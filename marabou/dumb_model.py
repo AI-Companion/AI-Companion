@@ -1,5 +1,5 @@
 import pickle
-
+import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import classification_report
@@ -20,6 +20,7 @@ class DumbModel:
 
     def predict_proba(self, X):
         X = self.vectorizer.transform(X)
+        #X = self.vectorizer.transform(np.array([X]))
         y_proba = self.clf.predict_proba(X)
         return y_proba
 
