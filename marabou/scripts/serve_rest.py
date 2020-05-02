@@ -8,8 +8,8 @@ import sys
 
 app = Flask(__name__)
 api = Api(app)
-logging.config.fileConfig('config/logging.conf')
-log = logging.getLogger(__name__)
+# logging.config.fileConfig('config/logging.conf')
+# log = logging.getLogger(__name__)
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="predict sentiment from a given text")
