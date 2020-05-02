@@ -1,0 +1,1 @@
+web: gunicorn app:marabou/scripts/serve_rest
