@@ -5,8 +5,11 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import classification_report
 
 
-class DumbModel:
+class DumbModel():
     def __init__(self, vocab_size=10_000):
+        """
+        
+        """
         self.vocab_size = vocab_size
         self.clf = None
         self.vectorizer = None
@@ -20,9 +23,9 @@ class DumbModel:
 
     def predict_proba(self, X):
         X = self.vectorizer.transform(X)
-        #X = self.vectorizer.transform(np.array([X]))
         y_proba = self.clf.predict_proba(X)
         return y_proba
+    
 
     def predict(self, X):
         X = self.vectorizer.transform(X)
@@ -34,6 +37,14 @@ class DumbModel:
             pickle.dump(self.vocab_size, f)
             pickle.dump(self.vectorizer, f)
             pickle.dump(self.clf, f)
+    
+    def get_output(self, probs, qlist):
+        vals = [round(p[1],4) for p in probs]
+        keys = ["class1_probs_%s"%name for name in qlist]
+        out = dict.fromkeys(keys)
+        out.update(zip(keys, vals))
+        return out
+
     
     @staticmethod
     def deserialize(fname):
