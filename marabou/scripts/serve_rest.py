@@ -1,10 +1,13 @@
 from flask import Flask
 from flask_restful import reqparse, abort, Api, Resource
 import argparse
+import logging
 from marabou.dumb_model import DumbModel
 
 app = Flask(__name__)
 api = Api(app)
+logging.config.fileConfig('config/logging.conf')
+log = logging.getLogger(__name__)
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="predict sentiment from a given text")
