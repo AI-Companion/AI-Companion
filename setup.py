@@ -20,5 +20,6 @@ setup(name='marabou',
                             'marabou-rest-api=marabou.scripts.serve_rest:main']
     },
     install_requires=INSTALL_REQUIREMENTS,
+    #data_files=[('web', ['marabou/scripts/templates/index.html','marabou/scripts/static/css/app.css'])],
     package_data={},
     include_package_data=True)
