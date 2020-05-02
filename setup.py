@@ -8,8 +8,9 @@ INSTALL_REQUIREMENTS = [
     'scikit-learn',
     'matplotlib',
     'flask',
-    'flask_restful'
-]
+    'flask_restful',
+    'pylint'
+    ]
 setup(name='marabou',
       packages=find_packages(),
       version='0.0.1dev1',

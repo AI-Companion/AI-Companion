@@ -1,4 +1,3 @@
-import pickle
 from flask import Flask
 from flask_restful import reqparse, abort, Api, Resource
 import argparse
@@ -13,7 +12,6 @@ def parse_arguments():
 
     return parser.parse_args()
 
-# argument parsing
 parser = reqparse.RequestParser()
 parser.add_argument('query')
 
@@ -23,12 +21,9 @@ class PredictSentiment(Resource):
     def get(self):
         # use parser and find the user's query
         args = parser.parse_args()
-        query = args['query']
-        probs = self.model.predict_proba([query])
-
-        # create JSON object
-        output = {'class0_probs': probs[0][0], 'class1_probs': probs[0][1]}
-        return output
+        qlist = args['query'].strip('][').split(',')
+        probs = self.model.predict_proba(qlist)
+        return self.model.get_output(probs, qlist)
 
 def main():
     args = parse_arguments()
