@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Models Show room</title>
+</head>
+<body>
+    <h1>Welcome to Marabou</h1>
+    <div class="form">
+        <form action="/" method="POST">
+            <input type="text" name="content" id="content", placeholder="Text to Submit">
+            <input type="submit" value="Submit Input">
+        </form>
+    </div>
+    {% if output|length > 1 %}
+        <div class="result">
+            <output>
+                {{output}}
+            </output>
+        </div>
+    {% endif %}
+</body>
+</html>
