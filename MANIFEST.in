@@ -1,0 +1,6 @@
+recursive-include marabou/scripts templates*.html static/css/*.css
+recursive-include marabou *
+recursive-include marabou/scripts/templates *
+recursive-include marabou/scripts/static *
+
+global-exclude *.pyc
