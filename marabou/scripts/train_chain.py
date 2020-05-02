@@ -5,7 +5,14 @@ from sklearn.metrics import classification_report
 from marabou.dataset import Dataset
 from marabou.dumb_model import DumbModel
 
-def train_model(dataset_dir, model_file, vocab_size):
+
+def train_model(dataset_dir: str, model_file_name: str, vocab_size: int) -> None:
+    """
+    training function which prints classification summary as as result
+    :param dataset_dir: relative path for dataset folder
+    :param model_file_url: desired path to save model file
+    :param vocab_size: number of rows to read from the training dataset
+    """
     print(f'Training model from directory {dataset_dir}')
     print(f'Vocabulary size: {vocab_size}')
 
@@ -17,8 +24,8 @@ def train_model(dataset_dir, model_file, vocab_size):
     model = DumbModel(vocab_size=vocab_size)
     model.train(X, y)
 
-    print(f'Storing model to {model_file}')
-    model.serialize(model_file)
+    print(f'Storing model to {model_file_name}')
+    model.serialize(model_file_name)
 
     X_test, y_test = dset.get_test_set()
     y_pred = model.predict(X_test)

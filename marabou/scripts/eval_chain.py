@@ -1,16 +1,21 @@
 import os
 import argparse
-from sklearn.metrics import classification_report
-
+from typing import List
 from marabou.dumb_model import DumbModel
 
-def ask_model(model_file, question):
-    print(f'Asking model {model_file} about "{question}"')
 
-    model = DumbModel.deserialize(model_file)
+def ask_model(model_file_url: str, questions_list: List[str]) -> None:
+    """
+    Wrapper function that calls the model deserializer and returns prediction
+    :param model_file_url: relative path for the model file
+    :param questions_list: list of strings to perform inference on
+    :return: list of probabilies for positive class for each input word
+    """
+    print(f'Asking model {model_file_url} about "{questions_list}"')
 
-    y_pred = model.predict_proba([question])
-    print(y_pred[0])
+    model = DumbModel.deserialize(model_file_url)
+    probs = model.predict_proba(questions_list)
+    print(model.get_output(probs, questions_list))
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="predict sentiment from a given text")
@@ -19,11 +24,11 @@ def parse_arguments():
 
     return parser.parse_args()
 
-
 def main():
     args = parse_arguments()
+    qlist = args.question.strip('][').split(',')
 
-    ask_model(args.model_file, args.question)
+    ask_model(args.model_file, qlist)
 
 if __name__ == '__main__':
     main()
