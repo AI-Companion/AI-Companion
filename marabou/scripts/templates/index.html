@@ -13,12 +13,21 @@
             <input type="submit" value="Submit Input">
         </form>
     </div>
-    {% if output|length > 1 %}
+    {% if output|length > 0 %}
         <div class="result">
-            <output>
-                {{output}}
-            </output>
+            
+            <table>
+                <tr>
+                    <th>Class0 prob</th>
+                    <th>Class1 prob</th>
+                </tr>
+                    <tr>
+                        <td>{{ output[0][0] }}</td>
+                        <td>{{ output[0][1] }}</td>
+                    </tr>
+            </table>
         </div>
+    
     {% endif %}
 </body>
 </html>
