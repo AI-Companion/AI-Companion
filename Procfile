@@ -1,1 +1,1 @@
-web: gunicorn marabou/scripts/serve_rest:marabou/scripts/serve_rest
+web: marabou-rest-api
