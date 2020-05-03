@@ -1,1 +1,1 @@
-web: marabou-rest-api
+web: marabou-rest-api --binding 127.0.0.1
