@@ -33,7 +33,6 @@ class PredictSentiment(Resource):
 
 @app.route('/',methods=['POST', 'GET'])
 def index():
-    print("A")
     if request.method == 'POST':
         task_content = request.form['content']
         model = DumbModel.deserialize('models/modelfile.pickle')
@@ -41,7 +40,6 @@ def index():
         output = new_prediction.model.predict_proba([task_content])
         return render_template('index.html', output=output)
     else:
-        print("B")
         return render_template('index.html')
         
 
