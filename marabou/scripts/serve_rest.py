@@ -54,7 +54,7 @@ def main():
         args = parse_arguments()
         model = DumbModel.deserialize(args.model_file)  # load model at the beginning once only
         api.add_resource(PredictSentiment, '/',resource_class_args={model})
-    app.run(debug=True)
+    app.run(debug=True,host='0.0.0.0', port=5000)
 
 if __name__ == '__main__':
     main()
