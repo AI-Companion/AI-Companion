@@ -2,10 +2,13 @@ from pathlib import Path
 
 
 class Dataset:
+    """
+    Dataset handler which gets training and test data
+    """
     def __init__(self, train_dir='data/raw/aclImdb/train', test_dir='data/raw/aclImdb/test'):
         self.train_dir = Path(train_dir)
         self.test_dir = Path(test_dir)
-    
+
     def _get_set(self, directory, limit=None):
         x = []
         y = []
@@ -20,9 +23,19 @@ class Dataset:
             x.append(file.read_text())
             y.append(0)
         return x, y
-    
+
     def get_train_set(self, limit=None):
+        """
+        returns training data with the given number of rows
+        :param limit: max number of rows
+        :return: training features and targets
+        """
         return self._get_set(limit=limit, directory=self.train_dir)
 
     def get_test_set(self, limit=None):
+        """
+        returns test data with the given number of rows
+        :param limit: max number of rows
+        :return: test features and targets
+        """
         return self._get_set(limit=limit, directory=self.test_dir)
