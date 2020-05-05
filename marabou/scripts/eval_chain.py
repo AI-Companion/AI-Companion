@@ -1,7 +1,7 @@
 import os
 import argparse
 from typing import List
-from marabou.dumb_model import DumbModel
+from marabou.models.dumb_model import DumbModel
 
 
 def ask_model(model_file_url: str, questions_list: List[str]) -> None:

@@ -3,7 +3,7 @@ import argparse
 from sklearn.metrics import classification_report
 
 from marabou.dataset import Dataset
-from marabou.dumb_model import DumbModel
+from marabou.models.dumb_model import DumbModel
 
 
 def train_model(dataset_dir: str, model_file_name: str, vocab_size: int) -> None:
