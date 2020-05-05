@@ -9,7 +9,10 @@ INSTALL_REQUIREMENTS = [
     'matplotlib',
     'flask',
     'flask_restful',
-    'pylint'
+    'pylint',
+    'doxypypy',
+    'pycodestyle'
+    #'git_pep8_commit_hook'
     ]
 setup(name='marabou',
     #package_dir={'':'marabou'},
