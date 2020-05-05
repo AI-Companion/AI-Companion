@@ -3,7 +3,7 @@ from flask import Flask, render_template, url_for, request, redirect
 from flask_restful import reqparse, abort, Api, Resource
 import argparse
 import logging
-from marabou.dumb_model import DumbModel
+from marabou.models.dumb_model import DumbModel
 import sys
 import os
 
