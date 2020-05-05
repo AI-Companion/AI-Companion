@@ -1,4 +1,6 @@
-from setuptools import setup, find_packages
+import subprocess
+from setuptools import setup, find_packages, Command
+from setuptools.command.install import install
 
 
 INSTALL_REQUIREMENTS = [
@@ -13,7 +15,14 @@ INSTALL_REQUIREMENTS = [
     'doxypypy',
     'pycodestyle'
     #'git_pep8_commit_hook'
-    ]
+]
+
+
+class InstallCommand(install):
+    """will call activate githooks for install mode"""
+    def run(self):
+        subprocess.call("git config core.hooksPath .git/hooks/",shell=True)
+
 setup(name='marabou',
     #package_dir={'':'marabou'},
     packages=find_packages(include=['.*','marabou','marabou.*']),
@@ -25,5 +34,9 @@ setup(name='marabou',
                             'marabou-rest-api=marabou.scripts.serve_rest:main']
     },
     install_requires=INSTALL_REQUIREMENTS,
+    tests_require=["pytest", ],
     package_data={},
-    include_package_data=True)
+    include_package_data=True,
+    cmdClass={
+        'install':InstallCommand
+    })
