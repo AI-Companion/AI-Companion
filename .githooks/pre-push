@@ -1,0 +1,26 @@
+#!/bin/bash
+
+errors=0
+validFiles="$(find marabou tests -iname "*.py")"
+parameters="--max-line-length=120"
+ignore_errors="R0201,C0114,R1705"
+names_to_keep="x,X,y,X_train,y_train,f,X_test,y_test,y_pred"
+
+while read -r file
+do
+	if [ -f "$file" ]
+	then
+		pycodestyle "$parameters" "$file" 2>/dev/null
+		e1="$?"
+		
+		pylint "$parameters" --disable="$ignore_errors" --good-names="$names_to_keep" "$file" 2>/dev/null
+		e2="$?"
+	fi
+done <<< "$validFiles"
+
+if [ "$errors" -ne "0" ]
+then
+	echo -e "\n\033[1;31m--> PEP8 violations found. Commit cancelled!\033[0m"
+fi
+
+exit $errors
