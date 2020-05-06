@@ -17,7 +17,7 @@ INSTALL_REQUIREMENTS = [
     #'git_pep8_commit_hook'
 ]
 
-#test
+#test2
 class InstallCommand(install):
     """will call activate githooks for install mode"""
     def run(self):
