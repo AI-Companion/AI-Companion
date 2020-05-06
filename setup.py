@@ -27,7 +27,7 @@ setup(name='marabou',
     #package_dir={'':'marabou'},
     packages=find_packages(include=['.*','marabou','marabou.*']),
     author='Marouen Azzouz, Youssef Azzouz',
-    author_email='azzouz.marouen@gmail.com, youssef.azzouz1512@gmail.com'
+    author_email='azzouz.marouen@gmail.com, youssef.azzouz1512@gmail.com',
     version='0.0.1dev1',
     zip_safe=False,
     entry_points={
