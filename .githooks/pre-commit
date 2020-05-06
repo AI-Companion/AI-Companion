@@ -3,7 +3,7 @@
 errors=0
 validFiles="$(find marabou tests -iname "*.py")"
 parameters="--max-line-length=120"
-ignore_errors="R0201,C0114,R1705"
+ignore_errors="R0201,C0114,R1705,W1309,R0903"
 names_to_keep="x,X,y,X_train,y_train,f,X_test,y_test,y_pred"
 
 while read -r file
@@ -15,6 +15,9 @@ do
 		
 		pylint "$parameters" --disable="$ignore_errors" --good-names="$names_to_keep" "$file" 2>/dev/null
 		e2="$?"
+
+		! (( $errors || $e1 || $e2 ))
+		errors="$?"
 	fi
 done <<< "$validFiles"
 
