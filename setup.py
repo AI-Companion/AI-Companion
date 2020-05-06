@@ -13,8 +13,8 @@ INSTALL_REQUIREMENTS = [
     'flask_restful',
     'pylint',
     'doxypypy',
-    'pycodestyle',
-    'git_pep8_commit_hook'
+    'pycodestyle'
+    #'git_pep8_commit_hook'
 ]
 
 
