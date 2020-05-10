@@ -3,7 +3,7 @@ import sys
 import os
 from flask import Flask, render_template, request
 from flask_restful import reqparse, Api, Resource
-from marabou.models.dumb_model import DumbModel
+from marabou.models.tf_idf_models import DumbModel
 
 app = Flask(__name__)
 api = Api(app)
