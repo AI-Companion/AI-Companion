@@ -3,16 +3,17 @@ import os
 import subprocess
 
 
-class SentimentAnalysisDataset:
+class ImdbDataset:
     """
     Dataset handler which gets training and test data
     """
     def __init__(self, limit=None):
         self.limit = limit
+        self.n_obs_per_class = None
         self._get_set()
 
     def _get_set(self):
-        script_path = os.path.join(os.getcwd(), "load_sentiment_analysis_data.sh")
+        script_path = os.path.join(os.getcwd(), "load_imdb_dataset.sh")
         subprocess.call("%s" % script_path, shell=True)
 
     def get_set(self, mode="train"):
@@ -29,13 +30,20 @@ class SentimentAnalysisDataset:
         else:
             directory = os.path.join(directory, "test")
 
+        n_obs = len(os.listdir(os.path.join(directory, 'pos')))
+        if self.limit == 0:
+            self.limit = 2*n_obs
+        else:
+            if self.limit > 2*n_obs:
+                self.limit = 2*n_obs
+        self.n_obs_per_class = round(self.limit / 2)
         for file in Path(os.path.join(directory, 'pos')).iterdir():
-            if self.limit is not None and len(x) >= self.limit / 2:
+            if len(x) >= self.n_obs_per_class:
                 break
             x.append(file.read_text())
             y.append(1)
         for file in Path(os.path.join(directory, 'neg')).iterdir():
-            if self.limit is not None and len(x) >= self.limit:
+            if len(x) >= self.limit:
                 break
             x.append(file.read_text())
             y.append(0)

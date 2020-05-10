@@ -1,8 +1,8 @@
 import os
 import argparse
 from sklearn.metrics import classification_report
-from marabou.utils.data_utils import SentimentAnalysisDataset
-from marabou.models.dumb_model import DumbModel
+from marabou.utils.data_utils import ImdbDataset
+from marabou.models.tf_idf_models import DumbModel
 
 
 def train_model(model_type: str, vocab_size: int) -> None:
@@ -13,12 +13,13 @@ def train_model(model_type: str, vocab_size: int) -> None:
     :return: None
     """
     print(f'Training model from directory data/Imdb')
-    print(f'Vocabulary size: {vocab_size}')
 
-    dataset = SentimentAnalysisDataset(vocab_size)
+    dataset = ImdbDataset(vocab_size)
     X, y = dataset.get_set("train")
+    train_data_size = len(X)
+    print("Training data size: %i" % train_data_size)
 
-    model = DumbModel(vocab_size=vocab_size)
+    model = DumbModel(vocab_size=train_data_size)
     model.train(X, y)
 
     model_dir = os.path.join(os.getcwd(), "models/sentiment_analysis/")
@@ -39,7 +40,7 @@ def parse_arguments():
     """script arguments parser"""
     parser = argparse.ArgumentParser(description="Train sentiment analysis classifier")
     parser.add_argument('model_type', help='model type', type=str)
-    parser.add_argument('--vocab_size', help='volcabulary size', type=int)
+    parser.add_argument('--vocab_size', help='volcabulary size')
 
     return parser.parse_args()
 
@@ -47,6 +48,8 @@ def parse_arguments():
 def main():
     """main function"""
     args = parse_arguments()
+    if args.vocab_size is None:
+        args.vocab_size = 0
     train_model(args.model_type, int(args.vocab_size))
 
 
