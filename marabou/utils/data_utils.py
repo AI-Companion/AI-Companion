@@ -37,14 +37,28 @@ class ImdbDataset:
             if self.limit > 2*n_obs:
                 self.limit = 2*n_obs
         self.n_obs_per_class = round(self.limit / 2)
-        for file in Path(os.path.join(directory, 'pos')).iterdir():
+        for f in os.listdir(os.path.join(directory, 'pos')):
             if len(x) >= self.n_obs_per_class:
                 break
-            x.append(file.read_text())
+            file1 = open(os.path.join(directory, 'pos', f), "r")
+            x.append(file1.readline())
+            file1.close()
             y.append(1)
-        for file in Path(os.path.join(directory, 'neg')).iterdir():
+        for f in os.listdir(os.path.join(directory, 'neg')):
             if len(x) >= self.limit:
                 break
-            x.append(file.read_text())
+            file1 = open(os.path.join(directory, 'neg', f), "r")
+            x.append(file1.readline())
+            file1.close()
             y.append(0)
+        #for file in Path(os.path.join(directory, 'pos')).iterdir():
+        #    if len(x) >= self.n_obs_per_class:
+        #        break
+        #    x.append(file.r())
+        #    y.append(1)
+        #for file in Path(os.path.join(directory, 'neg')).iterdir():
+        #    if len(x) >= self.limit:
+        #        break
+        #    x.append(file.read_text())
+        #    y.append(0)
         return x, y
