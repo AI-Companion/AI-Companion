@@ -1,4 +1,5 @@
 import pickle
+import os
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 
@@ -45,13 +46,17 @@ class DumbModel():
         y_pred = self.clf.predict(X)
         return y_pred
 
-    def save_model(self, file_name):
+    def save_model(self, file_name_prefix):
         """
         saves the model using a pickle serializable
-        :param file_name: filename
+        :param file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
         :return: None
         """
-        with open(file_name, 'wb') as f:
+        model_folder = os.path.join(os.getcwd(), "models")
+        if not os.path.isdir(model_folder):
+            os.mkdir(model_folder)
+        file_url = os.path.join(model_folder, file_name_prefix+"_tfidf_model")
+        with open(file_url, 'wb') as f:
             pickle.dump(self.vocab_size, f)
             pickle.dump(self.vectorizer, f)
             pickle.dump(self.clf, f)
@@ -72,7 +77,7 @@ class DumbModel():
     @staticmethod
     def deserialize(file_name):
         """
-        extracts a model saved using the serialize function
+        extracts a model saved using the save_model function
         :param file_name: name of the file containing the saved model
         :return: a model object
         """
