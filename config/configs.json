@@ -1,0 +1,13 @@
+{
+    "dataset_name":"imdb",
+    "dataset_url":"http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz",
+    "embeddings_path":"http://nlp.stanford.edu/data/glove.6B.zip",
+    "experimental_mode":true,
+    "pre_trained_embedding":true,
+    "embedding_algorithm":"glove",
+    "vocab_size":5000,
+    "validation_split":0.3,
+    "max_sequence_length":500,
+    "embedding_dimension":100,
+    "model_optimizer":"Adam"
+}
