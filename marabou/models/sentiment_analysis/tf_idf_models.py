@@ -55,7 +55,7 @@ class DumbModel():
         model_folder = os.path.join(os.getcwd(), "models")
         if not os.path.isdir(model_folder):
             os.mkdir(model_folder)
-        file_url = os.path.join(model_folder, file_name_prefix+"_tfidf_model")
+        file_url = os.path.join(model_folder, file_name_prefix+"_tfidf_model.pickle")
         with open(file_url, 'wb') as f:
             pickle.dump(self.vocab_size, f)
             pickle.dump(self.vectorizer, f)
@@ -75,7 +75,7 @@ class DumbModel():
         return out
 
     @staticmethod
-    def deserialize(file_name):
+    def load_model(file_name):
         """
         extracts a model saved using the save_model function
         :param file_name: name of the file containing the saved model
