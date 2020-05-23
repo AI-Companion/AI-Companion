@@ -12,7 +12,7 @@ class DumbModel():
         self.clf = None
         self.vectorizer = None
 
-    def train(self, X_train, y_train):
+    def fit(self, X_train, y_train):
         """
         training function
         :param X_train: training features
@@ -45,7 +45,7 @@ class DumbModel():
         y_pred = self.clf.predict(X)
         return y_pred
 
-    def serialize(self, file_name):
+    def save_model(self, file_name):
         """
         saves the model using a pickle serializable
         :param file_name: filename

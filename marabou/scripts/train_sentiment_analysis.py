@@ -6,6 +6,7 @@ from keras.preprocessing.text import Tokenizer
 from marabou.utils.data_utils import ImdbDataset, DataPreprocessor
 from marabou.utils.config_loader import ConfigReader
 from marabou.models.sentiment_analysis.rnn_models import RNNModel
+from marabou.models.sentiment_analysis.tf_idf_models import DumbModel
 
 
 def get_training_validation_data(X: List, y: List, data_processor: DataPreprocessor)\
@@ -42,12 +43,19 @@ def train_model(config: ConfigReader) -> None:
         X = [X[i] for i in ind]
         y = [y[i] for i in ind]
     X_train, X_test, y_train, y_test, tokenizer_obj = get_training_validation_data(X, y, data_preprocessor)
-    trained_model = RNNModel(config, tokenizer_obj.word_index)
-    trained_model.fit(X_train, y_train, X_test, y_test)
-    file_prefix = "sentiment_analysis_%s" % time.strftime("%Y%m%d_%H%M%S")
-    print("===========> saving trained model under models")
-    trained_model.save_model(file_prefix)
-    data_preprocessor.save_tokenizer(file_prefix)
+    trained_model = None
+    if config.model_name == "rnn":
+        trained_model = RNNModel(config, tokenizer_obj.word_index)
+        trained_model.fit(X_train, y_train, X_test, y_test)
+        file_prefix = "sentiment_analysis_%s" % time.strftime("%Y%m%d_%H%M%S")
+        print("===========> saving trained model under models")
+        trained_model.save_model(file_prefix)
+        data_preprocessor.save_tokenizer(file_prefix)
+    else:  # model_name =="tfidf"
+        trained_model = DumbModel(config.vocab_size)
+        trained_model.fit(X_train, y_train)
+        print("===========> saving trained model under models")
+        trained_model.save_model(file_prefix)
 
 
 def parse_arguments():

@@ -1,6 +1,6 @@
 import argparse
 from typing import List
-from marabou.models.tf_idf_models import DumbModel
+from marabou.models.sentiment_analysis.tf_idf_models import DumbModel
 
 
 def ask_model(model_file_url: str, questions_list: List[str]) -> None:

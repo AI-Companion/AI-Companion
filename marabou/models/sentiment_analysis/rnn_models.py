@@ -119,7 +119,7 @@ class RNNModel:
         model_folder = os.path.join(os.getcwd(), "models")
         if not os.path.isdir(model_folder):
             os.mkdir(model_folder)
-        file_url = os.path.join(model_folder, file_name_prefix+"rnn_model")
+        file_url = os.path.join(model_folder, file_name_prefix+"_rnn_model")
         self.model.save(file_url)
         print("----> model saved to %s" % file_url)
 
