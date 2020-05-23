@@ -51,7 +51,7 @@ class RNNModel:
         model.add(LSTM(64, dropout=0.2, recurrent_dropout=0.2))
         model.add(Dense(250, activation='relu'))
         model.add(Dense(1, activation='sigmoid'))
-        model.compile(loss='binary_crossentropy', optimizer="adam", metrics=['accuracy'])
+        model.compile(loss='binary_crossentropy', optimizer="adam", metrics=['acc'])
         print(model.summary())
         return model
 
@@ -119,7 +119,7 @@ class RNNModel:
         model_folder = os.path.join(os.getcwd(), "models")
         if not os.path.isdir(model_folder):
             os.mkdir(model_folder)
-        file_url = os.path.join(model_folder, file_name_prefix+"_rnn_model")
+        file_url = os.path.join(model_folder, file_name_prefix+"_rnn_model.pickle")
         self.model.save(file_url)
         print("----> model saved to %s" % file_url)
 
