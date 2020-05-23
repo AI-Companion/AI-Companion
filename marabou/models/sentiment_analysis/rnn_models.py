@@ -34,6 +34,7 @@ class RNNModel:
 
 
     def build_model(self):
+        print("===========> build model")
         model = Sequential()
         model.add(self.embedding_layer)
         model.add(LSTM(64, dropout=0.2, recurrent_dropout=0.2))
@@ -45,13 +46,16 @@ class RNNModel:
 
 
     def get_embedding_matrix(self):
+        print("===========> collecting pretrained embedding")
         script_path = os.path.join(os.getcwd(), "bash_scripts/load_stanford_6B_embedding.sh")
         subprocess.call("%s %s" % (script_path, self.embeddings_path), shell=True)
         file_name = 'glove.6B.100d.txt'
         if self.embedding_dimension in [50, 100, 200, 300]:
             file_name = 'glove.6B.%id.txt' % self.embedding_dimension
+        file_url = os.path.join(os.getcwd(), 'embeddings', file_name)
+        print("----> embedding file saved to %s" % file_url)
         embedding_index = {}
-        with open(os.path.join(os.getcwd(), 'embeddings', file_name)) as f:
+        with open(file_url) as f:
             for line in f:
                 word, coefs = line.split(maxsplit=1)
                 coefs = np.fromstring(coefs, 'f', sep=' ')
