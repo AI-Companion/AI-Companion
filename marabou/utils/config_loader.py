@@ -47,3 +47,8 @@ class ConfigReader():
     @property
     def embedding_dimension(self):
         return self.config["embedding_dimension"]
+
+    @property
+    def experimental_mode(self):
+        return self.config["experimental_mode"]
+

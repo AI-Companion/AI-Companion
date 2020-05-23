@@ -13,7 +13,10 @@ INSTALL_REQUIREMENTS = [
     'flask_restful',
     'pylint',
     'doxypypy',
-    'pycodestyle'
+    'pycodestyle',
+    'nltk',
+    'keras',
+    'tensorflow'
     #'git_pep8_commit_hook'
 ]
 
@@ -21,7 +24,7 @@ INSTALL_REQUIREMENTS = [
 class InstallCommand(install):
     """will call activate githooks for install mode"""
     def run(self):
-        subprocess.call("git config core.hooksPath .githooks/",shell=True)
+        subprocess.call("git config core.hooksPath .githooks/", shell=True)
         install.run(self)
 
 setup(name='marabou',

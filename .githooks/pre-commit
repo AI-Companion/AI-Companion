@@ -4,7 +4,7 @@ errors=0
 validFiles="$(find marabou tests -iname "*.py")"
 parameters="--max-line-length=120"
 ignore_errors="R0201,C0114,R1705,W1309,R0903"
-names_to_keep="x,X,y,X_train,y_train,f,X_test,y_test,y_pred"
+names_to_keep="x,X,y,X_train,y_train,f,X_test,y_test,y_pred, X_train, y_train"
 
 while read -r file
 do
