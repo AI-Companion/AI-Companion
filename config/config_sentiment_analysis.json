@@ -1,6 +1,6 @@
 {
     "dataset_name":"imdb",
-    "model_name":"tfidf",
+    "model_name":"rnn",
     "dataset_url":"http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz",
     "embeddings_path":"http://nlp.stanford.edu/data/glove.6B.zip",
     "experimental_mode":true,
