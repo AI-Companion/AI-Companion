@@ -138,7 +138,7 @@ class DataPreprocessor:
         model_folder = os.path.join(os.getcwd(), "models")
         if not os.path.isdir(model_folder):
             os.mkdir(model_folder)
-        file_url = os.path.join(model_folder, file_name_prefix+"tokenizer.pickle")
+        file_url = os.path.join(model_folder, file_name_prefix+"_tokenizer.pickle")
         with open(file_url, 'wb') as handle:
             pickle.dump(self.tokenizer_obj, handle, protocol=pickle.HIGHEST_PROTOCOL)
         print("----> tokenizer object saved to %s" % file_url)
