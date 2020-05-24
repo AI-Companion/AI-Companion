@@ -129,16 +129,43 @@ class DataPreprocessor:
         print('testing target shape ', np.asarray(y_test).shape)
         return X_train, X_test, np.asarray(y_train), np.asarray(y_test)
 
-    def save_tokenizer(self, file_name_prefix):
+    def save_preprocessor(self, file_name_prefix):
         """
-        stores the tokenizer under 'models folder'
+        stores the data preprocessor under 'models folder'
         :param file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
         :return: None
         """
         model_folder = os.path.join(os.getcwd(), "models")
         if not os.path.isdir(model_folder):
             os.mkdir(model_folder)
-        file_url = os.path.join(model_folder, file_name_prefix+"_tokenizer.pickle")
+        file_url = os.path.join(model_folder, file_name_prefix + "_preprocessor.pickle")
         with open(file_url, 'wb') as handle:
             pickle.dump(self.tokenizer_obj, handle, protocol=pickle.HIGHEST_PROTOCOL)
-        print("----> tokenizer object saved to %s" % file_url)
+            pickle.dump(self.max_sequence_length, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        print("----> proprocessor object saved to %s" % file_url)
+
+    @staticmethod
+    def load_preprocessor(preprocessor_file_name):
+        """
+        loads preprocessing tools for the model
+        :param preprocessor_file_name: data to evaluate
+        :return: preprocessed object
+        """
+        preprocessor = None
+        model_dir = os.path.join(os.getcwd(), "models")
+        with open(os.path.join(model_dir, preprocessor_file_name), 'rb') as f:
+            preprocessor.tokenizer_obj = pickle.load(f)
+            preprocessor.max_sequence_length = pickle.load(f)
+        return preprocessor
+
+    @staticmethod
+    def preprocess_data(data, preprocessor):
+        """
+        performs data preprocessing before inference
+        :param data: data to evaluate
+        :param preprocessor: tokenizer object
+        :return: preprocessed data
+        """
+        data = preprocessor.tokenizer_obj.texts_to_sequences(data)
+        data = pad_sequences(data, maxlen=preprocessor.max_sequence_length)
+        return data
