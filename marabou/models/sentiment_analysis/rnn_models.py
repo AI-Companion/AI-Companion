@@ -1,16 +1,25 @@
 import os
+import string
+import pickle
 import subprocess
 import re
 from itertools import compress
-from typing import Dict
-import numpy as np
+from typing import Dict, List
 import matplotlib.pyplot as plt
 import keras
+import numpy as np
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from sklearn.model_selection import train_test_split
+from keras.preprocessing.text import Tokenizer
+from keras.preprocessing.sequence import pad_sequences
 from keras.models import Sequential
 from keras.layers import Embedding, Dense, LSTM
 from keras.initializers import Constant
-from keras.preprocessing.sequence import pad_sequences
 from marabou.utils.config_loader import ConfigReader
+nltk.download('punkt')
+nltk.download('stopwords')
 
 
 class RNNModel:
@@ -178,3 +187,112 @@ class RNNModel:
                 return None
             return None
         return None
+
+
+class DataPreprocessor:
+    """
+    Utility class performing several data preprocessing steps
+    """
+    def __init__(self, max_sequence_length: int, validation_split: float, vocab_size: int):
+        self.max_sequence_length = max_sequence_length
+        self.validation_split = validation_split
+        self.vocab_size = vocab_size
+        self.tokenizer_obj = None
+
+    def clean_data(self, X: List):
+        """
+        performs data cleaning operations such as removing html breaks, lower case,
+        remove stopwords ...
+        :param X: input reviews to be cleaned
+        :return: None
+        """
+        print("===========> data cleaning")
+        review_lines = list()
+        for line in X:
+            line = line.replace('<br /><br />', ' ')
+            line = line.replace('<br />', ' ')
+            tokens = word_tokenize(line)
+            tokens = [w.lower() for w in tokens]
+            table = str.maketrans('', '', string.punctuation)
+            stripped = [w.translate(table) for w in tokens]
+            words = [word for word in stripped if word.isalpha()]
+            stop_words = set(stopwords.words('english'))
+            words = [word for word in words if word not in stop_words]
+            review_lines.append(words)
+        print("----> data cleaning finish")
+        return review_lines
+
+    def tokenize_text(self, X: List):
+        """
+        performs data tokenization into a format that is digestible by the model
+        :param X: list of predictors already cleaned
+        :return: tokenizer object and tokenized input features
+        """
+        print("===========> data tokenization")
+        tokenizer_obj = Tokenizer(num_words=self.vocab_size)
+        tokenizer_obj.fit_on_texts(X)
+        self.tokenizer_obj = tokenizer_obj
+        sequences = tokenizer_obj.texts_to_sequences(X)
+        word_index = tokenizer_obj.word_index
+        review_pad = pad_sequences(sequences, maxlen=self.max_sequence_length)
+        print("----> data tokenization finish")
+        print("found %i unique tokens" % len(word_index))
+        print("features tensor shape ", review_pad.shape)
+        return tokenizer_obj, review_pad
+
+    def split_train_test(self, X, y):
+        """
+        wrapper method to split training data into a validation set and a training set
+        :param X: tokenized predictors
+        :param y: labels
+        :return: a tuple consisting of training predictors, training labels, validation predictors, validation labels
+        """
+        print("===========> data split")
+        X_train, X_test, y_train, y_test = train_test_split(X, y, shuffle=True, test_size=self.validation_split)
+        print("----> data split finish")
+        print('training features shape ', X_train.shape)
+        print('testing features shape ', X_test.shape)
+        print('training target shape ', np.asarray(y_train).shape)
+        print('testing target shape ', np.asarray(y_test).shape)
+        return X_train, X_test, np.asarray(y_train), np.asarray(y_test)
+
+    def save_preprocessor(self, file_name_prefix):
+        """
+        stores the data preprocessor under 'models folder'
+        :param file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
+        :return: None
+        """
+        model_folder = os.path.join(os.getcwd(), "models")
+        if not os.path.isdir(model_folder):
+            os.mkdir(model_folder)
+        file_url = os.path.join(model_folder, file_name_prefix + "_preprocessor.pickle")
+        with open(file_url, 'wb') as handle:
+            pickle.dump(self.tokenizer_obj, handle, protocol=pickle.HIGHEST_PROTOCOL)
+            pickle.dump(self.max_sequence_length, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        print("----> proprocessor object saved to %s" % file_url)
+
+    @staticmethod
+    def load_preprocessor(preprocessor_file_name):
+        """
+        loads preprocessing tools for the model
+        :param preprocessor_file_name: data to evaluate
+        :return: preprocessed object
+        """
+        preprocessor = None
+        model_dir = os.path.join(os.getcwd(), "models")
+        with open(os.path.join(model_dir, preprocessor_file_name), 'rb') as f:
+            preprocessor.tokenizer_obj = pickle.load(f)
+            preprocessor.max_sequence_length = pickle.load(f)
+        return preprocessor
+
+    @staticmethod
+    def preprocess_data(data, preprocessor):
+        """
+        performs data preprocessing before inference
+        :param data: data to evaluate
+        :param preprocessor: tokenizer object
+        :return: preprocessed data
+        """
+        data = preprocessor.tokenizer_obj.texts_to_sequences(data)
+        data = pad_sequences(data, maxlen=preprocessor.max_sequence_length)
+        return data

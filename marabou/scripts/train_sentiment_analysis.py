@@ -3,9 +3,9 @@ import time
 from typing import List, Tuple
 import numpy as np
 from keras.preprocessing.text import Tokenizer
-from marabou.utils.data_utils import ImdbDataset, DataPreprocessor
+from marabou.utils.data_utils import ImdbDataset
 from marabou.utils.config_loader import ConfigReader
-from marabou.models.sentiment_analysis.rnn_models import RNNModel
+from marabou.models.sentiment_analysis.rnn_models import RNNModel, DataPreprocessor
 from marabou.models.sentiment_analysis.tf_idf_models import DumbModel
 
 
