@@ -1,8 +1,11 @@
 import os
 import subprocess
+import re
+from itertools import compress
 from typing import Dict
 import numpy as np
 import matplotlib.pyplot as plt
+import keras
 from keras.models import Sequential
 from keras.layers import Embedding, Dense, LSTM
 from keras.initializers import Constant
@@ -119,7 +122,7 @@ class RNNModel:
         model_folder = os.path.join(os.getcwd(), "models")
         if not os.path.isdir(model_folder):
             os.mkdir(model_folder)
-        file_url = os.path.join(model_folder, file_name_prefix+"_rnn_model.h5")
+        file_url = os.path.join(model_folder, file_name_prefix + "_rnn_model.h5")
         self.model.save(file_url)
         print("----> model saved to %s" % file_url)
 
@@ -152,3 +155,26 @@ class RNNModel:
         ax[1].legend()
         plt.savefig(os.path.join(plot_folder, "learning_curve.png"))
         plt.close()
+
+    @staticmethod
+    def load_model():
+        """
+        extracts a model saved using the save_model function
+        :return: a model object and a tokenizer object
+        """
+        model = None
+        model_dir = os.path.join(os.getcwd(), "models")
+        model_files_list = os.listdir(os.path.join(os.getcwd(), "models"))
+        if len(model_files_list) > 0:
+            rnn_models_idx = [("sentiment_analysis" in f) and ("rnn" in f) for f in model_files_list]
+            if len(rnn_models_idx) > 0:
+                rnn_model = list(compress(model_files_list, rnn_models_idx))
+                model_dates = [int(''.join(re.findall(r'\d+', f))) for f in rnn_model]
+                h5_file_name = rnn_model[np.argmax(model_dates)]
+                preprocessor_file = h5_file_name.replace("rnn_model.h5", "preprocessor.pickle")
+                if os.path.isfile(os.path.join(model_dir, preprocessor_file)):
+                    model = keras.models.load_model(os.path.join(model_dir, h5_file_name))
+                    return model, preprocessor_file
+                return None
+            return None
+        return None

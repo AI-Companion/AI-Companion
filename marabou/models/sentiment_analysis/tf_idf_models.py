@@ -1,5 +1,8 @@
 import pickle
 import os
+import re
+from itertools import compress
+import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 
@@ -55,7 +58,7 @@ class DumbModel():
         model_folder = os.path.join(os.getcwd(), "models")
         if not os.path.isdir(model_folder):
             os.mkdir(model_folder)
-        file_url = os.path.join(model_folder, file_name_prefix+"_tfidf_model.pickle")
+        file_url = os.path.join(model_folder, file_name_prefix + "_tfidf_model.pickle")
         with open(file_url, 'wb') as f:
             pickle.dump(self.vocab_size, f)
             pickle.dump(self.vectorizer, f)
@@ -75,15 +78,25 @@ class DumbModel():
         return out
 
     @staticmethod
-    def load_model(file_name):
+    def load_model():
         """
-        extracts a model saved using the save_model function
-        :param file_name: name of the file containing the saved model
+        find the most recent saved model and loads it, otherwise returns None object
         :return: a model object
         """
-        model = DumbModel()
-        with open(file_name, 'rb') as f:
-            model.vocab_size = pickle.load(f)
-            model.vectorizer = pickle.load(f)
-            model.clf = pickle.load(f)
-            return model
+        model = None
+        model_dir = os.path.join(os.getcwd(), "models")
+        model_files_list = os.listdir(model_dir)
+        if len(model_files_list) > 0:
+            tfidf_models_idx = [("sentiment_analysis" in f) and ("tfidf" in f) for f in model_files_list]
+            if len(tfidf_models_idx) > 0:
+                tfidf_model = list(compress(model_files_list, tfidf_models_idx))
+                model_dates = [int(''.join(re.findall(r'\d+', f))) for f in tfidf_model]
+                model = DumbModel()
+                file_name = tfidf_model[np.argmax(model_dates)]
+                with open(os.path.join(model_dir, file_name), 'rb') as f:
+                    model.vocab_size = pickle.load(f)
+                    model.vectorizer = pickle.load(f)
+                    model.clf = pickle.load(f)
+                return model
+            return None
+        return None

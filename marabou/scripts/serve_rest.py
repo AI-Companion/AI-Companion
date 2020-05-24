@@ -49,7 +49,7 @@ def index():
     """
     if request.method == 'POST':
         task_content = request.form['content']
-        model = DumbModel.deserialize('models/modelfile.pickle')
+        model = DumbModel.load_model('models/modelfile.pickle')
         new_prediction = PredictSentiment(model=model)  # new instance of PredictSentiment
         output = new_prediction.model.predict_proba([task_content])
         return render_template('index.html', output=output)
@@ -63,7 +63,7 @@ def main():
         print("no args added")
     else:
         args = parse_arguments()
-        model = DumbModel.deserialize(args.model_file)  # load model at the beginning once only
+        model = DumbModel.load_model(args.model_file)  # load model at the beginning once only
         api.add_resource(PredictSentiment, '/', resource_class_args={model})
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=True, host='0.0.0.0', port=port)

@@ -101,3 +101,10 @@ class ConfigReader():
         enables a selection between rnn model of tf-idf followed by classical ml algorithm
         """
         return self.config["model_name"]
+
+    @property
+    def eval_model_name(self):
+        """
+        selects the name of the model to perform evaluation on
+        """
+        return self.config["eval_model_name"]

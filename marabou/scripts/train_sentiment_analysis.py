@@ -10,7 +10,7 @@ from marabou.models.sentiment_analysis.tf_idf_models import DumbModel
 
 
 def get_training_validation_data(X: List, y: List, data_processor: DataPreprocessor)\
-                                    -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, Tokenizer]:
+        -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, Tokenizer]:
     """
     wrapper method which yields the training and validation datasets + tokenizer object
     :param X: list of texts (features)
@@ -49,9 +49,9 @@ def train_model(config: ConfigReader) -> None:
         history = []
         trained_model = RNNModel(config, tokenizer_obj.word_index)
         history = trained_model.fit(X_train, y_train, X_test, y_test)
-        print("===========> saving trained model under models")
+        print("===========> saving trained model and preprocessor under models")
         trained_model.save_model(file_prefix)
-        data_preprocessor.save_tokenizer(file_prefix)
+        data_preprocessor.save_preprocessor(file_prefix)
         trained_model.save_learning_curve(history)
     else:  # model_name =="tfidf"
         trained_model = DumbModel(config.vocab_size)
