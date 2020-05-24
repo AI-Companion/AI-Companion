@@ -3,8 +3,7 @@ warnings.filterwarnings('ignore')
 import argparse
 from typing import List
 from marabou.models.sentiment_analysis.tf_idf_models import DumbModel
-from marabou.models.sentiment_analysis.rnn_models import RNNModel
-from marabou.utils.data_utils import DataPreprocessor
+from marabou.models.sentiment_analysis.rnn_models import RNNModel, DataPreprocessor
 from marabou.utils.config_loader import ConfigReader
 
 
@@ -26,6 +25,8 @@ def evaluate_model(questions_list: List[str], valid_config: ConfigReader) -> Non
     if valid_config.eval_model_name == "rnn":
         pre_processor = DataPreprocessor.load_preprocessor(preprocessor_file)
         questions_list = DataPreprocessor.preprocess_data(questions_list, pre_processor)
+    if valid_config.eval_model_name not in ["rnn", "tfidf"]:
+        raise ValueError("please set eva_mode_name to be either 'rnn' or 'tfidf'")
     probs = model.predict_proba(questions_list)
     print(model.get_output(probs, questions_list))
 

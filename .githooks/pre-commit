@@ -3,14 +3,14 @@
 errors=0
 validFiles="$(find marabou tests -iname "*.py")"
 parameters="--max-line-length=120"
-ignore_errors="R0201,C0114,R1705,W1309,R0903,R0902"
+ignore_errors="R0201,C0114,R1705,W1309,R0903,R0902,E402,E1121,C0413"
 names_to_keep="x,X,y,X_train,y_train,f,X_test,y_test,y_pred, X_train, y_train, i, ax"
 
 while read -r file
 do
 	if [ -f "$file" ]
 	then
-		pycodestyle "$parameters" "$file" 2>/dev/null
+		pycodestyle "$parameters" --ignore="$ignore_errors" "$file" 2>/dev/null
 		e1="$?"
 		
 		pylint "$parameters" --disable="$ignore_errors" --good-names="$names_to_keep" "$file" 2>/dev/null
