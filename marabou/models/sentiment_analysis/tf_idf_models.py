@@ -12,6 +12,7 @@ class DumbModel():
     NB network class. The class provides a wrapper for sklearn methods
     """
     def __init__(self, vocab_size=10_000):
+        self.model_name = "tfidf_model"
         self.vocab_size = vocab_size
         self.clf = None
         self.vectorizer = None

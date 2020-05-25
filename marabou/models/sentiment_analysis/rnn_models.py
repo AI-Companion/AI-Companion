@@ -135,6 +135,7 @@ class RNNModel:
     Handles the RNN model
     """
     def __init__(self, **kwargs):
+        self.model_name = "rnn"
         self.use_pretrained_embedding = None
         self.vocab_size = None
         self.embedding_dimension = None
