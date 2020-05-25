@@ -36,8 +36,9 @@ class DumbModel():
         :return: probability array
         """
         X = self.vectorizer.transform(X)
-        y_proba = self.clf.predict_proba(X)
-        return y_proba
+        probs = self.clf.predict_proba(X)
+
+        return [p[1] for p in probs]
 
     def predict(self, X):
         """
@@ -88,7 +89,7 @@ class DumbModel():
         model_files_list = os.listdir(model_dir)
         if len(model_files_list) > 0:
             tfidf_models_idx = [("sentiment_analysis" in f) and ("tfidf" in f) for f in model_files_list]
-            if len(tfidf_models_idx) > 0:
+            if sum(tfidf_models_idx) > 0:
                 tfidf_model = list(compress(model_files_list, tfidf_models_idx))
                 model_dates = [int(''.join(re.findall(r'\d+', f))) for f in tfidf_model]
                 model = DumbModel()
