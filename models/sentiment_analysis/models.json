@@ -1,0 +1,7 @@
+[{
+  "name": "dumb_model",
+  "description": "description for dumb_model model",
+  "image": "/static/assets/img/portfolio/thumbnails/dumb_model.jpg",
+  "input": ["textarea"],
+  "output": ["real", "real"]
+}]

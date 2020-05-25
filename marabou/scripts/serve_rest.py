@@ -1,13 +1,14 @@
 import argparse
 import sys
 import os
+import json
 from flask import Flask, render_template, request
 from flask_restful import reqparse, Api, Resource
-from marabou.models.tf_idf_models import DumbModel
+from marabou.models.modelConfig import model
 
 app = Flask(__name__)
 api = Api(app)
-
+models_list = []
 
 def parse_arguments():
     """
@@ -45,16 +46,44 @@ class PredictSentiment(Resource):
 @app.route('/', methods=['POST', 'GET'])
 def index():
     """
-    index function
+    index function parse availble models under models/sentiment_analysis from models.json file
     """
-    if request.method == 'POST':
-        task_content = request.form['content']
-        model = DumbModel.deserialize('models/modelfile.pickle')
-        new_prediction = PredictSentiment(model=model)  # new instance of PredictSentiment
-        output = new_prediction.model.predict_proba([task_content])
-        return render_template('index.html', output=output)
-    else:
+    models_list = []
+    try:
+        with open('models/sentiment_analysis/models.json','r') as f:
+            conf = json.load(f)
+        # load instances of models
+        for m in conf:
+            models_list.append(model(m['name'], m['description'], m['image'], m['input'], m['output']))
+        return render_template('index.html',models = models_list)
+    except IOError:    
+        print("models.json file not found")
         return render_template('index.html')
+
+
+@app.route('/model/<model_name>', methods=['POST', 'GET'])
+def model_page(model_name):
+    try:
+        with open('models/sentiment_analysis/models.json','r') as f:
+            conf = json.load(f)
+        # load instance of chosen model
+        for m in conf:
+            if m['name'] == model_name:
+                model_chosen = model(m['name'], m['description'], m['image'], m['input'], m['output'])
+
+    except IOError:    
+        print("models.json file not found")
+
+    if request.method == 'POST':
+        try:
+            content = request.form['content']
+            output = model_chosen.predict([content])
+            return render_template('model.html', model = model_chosen, output = output)
+        except:
+            return render_template('model.html', model = model_chosen)
+
+    else:
+        return render_template('model.html', model = model_chosen)
 
 
 def main():

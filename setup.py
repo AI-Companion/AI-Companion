@@ -1,6 +1,7 @@
 import subprocess
 from setuptools import setup, find_packages, Command
 from setuptools.command.install import install
+from distutils.command.clean import clean
 
 
 INSTALL_REQUIREMENTS = [
