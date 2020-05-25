@@ -2,7 +2,6 @@ import argparse
 import time
 from typing import List, Tuple
 import numpy as np
-from keras.preprocessing.text import Tokenizer
 from marabou.utils.data_utils import ImdbDataset
 from marabou.utils.config_loader import ConfigReader
 from marabou.models.sentiment_analysis.rnn_models import RNNModel, DataPreprocessor
@@ -10,18 +9,18 @@ from marabou.models.sentiment_analysis.tf_idf_models import DumbModel
 
 
 def get_training_validation_data(X: List, y: List, data_processor: DataPreprocessor)\
-        -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, Tokenizer]:
+        -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
     wrapper method which yields the training and validation datasets + tokenizer object
     :param X: list of texts (features)
     :param y: list of ratings
     :param data_processor: a data handler object
-    :return: tuple containing the training data, validation data and tokenizer object
+    :return: tuple containing the training data, validation data
     """
     preprocessed_input = data_processor.clean_data(X)
-    tokenizer_obj, preprocessed_input = data_processor.tokenize_text(preprocessed_input)
+    preprocessed_input = data_processor.tokenize_text(preprocessed_input)
     X_train, X_test, y_train, y_test = data_processor.split_train_test(preprocessed_input, y)
-    return X_train, X_test, y_train, y_test, tokenizer_obj
+    return X_train, X_test, y_train, y_test
 
 
 def train_model(config: ConfigReader) -> None:
@@ -44,15 +43,16 @@ def train_model(config: ConfigReader) -> None:
             ind = np.random.randint(0, len(X), 1000)
             X = [X[i] for i in ind]
             y = [y[i] for i in ind]
-        X_train, X_test, y_train, y_test, tokenizer_obj = get_training_validation_data(X, y, data_preprocessor)
+        X_train, X_test, y_train, y_test = get_training_validation_data(X, y, data_preprocessor)
         trained_model = None
         history = []
-        trained_model = RNNModel(config, tokenizer_obj.word_index)
+        trained_model = RNNModel(config=config, data_preprocessor=data_preprocessor)
         history = trained_model.fit(X_train, y_train, X_test, y_test)
-        print("===========> saving trained model and preprocessor under models")
+        print("===========> saving learning curve under plots/")
+        trained_model.save_learning_curve(history, file_prefix)
+        print("===========> saving trained model and preprocessor under models/")
         trained_model.save_model(file_prefix)
         data_preprocessor.save_preprocessor(file_prefix)
-        trained_model.save_learning_curve(history)
     else:  # model_name =="tfidf"
         trained_model = DumbModel(config.vocab_size)
         trained_model.fit(X, y)

@@ -20,5 +20,5 @@ elif [ ! "$(ls -A $embeddings_folder)" ] # embedings folder exists and is empty
 then # load data
     download_data
 else
-    echo "----> data already downloaded"
+    echo "----> embedding already downloaded"
 fi

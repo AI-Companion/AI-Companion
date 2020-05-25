@@ -14,21 +14,23 @@ def evaluate_model(questions_list: List[str], valid_config: ConfigReader) -> Non
     :param questions_list: list of strings to perform inference on
     :return: list of probabilies for positive class for each input word
     """
-    model = None
     pre_processor = None
+    trained_model = None
     if valid_config.eval_model_name == "tfidf":
-        model = DumbModel.load_model()
+        trained_model = DumbModel.load_model()
     if valid_config.eval_model_name == "rnn":
-        model, preprocessor_file = RNNModel.load_model()
-    if model is None:
+        trained_model, preprocessor_file = RNNModel.load_model()
+    if trained_model is None:
         raise ValueError("there is no corresponding model file")
     if valid_config.eval_model_name == "rnn":
         pre_processor = DataPreprocessor.load_preprocessor(preprocessor_file)
         questions_list = DataPreprocessor.preprocess_data(questions_list, pre_processor)
     if valid_config.eval_model_name not in ["rnn", "tfidf"]:
         raise ValueError("please set eva_mode_name to be either 'rnn' or 'tfidf'")
-    probs = model.predict_proba(questions_list)
-    print(model.get_output(probs, questions_list))
+    probs = trained_model.predict_proba(questions_list)
+    print(probs)
+    preds = trained_model.predict(questions_list)
+    print(preds)
 
 
 def parse_arguments():

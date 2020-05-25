@@ -3,7 +3,7 @@
     "model_name":"rnn",
     "dataset_url":"http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz",
     "embeddings_path":"http://nlp.stanford.edu/data/glove.6B.zip",
-    "experimental_mode":true,
+    "experimental_mode":false,
     "pre_trained_embedding":true,
     "embedding_algorithm":"glove",
     "vocab_size":5000,
@@ -11,5 +11,5 @@
     "max_sequence_length":500,
     "embedding_dimension":100,
     "model_optimizer":"Adam",
-    "eval_model_name":"tfidf"
+    "eval_model_name":"rnn"
 }
