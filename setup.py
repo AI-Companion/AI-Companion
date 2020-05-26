@@ -19,7 +19,7 @@ INSTALL_REQUIREMENTS = [
     'tensorflow',
     'matplotlib',
     'h5py',
-    'git_pep8_commit_hook'
+    #'git_pep8_commit_hook'
 ]
 
 #test2
