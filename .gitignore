@@ -3,3 +3,5 @@ dist/*
 env/*
 data/*
 marabou.egg-info/*
+*/marabou.egg-info/*
+*.pyc
