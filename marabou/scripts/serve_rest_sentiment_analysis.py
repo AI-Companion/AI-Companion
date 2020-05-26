@@ -69,8 +69,7 @@ def main():
     if len(sys.argv) < 2:
         print("no args added")
     else:
-        args = parse_arguments()
-        valid_config = ConfigReader(args.config)
+        valid_config = ConfigReader("config/config_sentiment_analysis.json")
         pre_processor = None
         model = None
         if valid_config.eval_model_name == "tfidf":
