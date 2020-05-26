@@ -18,7 +18,7 @@ INSTALL_REQUIREMENTS = [
     'keras',
     'tensorflow',
     'matplotlib',
-    'h5py'
+    'h5py',
     #'git_pep8_commit_hook'
 ]
 
