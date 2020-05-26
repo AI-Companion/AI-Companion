@@ -1,4 +1,3 @@
-import argparse
 import time
 from typing import List, Tuple
 import numpy as np
@@ -11,7 +10,7 @@ from marabou.models.sentiment_analysis.tf_idf_models import DumbModel
 def get_training_validation_data(X: List, y: List, data_processor: DataPreprocessor)\
         -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
-    wrapper method which yields the training and validation datasets + tokenizer object
+    wrapper method which yields the training and validation datasets
     :param X: list of texts (features)
     :param y: list of ratings
     :param data_processor: a data handler object
@@ -60,20 +59,9 @@ def train_model(config: ConfigReader) -> None:
         trained_model.save_model(file_prefix)
 
 
-def parse_arguments():
-    """
-    Parsing arguments for the training script
-    """
-    parser = argparse.ArgumentParser(description="Train sentiment analysis model")
-    parser.add_argument('--config', '-c', help='Path to the configuration file', required=True)
-
-    return parser.parse_args()
-
-
 def main():
     """main function"""
-    args = parse_arguments()
-    train_config = ConfigReader(args.config)
+    train_config = ConfigReader("config/config_sentiment_analysis.json")
     train_model(train_config)
 
 

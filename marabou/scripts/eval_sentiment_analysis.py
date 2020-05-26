@@ -28,9 +28,9 @@ def evaluate_model(questions_list: List[str], valid_config: ConfigReader) -> Non
     if valid_config.eval_model_name not in ["rnn", "tfidf"]:
         raise ValueError("please set eva_mode_name to be either 'rnn' or 'tfidf'")
     probs = trained_model.predict_proba(questions_list)
+    print("===========> probabilities")
     print(probs)
-    preds = trained_model.predict(questions_list)
-    print(preds)
+    # preds = trained_model.predict(questions_list)
 
 
 def parse_arguments():
@@ -38,7 +38,6 @@ def parse_arguments():
     Parse file arguments
     """
     parser = argparse.ArgumentParser(description="Predict sentiment from a given text")
-    parser.add_argument('--config', '-c', help='Path to the configuration file', required=True)
     parser.add_argument('question', help="text or list of texts to perform inference on")
 
     return parser.parse_args()
@@ -48,7 +47,7 @@ def main():
     """main function"""
     args = parse_arguments()
     qlist = args.question.strip('][').split(',')
-    valid_config = ConfigReader(args.config)
+    valid_config = ConfigReader("config/config_sentiment_analysis.json")
     evaluate_model(qlist, valid_config)
 
 
