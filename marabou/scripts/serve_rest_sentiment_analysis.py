@@ -59,7 +59,7 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/sentiment_analysis', methods=['POST', 'GET'])
+@app.route('/sentimentAnalysis', methods=['POST', 'GET'])
 def sentiment_analysis():
     """
     sentiment analysis service function
