@@ -1,4 +1,5 @@
 import os
+import sys
 from typing import List
 from flask import Flask, render_template, request
 from flask_restful import reqparse, Api, Resource
@@ -24,7 +25,7 @@ class PredictSentiment(Resource):
         self.model = model
         self.pre_processor = pre_processor
 
-    def getFromService(self, input_list: List[str]):
+    def get_from_service(self, input_list: List[str]):
         """
         gets the user's query strings.
         The query could either be a single string or a list of multiple strings
@@ -57,19 +58,19 @@ def index():
     """
     return render_template('index.html')
 
-@app.route('/sentimentAnalysis', methods=['POST', 'GET'])
-def sentimentAnalysis():
+
+@app.route('/sentiment_analysis', methods=['POST', 'GET'])
+def sentiment_analysis():
     """
-    sentimentAnalysis service function
+    sentiment analysis service function
     """
     if request.method == 'POST':
         task_content = request.form['content']
-        new_prediction = PredictSentiment(model= global_model_config[0], pre_processor= global_model_config[1])
-        output = new_prediction.getFromService([task_content])
+        new_prediction = PredictSentiment(model=global_model_config[0], pre_processor=global_model_config[1])
+        output = new_prediction.get_from_service([task_content])
         return render_template('sentiment_analysis.html', output=output)
     else:
         return render_template('sentiment_analysis.html')
-
 
 
 def main():
