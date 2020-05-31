@@ -2,9 +2,9 @@ import time
 from typing import List, Tuple
 import numpy as np
 from marabou.utils.data_utils import ImdbDataset
-from marabou.utils.config_loader import ConfigReader
-from marabou.models.sentiment_analysis.rnn_models import RNNModel, DataPreprocessor
-from marabou.models.sentiment_analysis.tf_idf_models import DumbModel
+from marabou.utils.config_loader import SentimentAnalysisConfigReader
+from marabou.models.sentiment_analysis_rnn import RNNModel, DataPreprocessor
+from marabou.models.sentiment_analysis_tfidf import DumbModel
 
 
 def get_training_validation_data(X: List, y: List, data_processor: DataPreprocessor)\
@@ -22,7 +22,7 @@ def get_training_validation_data(X: List, y: List, data_processor: DataPreproces
     return X_train, X_test, y_train, y_test
 
 
-def train_model(config: ConfigReader) -> None:
+def train_model(config: SentimentAnalysisConfigReader) -> None:
     """
     training function which prints classification summary as as result
     :param config: Configuration object containing parsed .json file parameters
@@ -32,7 +32,7 @@ def train_model(config: ConfigReader) -> None:
     if config.dataset_name == "imdb":
         dataset = ImdbDataset(config.dataset_url)
         X, y = dataset.get_set("train")
-        X_test, y_test = dataset.get_set("train")
+        X_test, y_test = dataset.get_set("test")
         X = X + X_test
         y = y + y_test
     file_prefix = "sentiment_analysis_%s" % time.strftime("%Y%m%d_%H%M%S")
@@ -61,7 +61,7 @@ def train_model(config: ConfigReader) -> None:
 
 def main():
     """main function"""
-    train_config = ConfigReader("config/config_sentiment_analysis.json")
+    train_config = SentimentAnalysisConfigReader("config/config_sentiment_analysis.json")
     train_model(train_config)
 
 
