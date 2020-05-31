@@ -2,12 +2,12 @@ import warnings
 warnings.filterwarnings('ignore')
 import argparse
 from typing import List
-from marabou.models.sentiment_analysis.tf_idf_models import DumbModel
-from marabou.models.sentiment_analysis.rnn_models import RNNModel, DataPreprocessor
-from marabou.utils.config_loader import ConfigReader
+from marabou.models.sentiment_analysis_tfidf import DumbModel
+from marabou.models.sentiment_analysis_rnn import RNNModel, DataPreprocessor
+from marabou.utils.config_loader import SentimentAnalysisConfigReader
 
 
-def evaluate_model(questions_list: List[str], valid_config: ConfigReader) -> None:
+def evaluate_model(questions_list: List[str], valid_config: SentimentAnalysisConfigReader) -> None:
     """
     Wrapper function that calls the model deserializer and returns prediction
     :param model_file_url: relative path for the model file
@@ -47,7 +47,7 @@ def main():
     """main function"""
     args = parse_arguments()
     qlist = args.question.strip('][').split(',')
-    valid_config = ConfigReader("config/config_sentiment_analysis.json")
+    valid_config = SentimentAnalysisConfigReader("config/config_sentiment_analysis.json")
     evaluate_model(qlist, valid_config)
 
 

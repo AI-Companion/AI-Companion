@@ -1,10 +1,11 @@
 import os
 import subprocess
+import pandas as pd
 
 
 class ImdbDataset:
     """
-    Dataset handler which gets training and test data
+    Dataset handler for the imdb dataset
     """
     def __init__(self, dataset_url=None):
         self._get_set(dataset_url)
@@ -48,3 +49,42 @@ class ImdbDataset:
             file1.close()
             y.append(0)
         return x, y
+
+
+class KaggleDataset:
+    """
+    Dataset handler for the ner dataset
+    """
+    def __init__(self, dataset_url=None):
+        self._get_set(dataset_url)
+
+    def _get_set(self, dataset_url):
+        """
+        checks if imdb dataset is downloaded or not, if not it'll collect it
+        :param dataset_url: web address of the imdb dataset
+        :return: None
+        """
+        print("===========> extracting kaggle ner dataset")
+        script_path = os.path.join(os.getcwd(), "bash_scripts/load_ner_dataset.sh")
+        subprocess.call("%s %s" % (script_path, dataset_url), shell=True)
+
+    def get_set(self):
+        """
+        Retrieves the compressed data file and extracts the training data.
+        Then it deletes the extracted csv
+        :return: training features and targets
+        """
+        X = []
+        y = []
+        dataset_path = os.path.join(os.getcwd(), "data/ner_dataset.csv")
+        data = pd.read_csv(dataset_path, encoding="latin1")
+        data = data.fillna(method="ffill")
+        agg_func = lambda s: [(w, p, t) for w, p, t in zip(s["Word"].values.tolist(),
+                                                           s["POS"].values.tolist(),
+                                                           s["Tag"].values.tolist())]
+        sent_grouped = data.groupby("Sentence #").apply(agg_func)
+        sent_list = [s for s in sent_grouped]
+        X = [[w[0] for w in s] for s in sent_list]
+        y = [[w[2] for w in s] for s in sent_list]
+        os.remove(dataset_path)
+        return X, y
