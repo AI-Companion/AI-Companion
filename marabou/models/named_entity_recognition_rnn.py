@@ -250,10 +250,10 @@ class RNNModel:
         :return: list of values related to each datasets and loss function
         """
         if (X_test is not None) and (y_test is not None):
-            history = self.model.fit(x=X_train, y=y_train, epochs=10, batch_size=32, validation_data=(X_test, y_test),
+            history = self.model.fit(x=X_train, y=y_train, epochs=10, batch_size=64, validation_data=(X_test, y_test),
                                      verbose=2)
         else:
-            history = self.model.fit(x=X_train, y=y_train, epochs=10, batch_size=32, verbose=2)
+            history = self.model.fit(x=X_train, y=y_train, epochs=10, batch_size=64, verbose=2)
         return history
 
     def predict(self, encoded_text_list):
