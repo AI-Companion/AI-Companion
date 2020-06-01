@@ -33,14 +33,18 @@ def train_model(config: NamedEntityRecognitionConfigReader) -> None:
         X, y = dataset.get_set()
     data_preprocessor = DataPreprocessor(config.max_sequence_length, config.validation_split, config.vocab_size)
     if config.experimental_mode:
-        ind = np.random.randint(0, len(X), 5000)
+        ind = np.random.randint(0, len(X), 1000)
         X = [X[i] for i in ind]
         y = [y[i] for i in ind]
     X_train, X_test, y_train, y_test = get_training_validation_data(X, y, data_preprocessor)
-    file_prefix = "sentiment_analysis_%s" % time.strftime("%Y%m%d_%H%M%S")
+    file_prefix = "named_entity_recognition_%s" % time.strftime("%Y%m%d_%H%M%S")
     trained_model = RNNModel(config=config, data_preprocessor=data_preprocessor)
     history = trained_model.fit(X_train, y_train, X_test, y_test)
+    print("===========> saving learning curve under plots/")
     trained_model.save_learning_curve(history, file_prefix)
+    print("===========> saving trained model and preprocessor under models/")
+    trained_model.save_model(file_prefix)
+    data_preprocessor.save_preprocessor(file_prefix)
 
 
 def main():

@@ -92,11 +92,9 @@ class FastTextEmbedding():
         print("----> embedding file saved to %s" % file_url)
         fin = io.open(file_url, 'r', encoding='utf-8', newline='\n', errors='ignore')
         embedding_index = {}
-        print("fin file index")
         for line in fin:
             tokens = line.rstrip().split(' ')
             embedding_index[tokens[0]] = [float(t) for t in tokens[1:]]
-        print("build embedding index")
         embedding_matrix = np.zeros((self.vocab_size, self.embedding_dimension))
         for word, i in self.word_index.items():
             if i >= self.vocab_size:
@@ -104,7 +102,6 @@ class FastTextEmbedding():
             embedding_vector = embedding_index.get(word)
             if embedding_vector is not None:
                 embedding_matrix[i] = embedding_vector
-        print("build embedding matrix")
         return embedding_matrix
 
     def build_embedding(self):
