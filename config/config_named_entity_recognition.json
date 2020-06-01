@@ -4,7 +4,7 @@
     "__help_model_name":"can be either 'rnn' or 'tfidf'",
     "dataset_url":"data/ner_dataset.zip",
     "__help_dataset_url":"url for the specified dataset",
-    "experimental_mode":true,
+    "experimental_mode":false,
     "__help_experimental_mode":"set to true if you just looking for a 'quick and dirty model'",
     "validation_split":0.3,
     "__help_validation_split":"train test split ratio",
@@ -18,7 +18,7 @@
     "__help_embedding_algorithm":"can be glove or fasttext",
     "embedding_dimension":100,
     "__help_embedding_dimension":"glove possible embedding dimensions are [50, 100, 200, 300] any other value will be replaced by 100, if embedding is fasttext then this parameter is ignored and 300 is applied",
-    "vocab_size":5000,
+    "vocab_size":1000,
     "__help_vocab_size":"count of unique tokens",
     "pre_trained_embedding":true,
     "__help_pre_trained_embedding":"set to true if you want to use a pre-trained embedding, otherwise the model will learn the embedding"
