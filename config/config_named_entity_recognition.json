@@ -4,7 +4,7 @@
     "__help_model_name":"can be either 'rnn' or 'tfidf'",
     "dataset_url":"data/ner_dataset.zip",
     "__help_dataset_url":"url for the specified dataset",
-    "experimental_mode":false,
+    "experimental_mode":true,
     "__help_experimental_mode":"set to true if you just looking for a 'quick and dirty model'",
     "validation_split":0.3,
     "__help_validation_split":"train test split ratio",
