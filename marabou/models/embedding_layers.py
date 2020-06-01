@@ -92,6 +92,7 @@ class FastTextEmbedding():
         print("----> embedding file saved to %s" % file_url)
         fin = io.open(file_url, 'r', encoding='utf-8', newline='\n', errors='ignore')
         embedding_index = {}
+        print("fin file index")
         for line in fin:
             tokens = line.rstrip().split(' ')
             embedding_index[tokens[0]] = map(float, tokens[1:])
