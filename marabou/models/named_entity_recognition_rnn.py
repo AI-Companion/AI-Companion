@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.model_selection import train_test_split
 from tensorflow.keras import Model
+from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
@@ -83,6 +84,7 @@ class DataPreprocessor:
         :return: a tuple consisting of training predictors, training labels, validation predictors, validation labels
         """
         print("===========> data split")
+        y = [to_categorical(i, num_classes=len(self.labels_to_idx)) for i in y]
         X_train, X_test, y_train, y_test = train_test_split(X, y, shuffle=True, test_size=self.validation_split)
         print("----> data split finish")
         print('training features shape ', X_train.shape)
@@ -148,6 +150,7 @@ class RNNModel:
         self.embedding_layer = None
         self.model = None
         self.n_labels = None
+        self.n_iter = 20
         keys = kwargs.keys()
         if 'config' in keys and 'data_preprocessor' in keys:
             self.init_from_config_file(kwargs['config'], kwargs['data_preprocessor'])
@@ -184,6 +187,8 @@ class RNNModel:
             self.embeddings_path = config.embeddings_path_glove
         elif self.embeddings_name == "fasttext":
             self.embeddings_path = config.embeddings_path_fasttext
+        if config.experimental_mode:
+            self.n_iter = 10
         self.max_length = config.max_sequence_length
         self.n_labels = len(data_preprocessor.labels_to_idx)
         self.word_index = data_preprocessor.tokenizer_obj.word_index
@@ -231,7 +236,7 @@ class RNNModel:
         # model.add(Dense(250, activation='relu'))
         # model.add(Dense(1, activation='sigmoid'))
 
-        model.compile(loss='binary_crossentropy', optimizer="adam", metrics=['acc'])
+        model.compile(loss='categorical_crossentropy', optimizer="adam", metrics=['acc'])
         print(model.summary())
         return model
 
