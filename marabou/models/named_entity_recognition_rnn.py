@@ -374,7 +374,7 @@ class RNNModel:
         model_files_list = os.listdir(os.path.join(os.getcwd(), "models"))
         if len(model_files_list) > 0:
             rnn_models_idx = [("named_entity_recognition" in f) and ("rnn" in f) for f in model_files_list]
-            if len(rnn_models_idx) > 0:
+            if np.sum(rnn_models_idx) > 0:
                 rnn_model = list(compress(model_files_list, rnn_models_idx))
                 model_dates = [int(''.join(re.findall(r'\d+', f))) for f in rnn_model]
                 h5_file_name = rnn_model[np.argmax(model_dates)]
