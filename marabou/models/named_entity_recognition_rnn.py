@@ -6,6 +6,7 @@ from itertools import compress
 from typing import List
 import matplotlib.pyplot as plt
 import numpy as np
+from nltk.tokenize import word_tokenize
 from sklearn.model_selection import train_test_split
 from tensorflow.keras import Model
 from tensorflow.keras.utils import to_categorical
@@ -56,11 +57,10 @@ class DataPreprocessor:
         """
         print("===========> data tokenization")
         # features tokenization
-        tokenizer_obj = Tokenizer(num_words=self.vocab_size)
-        tokenizer_obj.fit_on_texts(X)
-        self.tokenizer_obj = tokenizer_obj
-        sequences = tokenizer_obj.texts_to_sequences(X)
-        word_index = tokenizer_obj.word_index
+        self.tokenizer_obj = Tokenizer(num_words=self.vocab_size)
+        self.tokenizer_obj.fit_on_texts(X)
+        sequences = self.tokenizer_obj.texts_to_sequences(X)
+        word_index = self.tokenizer_obj.word_index
         review_pad = pad_sequences(sequences, maxlen=self.max_sequence_length, padding="post",
                                    value=self.vocab_size - 1)
         # labels tokenization
@@ -106,6 +106,8 @@ class DataPreprocessor:
         with open(file_url, 'wb') as handle:
             pickle.dump(self.tokenizer_obj, handle, protocol=pickle.HIGHEST_PROTOCOL)
             pickle.dump(self.max_sequence_length, handle, protocol=pickle.HIGHEST_PROTOCOL)
+            pickle.dump(self.vocab_size, handle, protocol=pickle.HIGHEST_PROTOCOL)
+            pickle.dump(self.labels_to_idx, handle, protocol=pickle.HIGHEST_PROTOCOL)
         print("----> proprocessor object saved to %s" % file_url)
 
     @staticmethod
@@ -120,6 +122,8 @@ class DataPreprocessor:
         with open(preprocessor_file_name, 'rb') as f:
             preprocessor['tokenizer_obj'] = pickle.load(f)
             preprocessor['max_sequence_length'] = pickle.load(f)
+            preprocessor['vocab_size'] = pickle.load(f)
+            preprocessor['labels_to_idx'] = pickle.load(f)
         return preprocessor
 
     @staticmethod
@@ -130,9 +134,21 @@ class DataPreprocessor:
         :param preprocessor: tokenizer object
         :return: preprocessed data
         """
-        data = preprocessor['tokenizer_obj'].texts_to_sequences(data)
-        data = pad_sequences(data, maxlen=preprocessor['max_sequence_length'])
-        return data
+        lines = list()
+        n_tokens_list = list()
+        for line in data:
+            if not isinstance(line, list):
+                line = word_tokenize(line)
+            tokens = [w.lower() for w in line]
+            table = str.maketrans('', '', string.punctuation)
+            stripped = [w.translate(table) for w in tokens]
+            words = [word for word in stripped if word.isalpha()]
+            lines.append(words)
+            n_tokens_list.append(len(words))
+        data = preprocessor['tokenizer_obj'].texts_to_sequences(lines)
+        data = pad_sequences(data, maxlen=preprocessor['max_sequence_length'], padding="post",
+                             value=preprocessor['vocab_size'] - 1)
+        return data, n_tokens_list
 
 
 class RNNModel:
@@ -150,7 +166,7 @@ class RNNModel:
         self.embedding_layer = None
         self.model = None
         self.n_labels = None
-        self.n_iter = 20
+        self.n_iter = 40
         keys = kwargs.keys()
         if 'config' in keys and 'data_preprocessor' in keys:
             self.init_from_config_file(kwargs['config'], kwargs['data_preprocessor'])
@@ -250,32 +266,45 @@ class RNNModel:
         :return: list of values related to each datasets and loss function
         """
         if (X_test is not None) and (y_test is not None):
-            history = self.model.fit(x=X_train, y=y_train, epochs=10, batch_size=64, validation_data=(X_test, y_test),
-                                     verbose=2)
+            history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=64,
+                                     validation_data=(X_test, y_test), verbose=2)
         else:
-            history = self.model.fit(x=X_train, y=y_train, epochs=10, batch_size=64, verbose=2)
+            history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=64, verbose=2)
         return history
 
-    def predict(self, encoded_text_list):
+    def predict(self, encoded_text_list, n_tokens_list, labels_to_idx):
         """
         inference method
         :param encoded_text_list: a list of texts to be evaluated. the input is assumed to have been
         preprocessed
-        :return: a numpy array containing the probabilities of a positive review for each list entry
+        :param n_tokens_list: number of tokens in each input string before padding
+        :param labels_to_idx: a dictionary containing the conversion from each class label to its id
+        :return: a numpy array containing the class for token character in the sentence
         """
+        idx_to_labels = {v: k for k, v in labels_to_idx.items()}
         probs = self.model.predict(encoded_text_list)
-        boolean_result = probs > 0.5
-        return [int(b) for b in boolean_result]
+        labels_list = []
+        for i in range(len(probs)):
+            real_probs = probs[i][:n_tokens_list[i]]
+            classes = np.argmax(real_probs, axis=1)
+            labels = [idx_to_labels[cl] for cl in classes]
+            labels_list.append(labels)
+        return labels_list
 
-    def predict_proba(self, encoded_text_list):
+    def predict_proba(self, encoded_text_list, n_tokens_list):
         """
         inference method
         :param encoded_text_list: a list of texts to be evaluated. the input is assumed to have been
         preprocessed
+        :param n_tokens_list: number of tokens in each input string before padding
         :return: a numpy array containing the probabilities of a positive review for each list entry
         """
         probs = self.model.predict(encoded_text_list)
-        return [p[0] for p in probs]
+        real_probs_list = []
+        for i in range(len(probs)):
+            real_probs = probs[i][:n_tokens_list[i]]
+            real_probs_list.append(real_probs)
+        return real_probs_list
 
     def save_model(self, file_name_prefix):
         """
@@ -342,7 +371,7 @@ class RNNModel:
         model_dir = os.path.join(os.getcwd(), "models")
         model_files_list = os.listdir(os.path.join(os.getcwd(), "models"))
         if len(model_files_list) > 0:
-            rnn_models_idx = [("sentiment_analysis" in f) and ("rnn" in f) for f in model_files_list]
+            rnn_models_idx = [("named_entity_recognition" in f) and ("rnn" in f) for f in model_files_list]
             if len(rnn_models_idx) > 0:
                 rnn_model = list(compress(model_files_list, rnn_models_idx))
                 model_dates = [int(''.join(re.findall(r'\d+', f))) for f in rnn_model]
