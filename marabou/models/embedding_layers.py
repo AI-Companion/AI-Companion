@@ -95,6 +95,7 @@ class FastTextEmbedding():
         for line in fin:
             tokens = line.rstrip().split(' ')
             embedding_index[tokens[0]] = map(float, tokens[1:])
+        print("build embedding index")
         embedding_matrix = np.zeros((self.vocab_size, self.embedding_dimension))
         for word, i in self.word_index.items():
             if i >= self.vocab_size:
@@ -102,6 +103,7 @@ class FastTextEmbedding():
             embedding_vector = embedding_index.get(word)
             if embedding_vector is not None:
                 embedding_matrix[i] = list(embedding_vector)
+        print("build embedding matrix")
         return embedding_matrix
 
     def build_embedding(self):
