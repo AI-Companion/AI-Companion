@@ -33,7 +33,7 @@ def train_model(config: NamedEntityRecognitionConfigReader) -> None:
         X, y = dataset.get_set()
     data_preprocessor = DataPreprocessor(config.max_sequence_length, config.validation_split, config.vocab_size)
     if config.experimental_mode:
-        ind = np.random.randint(0, len(X), 1000)
+        ind = np.random.randint(0, len(X), 5000)
         X = [X[i] for i in ind]
         y = [y[i] for i in ind]
     X_train, X_test, y_train, y_test = get_training_validation_data(X, y, data_preprocessor)
