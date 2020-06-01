@@ -166,7 +166,7 @@ class RNNModel:
         self.embedding_layer = None
         self.model = None
         self.n_labels = None
-        self.n_iter = 40
+        self.n_iter = 10
         keys = kwargs.keys()
         if 'config' in keys and 'data_preprocessor' in keys:
             self.init_from_config_file(kwargs['config'], kwargs['data_preprocessor'])
