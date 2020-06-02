@@ -21,7 +21,7 @@ def evaluate_model(questions_list: List[str]) -> None:
         raise ValueError("there is no corresponding model file")
     pre_processor = DataPreprocessor.load_preprocessor(preprocessor_file)
     questions_list, n_tokens = DataPreprocessor.preprocess_data(questions_list, pre_processor)
-    labels_list = trained_model.predict(questions_list, n_tokens, pre_processor["labels_to_idx"])
+    labels_list = trained_model.predict(questions_list, pre_processor["labels_to_idx"], n_tokens)
     print(labels_list)
 
 
