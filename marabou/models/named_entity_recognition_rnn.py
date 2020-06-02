@@ -6,8 +6,10 @@ from itertools import compress
 from typing import List
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 from nltk.tokenize import word_tokenize
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
 from tensorflow.keras import Model
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.preprocessing.text import Tokenizer
@@ -256,23 +258,17 @@ class RNNModel:
         print(model.summary())
         return model
 
-    def fit(self, X_train, y_train, X_test=None, y_test=None):
+    def convert_idx_to_labels(self, classes_vector, labels_to_idx):
         """
-        fits the model object to the data
-        :param X_train: numpy array containing encoded training features
-        :param y_train: numpy array containing training targets
-        :paran X_test: numpy array containing encoded test features
-        :param y_test: numpy array containing test targets
-        :return: list of values related to each datasets and loss function
+        utility function to convert encoded target idx to original labels
+        :param classes_vector: target vector containing indexed classes
+        :param labels_to_idx: a dictionary containing the conversion from each class label to its id
+        :return: a numpy array containing the corresponding labels
         """
-        if (X_test is not None) and (y_test is not None):
-            history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=64,
-                                     validation_data=(X_test, y_test), verbose=2)
-        else:
-            history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=64, verbose=2)
-        return history
+        idx_to_labels = {v: k for k, v in labels_to_idx.items()}
+        return [idx_to_labels[cl] for cl in classes_vector]
 
-    def predict(self, encoded_text_list, n_tokens_list, labels_to_idx):
+    def predict(self, encoded_text_list, labels_to_idx, n_tokens_list=None):
         """
         inference method
         :param encoded_text_list: a list of texts to be evaluated. the input is assumed to have been
@@ -281,15 +277,40 @@ class RNNModel:
         :param labels_to_idx: a dictionary containing the conversion from each class label to its id
         :return: a numpy array containing the class for token character in the sentence
         """
-        idx_to_labels = {v: k for k, v in labels_to_idx.items()}
         probs = self.model.predict(encoded_text_list)
         labels_list = []
         for i in range(len(probs)):
-            real_probs = probs[i][:n_tokens_list[i]]
+            if n_tokens_list is not None:
+                real_probs = probs[i][:n_tokens_list[i]]
+            else:
+                real_probs = probs[i]
             classes = np.argmax(real_probs, axis=1)
-            labels = [idx_to_labels[cl] for cl in classes]
-            labels_list.append(labels)
+            labels_list.append(self.convert_idx_to_labels(classes, labels_to_idx))
         return labels_list
+
+    def fit(self, X_train, y_train, X_test=None, y_test=None, labels_to_idx=None):
+        """
+        fits the model object to the data
+        :param X_train: numpy array containing encoded training features
+        :param y_train: numpy array containing training targets
+        :paran X_test: numpy array containing encoded test features
+        :param y_test: numpy array containing test targets
+        :param labels_to_idx: a dictionary containing the conversion from each class label to its id
+        :return: list of values related to each datasets and loss function
+        """
+        if (X_test is not None) and (y_test is not None):
+            history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=64,
+                                     validation_data=(X_test, y_test), verbose=2)
+            y_hat = self.predict(X_test, labels_to_idx)
+            true_classes = np.argmax(y_test, axis=2).tolist()
+            y = [self.convert_idx_to_labels(sublist, labels_to_idx) for sublist in true_classes]
+            y_flat = [val for sublist in y for val in sublist]
+            y_hat_flat = [val for sublist in y_hat for val in sublist]
+            report = classification_report(y_flat, y_hat_flat, output_dict=True)
+        else:
+            report = None
+            history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=64, verbose=2)
+        return history, report
 
     def predict_proba(self, encoded_text_list, n_tokens_list):
         """
@@ -328,6 +349,26 @@ class RNNModel:
         print("----> model saved to %s" % file_url_keras_model)
         print("----> class saved to %s" % file_url_class)
 
+    def save_classification_report(self, report, file_name_prefix):
+        """
+        saves the classification report to a txt file
+        :param report: a classification report object
+        :param file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
+        :return: None
+        """
+        plot_folder = os.path.join(os.getcwd(), "perf")
+        report_file_url = os.path.join(plot_folder, file_name_prefix + "_report.txt")
+        df = pd.DataFrame(report).transpose().round(2)
+        df['classes'] = df.index
+        f = open(report_file_url, "w")
+        line = "{:15} |{:10} |{:10} |{:10} |{:10}|\n".format("classes", "precision", "recall", "f1-score", "support")
+        f.write(line)
+        for _, row in df.iterrows():
+            line = "{:15} |{:10} |{:10} |{:10} |{:10}|\n".format(row[4], row[0], row[1], row[2], row[3])
+            f.write(line)
+        f.close()
+        print("----> classification report saved to %s" % report_file_url)
+
     def save_learning_curve(self, history, file_name_prefix):
         """
         saves the learning curve plot
@@ -336,7 +377,7 @@ class RNNModel:
         :param file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
         :return: None
         """
-        plot_folder = os.path.join(os.getcwd(), "plots")
+        plot_folder = os.path.join(os.getcwd(), "perf")
         if not os.path.isdir(plot_folder):
             os.mkdir(plot_folder)
 
