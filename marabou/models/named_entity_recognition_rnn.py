@@ -63,15 +63,18 @@ class DataPreprocessor:
         self.tokenizer_obj.fit_on_texts(X)
         sequences = self.tokenizer_obj.texts_to_sequences(X)
         word_index = self.tokenizer_obj.word_index
-        review_pad = pad_sequences(sequences, maxlen=self.max_sequence_length, padding="post",
-                                   value=self.vocab_size - 1)
+        # review_pad = pad_sequences(sequences, maxlen=self.max_sequence_length, padding="post",
+        #                           value=self.vocab_size - 1)
+        review_pad = pad_sequences(sequences, maxlen=self.max_sequence_length, padding="post")
+
         # labels tokenization
         flat_list = [item for sublist in y for item in sublist]
         unique_labels = list(set(flat_list))
         self.labels_to_idx = {t: i for i, t in enumerate(unique_labels)}
         tokenized_labels = [[self.labels_to_idx[word] for word in sublist] for sublist in y]
-        tokenized_labels = pad_sequences(tokenized_labels, maxlen=self.max_sequence_length, padding="post",
-                                         value=self.labels_to_idx["O"])
+        # tokenized_labels = pad_sequences(tokenized_labels, maxlen=self.max_sequence_length, padding="post",
+        #                                 value=self.labels_to_idx["O"])
+        tokenized_labels = pad_sequences(tokenized_labels, maxlen=self.max_sequence_length, padding="post")
         print("----> data tokenization finish")
         print("found %i unique tokens" % len(word_index))
         print("features tensor shape ", review_pad.shape)
@@ -148,8 +151,9 @@ class DataPreprocessor:
             lines.append(words)
             n_tokens_list.append(len(words))
         data = preprocessor['tokenizer_obj'].texts_to_sequences(lines)
-        data = pad_sequences(data, maxlen=preprocessor['max_sequence_length'], padding="post",
-                             value=preprocessor['vocab_size'] - 1)
+        # data = pad_sequences(data, maxlen=preprocessor['max_sequence_length'], padding="post",
+        #                     value=preprocessor['vocab_size'] - 1)
+        data = pad_sequences(data, maxlen=preprocessor['max_sequence_length'], padding="post")
         return data, n_tokens_list
 
 
@@ -168,7 +172,7 @@ class RNNModel:
         self.embedding_layer = None
         self.model = None
         self.n_labels = None
-        self.n_iter = 10
+        self.n_iter = 5
         keys = kwargs.keys()
         if 'config' in keys and 'data_preprocessor' in keys:
             self.init_from_config_file(kwargs['config'], kwargs['data_preprocessor'])
@@ -205,8 +209,6 @@ class RNNModel:
             self.embeddings_path = config.embeddings_path_glove
         elif self.embeddings_name == "fasttext":
             self.embeddings_path = config.embeddings_path_fasttext
-        if config.experimental_mode:
-            self.n_iter = 10
         self.max_length = config.max_sequence_length
         self.n_labels = len(data_preprocessor.labels_to_idx)
         self.word_index = data_preprocessor.tokenizer_obj.word_index
@@ -307,6 +309,8 @@ class RNNModel:
             y_flat = [val for sublist in y for val in sublist]
             y_hat_flat = [val for sublist in y_hat for val in sublist]
             report = classification_report(y_flat, y_hat_flat, output_dict=True)
+            df = pd.DataFrame(report).transpose().round(2)
+            print(df)
         else:
             report = None
             history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=64, verbose=2)

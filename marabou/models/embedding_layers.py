@@ -134,7 +134,7 @@ class ElmoEmbedding(Layer):
         self.elmo = hub.Module('https://tfhub.dev/google/elmo/2', trainable=self.trainable,
                                name="{}_module".format(self.name))
         # self.trainable_weights += tf.trainable_variables(scope="^{}_module/.*".format(self.name))
-        self.trainable_weights.append(tf.trainable_variables(scope="^{}_module/.*".format(self.name)))
+        self.trainable_weights.append(tf.compat.v1.trainable_variables(scope="^{}_module/.*".format(self.name)))
         super(ElmoEmbedding, self).build(input_shape)
 
     def call(self, x):
