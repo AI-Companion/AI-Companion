@@ -16,7 +16,8 @@ INSTALL_REQUIREMENTS = [
     'pycodestyle',
     'nltk',
     'keras==2.2.4',
-    'tensorflow==1.15.2',
+    'tensorflow',
+    'tensorflow_hub',
     'matplotlib',
     'h5py'
     #'git_pep8_commit_hook'
