@@ -15,11 +15,12 @@ INSTALL_REQUIREMENTS = [
     'doxypypy',
     'pycodestyle',
     'nltk',
-    'keras==2.2.4',
+    'keras',
     'tensorflow',
     'tensorflow_hub',
     'matplotlib',
-    'h5py'
+    'h5py',
+    'ntlk'
     #'git_pep8_commit_hook'
 ]
 
