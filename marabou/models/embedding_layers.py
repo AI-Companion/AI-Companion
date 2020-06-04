@@ -2,11 +2,8 @@ import subprocess
 import os
 import io
 import numpy as np
-import tensorflow as tf
-from tensorflow.keras.layers import Embedding, Layer
+from tensorflow.keras.layers import Embedding
 from tensorflow.keras.initializers import Constant
-from tensorflow.keras import backend as K
-import tensorflow_hub as hub
 
 
 class Glove6BEmbedding():
@@ -114,45 +111,3 @@ class FastTextEmbedding():
                                     embeddings_initializer=Constant(embeddings_matrix),
                                     input_length=self.max_length, trainable=False)
         return embedding_layer
-
-
-class ElmoEmbedding(Layer):
-    """
-    loads glove embedding from stanford
-    """
-    def __init__(self, use_pretrained_weights, embedding_dimension, **kwargs):
-        self.embedding_dimension = embedding_dimension  # 1024
-        self.trainable = use_pretrained_weights
-        self.elmo = None
-        print("===========> collecting pretrained embedding")
-        super(ElmoEmbedding, self).__init__(**kwargs)
-
-    def build(self, input_shape):
-        """
-        standard implementation for the build function
-        """
-        self.elmo = hub.Module('https://tfhub.dev/google/elmo/2', trainable=self.trainable,
-                               name="{}_module".format(self.name))
-        # self.trainable_weights += tf.trainable_variables(scope="^{}_module/.*".format(self.name))
-        self.trainable_weights.append(tf.compat.v1.trainable_variables(scope="^{}_module/.*".format(self.name)))
-        super(ElmoEmbedding, self).build(input_shape)
-
-    def call(self, x):
-        """
-        standard implementation for the call function
-        """
-        result = self.elmo(K.squeeze(K.cast(x, tf.string), axis=1),
-                           as_dict=True, signature='default')['default']
-        return result
-
-    def compute_mask(self, inputs):
-        """
-        standard implementation for the compute_mask function
-        """
-        return K.not_equal(inputs, '--PAD--')
-
-    def compute_output_shape(self, input_shape):
-        """
-        standard implementation for the compute_output_shape function
-        """
-        return (input_shape[0], self.embedding_dimension)

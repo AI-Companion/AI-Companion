@@ -37,6 +37,7 @@ def train_model(config: NamedEntityRecognitionConfigReader) -> None:
         X = [X[i] for i in ind]
         y = [y[i] for i in ind]
     X_train, X_test, y_train, y_test = get_training_validation_data(X, y, data_preprocessor)
+
     file_prefix = "named_entity_recognition_%s" % time.strftime("%Y%m%d_%H%M%S")
     trained_model = RNNModel(config=config, data_preprocessor=data_preprocessor)
     history, report = trained_model.fit(X_train, y_train, X_test, y_test, data_preprocessor.labels_to_idx)

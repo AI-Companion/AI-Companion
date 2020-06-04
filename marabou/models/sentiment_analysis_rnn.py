@@ -16,7 +16,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
 from tensorflow.keras.layers import Embedding, Dense, LSTM, Input
 from marabou.utils.config_loader import SentimentAnalysisConfigReader
-from marabou.models.embedding_layers import Glove6BEmbedding, ElmoEmbedding, FastTextEmbedding
+from marabou.models.embedding_layers import Glove6BEmbedding, FastTextEmbedding
 nltk.download('punkt')
 nltk.download('stopwords')
 
@@ -196,8 +196,6 @@ class RNNModel:
             glove_embeddings = Glove6BEmbedding(self.embedding_dimension, self.word_index,
                                                 self.vocab_size, self.embeddings_path, self.max_length)
             embedding_layer = glove_embeddings.embedding_layer
-        elif self.use_pretrained_embedding and self.embeddings_name == "elmo":
-            embedding_layer = ElmoEmbedding(self.use_pretrained_embedding, 1024)
         elif self.use_pretrained_embedding and self.embeddings_name == "fasttext":
             fasttext_embeddings = FastTextEmbedding(self.word_index, self.vocab_size, self.embeddings_path,
                                                     self.max_length)
