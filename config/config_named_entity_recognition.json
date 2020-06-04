@@ -10,7 +10,7 @@
     "__help_batch_size":"used to train the model, must be power of 2",
     "validation_split":0.3,
     "__help_validation_split":"train test split ratio",
-    "max_sequence_length":40,
+    "max_sequence_length":50,
     "__help_max_sequence_length":"maximum length of training features",
     "embeddings_path_glove":"http://nlp.stanford.edu/data/glove.6B.zip",
     "__help_embeddings_path_glove":"url for glove embedding file",
