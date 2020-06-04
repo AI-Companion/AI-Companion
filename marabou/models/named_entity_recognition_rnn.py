@@ -171,7 +171,7 @@ class RNNModel:
         self.model = None
         self.n_labels = None
         self.labels_to_idx = None
-        self.n_iter = 5
+        self.n_iter = 15
         keys = kwargs.keys()
         if 'config' in keys and 'data_preprocessor' in keys:
             self.init_from_config_file(kwargs['config'], kwargs['data_preprocessor'])
