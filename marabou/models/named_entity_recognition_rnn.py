@@ -7,6 +7,8 @@ from typing import List
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import nltk
+nltk.download('punkt')
 from nltk.tokenize import word_tokenize
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
@@ -17,7 +19,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
 from tensorflow.keras.layers import Embedding, Dense, LSTM, Input, TimeDistributed, Bidirectional, Dropout
 from marabou.utils.config_loader import NamedEntityRecognitionConfigReader
-from marabou.models.embedding_layers import FastTextEmbedding, Glove6BEmbedding, ElmoEmbedding
+from marabou.models.embedding_layers import FastTextEmbedding, Glove6BEmbedding
 
 
 class DataPreprocessor:
@@ -62,21 +64,18 @@ class DataPreprocessor:
         self.tokenizer_obj = Tokenizer(num_words=self.vocab_size)
         self.tokenizer_obj.fit_on_texts(X)
         sequences = self.tokenizer_obj.texts_to_sequences(X)
-        word_index = self.tokenizer_obj.word_index
-        # review_pad = pad_sequences(sequences, maxlen=self.max_sequence_length, padding="post",
-        #                           value=self.vocab_size - 1)
-        review_pad = pad_sequences(sequences, maxlen=self.max_sequence_length, padding="post")
-
+        self.tokenizer_obj.word_index["pad"] = 0
+        review_pad = pad_sequences(sequences, maxlen=self.max_sequence_length, padding="post",
+                                   value=self.tokenizer_obj.word_index["pad"])
         # labels tokenization
         flat_list = [item for sublist in y for item in sublist]
         unique_labels = list(set(flat_list))
         self.labels_to_idx = {t: i for i, t in enumerate(unique_labels)}
         tokenized_labels = [[self.labels_to_idx[word] for word in sublist] for sublist in y]
-        # tokenized_labels = pad_sequences(tokenized_labels, maxlen=self.max_sequence_length, padding="post",
-        #                                 value=self.labels_to_idx["O"])
-        tokenized_labels = pad_sequences(tokenized_labels, maxlen=self.max_sequence_length, padding="post")
+        tokenized_labels = pad_sequences(tokenized_labels, maxlen=self.max_sequence_length, padding="post",
+                                         value=self.labels_to_idx["O"])
         print("----> data tokenization finish")
-        print("found %i unique tokens" % len(word_index))
+        print("found %i unique tokens" % len(self.tokenizer_obj.word_index))
         print("features tensor shape ", review_pad.shape)
         print("labels tensor shape ", tokenized_labels.shape)
         return review_pad, tokenized_labels
@@ -151,9 +150,8 @@ class DataPreprocessor:
             lines.append(words)
             n_tokens_list.append(len(words))
         data = preprocessor['tokenizer_obj'].texts_to_sequences(lines)
-        # data = pad_sequences(data, maxlen=preprocessor['max_sequence_length'], padding="post",
-        #                     value=preprocessor['vocab_size'] - 1)
-        data = pad_sequences(data, maxlen=preprocessor['max_sequence_length'], padding="post")
+        data = pad_sequences(data, maxlen=preprocessor['max_sequence_length'], padding="post",
+                             value=preprocessor['max_sequence_length'].word_index["pad"])
         return data, n_tokens_list
 
 
@@ -185,6 +183,7 @@ class RNNModel:
         :param h5_file: url to a saved class
         :return: None
         """
+        print("h5 file %s" % h5_file)
         self.model = load_model(h5_file)
         with open(class_file, 'rb') as f:
             self.use_pretrained_embedding = pickle.load(f)
@@ -226,8 +225,6 @@ class RNNModel:
             glove_embeddings = Glove6BEmbedding(self.embedding_dimension, self.word_index,
                                                 self.vocab_size, self.embeddings_path, self.max_length)
             embedding_layer = glove_embeddings.embedding_layer
-        elif self.use_pretrained_embedding and self.embeddings_name == "elmo":
-            embedding_layer = ElmoEmbedding(self.use_pretrained_embedding, 1024)
         elif self.use_pretrained_embedding and self.embeddings_name == "fasttext":
             fasttext_embeddings = FastTextEmbedding(self.word_index, self.vocab_size, self.embeddings_path,
                                                     self.max_length)
