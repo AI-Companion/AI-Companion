@@ -151,7 +151,7 @@ class DataPreprocessor:
             n_tokens_list.append(len(words))
         data = preprocessor['tokenizer_obj'].texts_to_sequences(lines)
         data = pad_sequences(data, maxlen=preprocessor['max_sequence_length'], padding="post",
-                             value=preprocessor['max_sequence_length'].word_index["pad"])
+                             value=preprocessor['tokenizer_obj'].word_index["pad"])
         return data, n_tokens_list
 
 
@@ -170,6 +170,7 @@ class RNNModel:
         self.embedding_layer = None
         self.model = None
         self.n_labels = None
+        self.labels_to_idx = None
         self.n_iter = 5
         keys = kwargs.keys()
         if 'config' in keys and 'data_preprocessor' in keys:
@@ -211,6 +212,7 @@ class RNNModel:
         self.max_length = config.max_sequence_length
         self.n_labels = len(data_preprocessor.labels_to_idx)
         self.word_index = data_preprocessor.tokenizer_obj.word_index
+        self.labels_to_idx = data_preprocessor.labels_to_idx
         self.embedding_layer = self.build_embedding()
         self.model = self.build_model()
 
@@ -297,9 +299,12 @@ class RNNModel:
         :param labels_to_idx: a dictionary containing the conversion from each class label to its id
         :return: list of values related to each datasets and loss function
         """
+        wts = 10 * np.ones((y_train.shape[0], y_train.shape[1]))
+        classes = np.argmax(y_train, axis=2)
+        wts[classes == self.labels_to_idx["O"]] = 1
         if (X_test is not None) and (y_test is not None):
             history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=64,
-                                     validation_data=(X_test, y_test), verbose=2)
+                                     sample_weight=wts, validation_data=(X_test, y_test), verbose=2)
             y_hat = self.predict(X_test, labels_to_idx)
             true_classes = np.argmax(y_test, axis=2).tolist()
             y = [self.convert_idx_to_labels(sublist, labels_to_idx) for sublist in true_classes]
