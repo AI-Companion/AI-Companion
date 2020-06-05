@@ -13,7 +13,6 @@ from nltk.tokenize import word_tokenize
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from tensorflow.keras import Model
-from tensorflow.keras.keras_contrib.layers import CRF
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
@@ -248,8 +247,6 @@ class RNNModel:
         x = Dropout(0.1)(x)
         x = Bidirectional(LSTM(units=100, return_sequences=True, recurrent_dropout=0.1))(x)
         x = TimeDistributed(Dense(self.n_labels, activation='softmax'))(x)
-        crf = CRF(self.n_labels)  # CRF layer
-        x = crf(x)  # output
         model = Model(inputs=input_layer, outputs=x)
         # non sequential preferred because it can incorporate residual dependencies
         # model = Sequential()
