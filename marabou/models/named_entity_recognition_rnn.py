@@ -18,7 +18,8 @@ from tensorflow.keras.layers import add
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
-from tensorflow.keras.layers import Embedding, Dense, LSTM, Input, TimeDistributed, Bidirectional, Dropout
+from tensorflow.keras.layers import Embedding, Dense, LSTM, Input, TimeDistributed, Bidirectional
+# from tensorflow.keras.layers import Dropout
 from marabou.utils.config_loader import NamedEntityRecognitionConfigReader
 from marabou.models.embedding_layers import FastTextEmbedding, Glove6BEmbedding
 
@@ -251,7 +252,7 @@ class RNNModel:
         # x = Dropout(0.1)(x)
         # x = Bidirectional(LSTM(units=100, return_sequences=True, recurrent_dropout=0.1))(x)
 
-        # # archi 2: f1-macro
+        # # archi 2: f1-macro 0.35-fasttext
         x = Bidirectional(LSTM(units=512, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
         x_rnn = Bidirectional(LSTM(units=512, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
         x = add([x, x_rnn])  # residual connection to the first biLSTM
