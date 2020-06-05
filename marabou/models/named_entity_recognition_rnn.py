@@ -232,7 +232,9 @@ class RNNModel:
                                                     self.max_length)
             embedding_layer = fasttext_embeddings.embedding_layer
         else:
-            embedding_layer = Embedding(self.vocab_size, self.embedding_dimension, input_length=self.max_length)
+            print("===========> embedding trained with the model")
+            embedding_layer = Embedding(input_dim=self.vocab_size, output_dim=self.embedding_dimension,
+                                        input_length=self.max_length, trainable=True)
         return embedding_layer
 
     def build_model(self):
