@@ -73,9 +73,10 @@ class DataPreprocessor:
         flat_list = [item for sublist in y for item in sublist]
         unique_labels = list(set(flat_list))
         self.labels_to_idx = {t: i for i, t in enumerate(unique_labels)}
+        self.labels_to_idx["pad"] = len(unique_labels)
         tokenized_labels = [[self.labels_to_idx[word] for word in sublist] for sublist in y]
         tokenized_labels = pad_sequences(tokenized_labels, maxlen=self.max_sequence_length, padding="post",
-                                         value=self.labels_to_idx["O"])
+                                         value=self.labels_to_idx["pad"])
         print("----> data tokenization finish")
         print("found %i unique tokens" % len(self.tokenizer_obj.word_index))
         print("features tensor shape ", review_pad.shape)
