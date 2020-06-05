@@ -14,7 +14,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from tensorflow.keras import Model
 from tensorflow.keras.utils import to_categorical
-from tensorflow.keras.layers.merge import add
+from tensorflow.keras.layers import add
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
