@@ -14,6 +14,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from tensorflow.keras import Model
 from tensorflow.keras.utils import to_categorical
+from tensorflow.keras.layers.merge import add
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
@@ -246,16 +247,17 @@ class RNNModel:
         # Run the function
         input_layer = Input(shape=(self.max_length,), name='input')
         x = self.embedding_layer(input_layer)
-        x = Dropout(0.1)(x)
-        x = Bidirectional(LSTM(units=100, return_sequences=True, recurrent_dropout=0.1))(x)
+        # # archi 1: f1-macro 0.3-fasttext 0.3-no embedding
+        # x = Dropout(0.1)(x)
+        # x = Bidirectional(LSTM(units=100, return_sequences=True, recurrent_dropout=0.1))(x)
+
+        # # archi 2: f1-macro
+        x = Bidirectional(LSTM(units=512, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
+        x_rnn = Bidirectional(LSTM(units=512, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
+        x = add([x, x_rnn])  # residual connection to the first biLSTM
+
         x = TimeDistributed(Dense(self.n_labels, activation='softmax'))(x)
         model = Model(inputs=input_layer, outputs=x)
-        # non sequential preferred because it can incorporate residual dependencies
-        # model = Sequential()
-        # model.add(self.embedding_layer)
-        # model.add(LSTM(64, dropout=0.2, recurrent_dropout=0.2))
-        # model.add(Dense(250, activation='relu'))
-        # model.add(Dense(1, activation='sigmoid'))
 
         model.compile(loss='categorical_crossentropy', optimizer="adam", metrics=['acc'])
         print(model.summary())
