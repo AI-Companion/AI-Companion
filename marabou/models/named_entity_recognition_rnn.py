@@ -12,6 +12,7 @@ nltk.download('punkt')
 from nltk.tokenize import word_tokenize
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
+from tf2crf import CRF
 from tensorflow.keras import Model
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.layers import add
@@ -259,9 +260,12 @@ class RNNModel:
         x = add([x, x_rnn])  # residual connection to the first biLSTM
 
         x = TimeDistributed(Dense(self.n_labels, activation='softmax'))(x)
+        crf = CRF()
+        x = crf(x)
         model = Model(inputs=input_layer, outputs=x)
 
-        model.compile(loss='categorical_crossentropy', optimizer="adam", metrics=['acc'])
+        # model.compile(loss='categorical_crossentropy', optimizer="adam", metrics=['acc'])
+        model.compile(loss=crf.loss, optimizer='adam', metrics=[crf.accuracy])
         print(model.summary())
         return model
 
