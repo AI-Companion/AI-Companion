@@ -15,7 +15,7 @@ from sklearn.metrics import classification_report
 from tf2crf import CRF
 from tensorflow.keras import Model
 from tensorflow.keras.utils import to_categorical
-from tensorflow.keras.layers import add
+# from tensorflow.keras.layers import add
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
@@ -267,9 +267,7 @@ class RNNModel:
         # model.compile(loss='categorical_crossentropy', optimizer="adam", metrics=['acc'])
 
         # # archi 3: crf layer
-        x = Bidirectional(LSTM(units=512, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
-        x_rnn = Bidirectional(LSTM(units=512, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
-        x = add([x, x_rnn])  # residual connection to the first biLSTM
+        x = Bidirectional(LSTM(units=50, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
         x = TimeDistributed(Dense(50, activation='relu'))(x)
         crf = CRF(self.n_labels)
         x = crf(x)
