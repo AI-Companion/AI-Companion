@@ -143,6 +143,8 @@ class DataPreprocessor:
         :return: preprocessed data
         """
         lines = list()
+        print("data",data)
+        print("preprocessor",preprocessor['tokenizer_obj'])
         n_tokens_list = list()
         for line in data:
             if not isinstance(line, list):
