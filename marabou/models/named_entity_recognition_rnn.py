@@ -16,6 +16,7 @@ from tf2crf import CRF
 from tensorflow.keras import Model
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.layers import add
+from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
@@ -256,6 +257,7 @@ class RNNModel:
         # x = Bidirectional(LSTM(units=100, return_sequences=True, recurrent_dropout=0.1))(x)
         # x = TimeDistributed(Dense(self.n_labels, activation='softmax'))(x)
         # model = Model(inputs=input_layer, outputs=x)
+        # model.compile(loss='categorical_crossentropy', optimizer="adam", metrics=['acc'])
 
         # # archi 2: f1-macro 0.35-fasttext
         # x = Bidirectional(LSTM(units=512, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
@@ -263,6 +265,7 @@ class RNNModel:
         # x = add([x, x_rnn])  # residual connection to the first biLSTM
         # x = TimeDistributed(Dense(self.n_labels, activation='softmax'))(x)
         # model = Model(inputs=input_layer, outputs=x)
+        # model.compile(loss='categorical_crossentropy', optimizer="adam", metrics=['acc'])
 
         # # archi 3: crf layer
         x = Bidirectional(LSTM(units=512, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
@@ -272,9 +275,8 @@ class RNNModel:
         crf = CRF(self.n_labels)
         x = crf(x)
         model = Model(inputs=input_layer, outputs=x)
-
-        # model.compile(loss='categorical_crossentropy', optimizer="adam", metrics=['acc'])
         model.compile(loss=crf.loss, optimizer='adam', metrics=[crf.accuracy])
+
         print(model.summary())
         return model
 
@@ -321,8 +323,13 @@ class RNNModel:
         wts = 10 * np.ones((y_train.shape[0], y_train.shape[1]))
         classes = np.argmax(y_train, axis=2)
         wts[classes == self.labels_to_idx["O"]] = 1
+        checkpointer = ModelCheckpoint(filepath = 'model.h5',
+                            verbose = 0,
+                            mode = 'auto',
+                            save_best_only = True,
+                            monitor='val_loss')        
         if (X_test is not None) and (y_test is not None):
-            history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=64,
+            history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=64, callbacks=[checkpointer],
                                      sample_weight=wts, validation_data=(X_test, y_test), verbose=2)
             y_hat = self.predict(X_test, labels_to_idx)
             true_classes = np.argmax(y_test, axis=2).tolist()
