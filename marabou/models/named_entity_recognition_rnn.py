@@ -175,7 +175,7 @@ class RNNModel:
         self.model = None
         self.n_labels = None
         self.labels_to_idx = None
-        self.n_iter = 7
+        self.n_iter = 5
         keys = kwargs.keys()
         if 'config' in keys and 'data_preprocessor' in keys:
             self.init_from_config_file(kwargs['config'], kwargs['data_preprocessor'])
@@ -259,7 +259,8 @@ class RNNModel:
         x_rnn = Bidirectional(LSTM(units=512, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
         x = add([x, x_rnn])  # residual connection to the first biLSTM
 
-        x = TimeDistributed(Dense(self.n_labels, activation='softmax'))(x)
+        # x = TimeDistributed(Dense(self.n_labels, activation='softmax'))(x)
+        x = TimeDistributed(Dense(self.n_labels, activation='relu'))(x)
         crf = CRF()
         x = crf(x)
         model = Model(inputs=input_layer, outputs=x)
@@ -397,8 +398,8 @@ class RNNModel:
         if not os.path.isdir(plot_folder):
             os.mkdir(plot_folder)
 
-        acc = history.history['acc']
-        val_acc = history.history['val_acc']
+        acc = history.history['accuracy']
+        val_acc = history.history['val_accuracy']
         loss = history.history['loss']
         val_loss = history.history['val_loss']
         epochs = range(len(acc))
