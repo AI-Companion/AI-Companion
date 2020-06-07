@@ -16,7 +16,6 @@ from tf2crf import CRF
 from tensorflow.keras import Model
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.layers import add
-from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
@@ -323,13 +322,8 @@ class RNNModel:
         wts = 10 * np.ones((y_train.shape[0], y_train.shape[1]))
         classes = np.argmax(y_train, axis=2)
         wts[classes == self.labels_to_idx["O"]] = 1
-        checkpointer = ModelCheckpoint(filepath = 'model.h5',
-                            verbose = 0,
-                            mode = 'auto',
-                            save_best_only = True,
-                            monitor='val_loss')        
         if (X_test is not None) and (y_test is not None):
-            history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=64, callbacks=[checkpointer],
+            history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=64,
                                      sample_weight=wts, validation_data=(X_test, y_test), verbose=2)
             y_hat = self.predict(X_test, labels_to_idx)
             true_classes = np.argmax(y_test, axis=2).tolist()
