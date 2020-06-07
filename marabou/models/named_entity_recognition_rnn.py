@@ -250,7 +250,7 @@ class RNNModel:
         # Run the function
         input_layer = Input(shape=(self.max_length,), name='input')
         x = self.embedding_layer(input_layer)
-
+        
         # # archi 1: f1-macro 0.3-fasttext 0.3-no embedding
         # x = Dropout(0.1)(x)
         # x = Bidirectional(LSTM(units=100, return_sequences=True, recurrent_dropout=0.1))(x)
