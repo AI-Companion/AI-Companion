@@ -73,8 +73,8 @@ class DataPreprocessor:
         # labels tokenization
         flat_list = [item for sublist in y for item in sublist]
         unique_labels = list(set(flat_list))
-        self.labels_to_idx = {t: i for i, t in enumerate(unique_labels)}
-        self.labels_to_idx["pad"] = len(unique_labels)
+        self.labels_to_idx = {t: i+1 for i, t in enumerate(unique_labels)}
+        self.labels_to_idx["pad"] = 0
         tokenized_labels = [[self.labels_to_idx[word] for word in sublist] for sublist in y]
         tokenized_labels = pad_sequences(tokenized_labels, maxlen=self.max_sequence_length, padding="post",
                                          value=self.labels_to_idx["pad"])
