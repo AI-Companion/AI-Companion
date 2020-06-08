@@ -18,6 +18,8 @@ from keras.utils import to_categorical
 from keras.layers import LSTM, Dense, TimeDistributed, Embedding, Bidirectional
 from keras.preprocessing.text import Tokenizer
 from keras_contrib.layers import CRF
+from keras_contrib.losses import crf_loss
+from keras_contrib.metrics import crf_viterbi_accuracy
 from marabou.utils.config_loader import NamedEntityRecognitionConfigReader
 from marabou.models.embedding_layers import FastTextEmbedding, Glove6BEmbedding
 
@@ -70,7 +72,7 @@ class DataPreprocessor:
         # labels tokenization
         flat_list = [item for sublist in y for item in sublist]
         unique_labels = list(set(flat_list))
-        self.labels_to_idx = {t: i+1 for i, t in enumerate(unique_labels)}
+        self.labels_to_idx = {t: i + 1 for i, t in enumerate(unique_labels)}
         self.labels_to_idx["pad"] = 0
         tokenized_labels = [[self.labels_to_idx[word] for word in sublist] for sublist in y]
         tokenized_labels = pad_sequences(tokenized_labels, maxlen=self.max_sequence_length, padding="post",
@@ -186,7 +188,10 @@ class RNNModel:
         :return: None
         """
         print("h5 file %s" % h5_file)
-        self.model = load_model(h5_file)
+        self.model = load_model(h5_file, custom_objects={'CRF': CRF,
+                                                         'crf_loss': crf_loss,
+                                                         'crf_viterbi_accuracy': crf_viterbi_accuracy})
+
         with open(class_file, 'rb') as f:
             self.use_pretrained_embedding = pickle.load(f)
             self.vocab_size = pickle.load(f)
@@ -247,7 +252,7 @@ class RNNModel:
         # Run the function
         input_layer = Input(shape=(self.max_length,), name='input')
         x = self.embedding_layer(input_layer)
-        
+
         # # archi 1: f1-macro 0.3-fasttext 0.3-no embedding
         # x = Dropout(0.1)(x)
         # x = Bidirectional(LSTM(units=100, return_sequences=True, recurrent_dropout=0.1))(x)
@@ -318,10 +323,10 @@ class RNNModel:
         classes = np.argmax(y_train, axis=2)
         wts[classes == self.labels_to_idx["O"]] = 1
         if (X_test is not None) and (y_test is not None):
-            #history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=64,
+            # history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=64,
             #                         sample_weight=wts, validation_data=(X_test, y_test), verbose=2)
             history = self.model.fit(X_train, y_train, batch_size=64, epochs=self.n_iter,
-                                validation_split=0.1)
+                                     validation_split=0.1)
             y_hat = self.predict(X_test, labels_to_idx)
             true_classes = np.argmax(y_test, axis=2).tolist()
             y = [self.convert_idx_to_labels(sublist, labels_to_idx) for sublist in true_classes]
