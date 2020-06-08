@@ -325,10 +325,10 @@ class RNNModel:
         classes = np.argmax(y_train, axis=2)
         wts[classes == self.labels_to_idx["O"]] = 1
         if (X_test is not None) and (y_test is not None):
-            # history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=64,
-            #                         sample_weight=wts, validation_data=(X_test, y_test), verbose=2)
-            history = self.model.fit(X_train, y_train, batch_size=64, epochs=self.n_iter,
-                                     validation_split=0.1)
+            history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=64,
+                                    sample_weight=wts, validation_split=0.1, verbose=2)
+            # history = self.model.fit(X_train, y_train, batch_size=64, epochs=self.n_iter,
+            #                         validation_split=0.1)
             y_hat = self.predict(X_test, labels_to_idx)
             true_classes = np.argmax(y_test, axis=2).tolist()
             y = [self.convert_idx_to_labels(sublist, labels_to_idx) for sublist in true_classes]
