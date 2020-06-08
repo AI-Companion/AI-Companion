@@ -276,7 +276,7 @@ class RNNModel:
         crf = CRF(self.n_labels)
         x = crf(x)
         model = Model(inputs=input_layer, outputs=x)
-        model.compile(loss=crf.loss_function, optimizer='adam', metrics=[crf.accuracy])
+        model.compile(loss=crf.loss_function, optimizer='adam', metrics=[crf.accuracy], sample_weight_mode='temporal')
 
         print(model.summary())
         return model
