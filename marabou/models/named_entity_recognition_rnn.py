@@ -12,15 +12,14 @@ nltk.download('punkt')
 from nltk.tokenize import word_tokenize
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
-from tf2crf import CRF
-from tensorflow.keras import Model
-from tensorflow.keras.utils import to_categorical
-from tensorflow.keras.layers import add
-from tensorflow.keras.preprocessing.text import Tokenizer
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.models import load_model
-from tensorflow.keras.layers import Embedding, Dense, LSTM, Input, TimeDistributed, Bidirectional
-# from tensorflow.keras.layers import Dropout
+from keras.models import Model, Input, load_model
+from keras.preprocessing.sequence import pad_sequences
+from keras.utils import to_categorical
+from keras.layers import LSTM, Dense, TimeDistributed, Embedding, Bidirectional
+from keras.preprocessing.text import Tokenizer
+from keras_contrib.layers import CRF
+from keras_contrib.losses import crf_loss
+from keras_contrib.metrics import crf_viterbi_accuracy
 from marabou.utils.config_loader import NamedEntityRecognitionConfigReader
 from marabou.models.embedding_layers import FastTextEmbedding, Glove6BEmbedding
 
@@ -73,8 +72,8 @@ class DataPreprocessor:
         # labels tokenization
         flat_list = [item for sublist in y for item in sublist]
         unique_labels = list(set(flat_list))
-        self.labels_to_idx = {t: i for i, t in enumerate(unique_labels)}
-        self.labels_to_idx["pad"] = len(unique_labels)
+        self.labels_to_idx = {t: i + 1 for i, t in enumerate(unique_labels)}
+        self.labels_to_idx["pad"] = 0
         tokenized_labels = [[self.labels_to_idx[word] for word in sublist] for sublist in y]
         tokenized_labels = pad_sequences(tokenized_labels, maxlen=self.max_sequence_length, padding="post",
                                          value=self.labels_to_idx["pad"])
@@ -177,7 +176,7 @@ class RNNModel:
         self.model = None
         self.n_labels = None
         self.labels_to_idx = None
-        self.n_iter = 7
+        self.n_iter = 5
         keys = kwargs.keys()
         if 'config' in keys and 'data_preprocessor' in keys:
             self.init_from_config_file(kwargs['config'], kwargs['data_preprocessor'])
@@ -191,7 +190,10 @@ class RNNModel:
         :return: None
         """
         print("h5 file %s" % h5_file)
-        self.model = load_model(h5_file)
+        self.model = load_model(h5_file, custom_objects={'CRF': CRF,
+                                                         'crf_loss': crf_loss,
+                                                         'crf_viterbi_accuracy': crf_viterbi_accuracy})
+
         with open(class_file, 'rb') as f:
             self.use_pretrained_embedding = pickle.load(f)
             self.vocab_size = pickle.load(f)
@@ -252,22 +254,30 @@ class RNNModel:
         # Run the function
         input_layer = Input(shape=(self.max_length,), name='input')
         x = self.embedding_layer(input_layer)
+
         # # archi 1: f1-macro 0.3-fasttext 0.3-no embedding
         # x = Dropout(0.1)(x)
         # x = Bidirectional(LSTM(units=100, return_sequences=True, recurrent_dropout=0.1))(x)
+        # x = TimeDistributed(Dense(self.n_labels, activation='softmax'))(x)
+        # model = Model(inputs=input_layer, outputs=x)
+        # model.compile(loss='categorical_crossentropy', optimizer="adam", metrics=['acc'])
 
         # # archi 2: f1-macro 0.35-fasttext
-        x = Bidirectional(LSTM(units=512, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
-        x_rnn = Bidirectional(LSTM(units=512, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
-        x = add([x, x_rnn])  # residual connection to the first biLSTM
+        # x = Bidirectional(LSTM(units=512, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
+        # x_rnn = Bidirectional(LSTM(units=512, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
+        # x = add([x, x_rnn])  # residual connection to the first biLSTM
+        # x = TimeDistributed(Dense(self.n_labels, activation='softmax'))(x)
+        # model = Model(inputs=input_layer, outputs=x)
+        # model.compile(loss='categorical_crossentropy', optimizer="adam", metrics=['acc'])
 
-        x = TimeDistributed(Dense(self.n_labels, activation='softmax'))(x)
-        crf = CRF()
+        # # archi 3: crf layer
+        x = Bidirectional(LSTM(units=50, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
+        x = TimeDistributed(Dense(50, activation='relu'))(x)
+        crf = CRF(self.n_labels)
         x = crf(x)
         model = Model(inputs=input_layer, outputs=x)
+        model.compile(loss=crf.loss_function, optimizer='adam', metrics=[crf.accuracy])
 
-        # model.compile(loss='categorical_crossentropy', optimizer="adam", metrics=['acc'])
-        model.compile(loss=crf.loss, optimizer='adam', metrics=[crf.accuracy])
         print(model.summary())
         return model
 
@@ -315,8 +325,10 @@ class RNNModel:
         classes = np.argmax(y_train, axis=2)
         wts[classes == self.labels_to_idx["O"]] = 1
         if (X_test is not None) and (y_test is not None):
-            history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=64,
-                                     sample_weight=wts, validation_data=(X_test, y_test), verbose=2)
+            # history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=64,
+            #                         sample_weight=wts, validation_data=(X_test, y_test), verbose=2)
+            history = self.model.fit(X_train, y_train, batch_size=64, epochs=self.n_iter,
+                                     validation_split=0.1)
             y_hat = self.predict(X_test, labels_to_idx)
             true_classes = np.argmax(y_test, axis=2).tolist()
             y = [self.convert_idx_to_labels(sublist, labels_to_idx) for sublist in true_classes]
@@ -399,8 +411,8 @@ class RNNModel:
         if not os.path.isdir(plot_folder):
             os.mkdir(plot_folder)
 
-        acc = history.history['acc']
-        val_acc = history.history['val_acc']
+        acc = history.history['crf_viterbi_accuracy']
+        val_acc = history.history['val_crf_viterbi_accuracy']
         loss = history.history['loss']
         val_loss = history.history['val_loss']
         epochs = range(len(acc))
