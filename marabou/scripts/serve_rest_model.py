@@ -64,7 +64,7 @@ def sentiment_analysis():
         task_content = request.form['content']
         new_prediction = PredictSentiment(model=global_model_config[0], pre_processor=global_model_config[1])
         output = new_prediction.get_from_service([task_content])
-        return render_template('sentiment_analysis.html', output=output)
+        return render_template('sentiment_analysis.html', output=round(output[0]*100,2))
     else:
         return render_template('sentiment_analysis.html')
 

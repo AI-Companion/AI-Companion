@@ -20,7 +20,7 @@ INSTALL_REQUIREMENTS = [
     'tensorflow_hub',
     'matplotlib',
     'h5py',
-    'ntlk'
+    'tf2crf'
     #'git_pep8_commit_hook'
 ]
 
@@ -33,7 +33,7 @@ class InstallCommand(install):
 
 setup(name='marabou',
     #package_dir={'':'marabou'},
-    packages=find_packages(include=['.*','marabou','marabou.*']),
+    packages=find_packages(include=['marabou','marabou.*']),
     author='Marouen Azzouz, Youssef Azzouz',
     author_email='azzouz.marouen@gmail.com, youssef.azzouz1512@gmail.com',
     version='0.0.1dev1',
@@ -41,7 +41,7 @@ setup(name='marabou',
     entry_points={
         'console_scripts': ['marabou-train-sentiment-analysis=marabou.scripts.train_sentiment_analysis:main',
                             'marabou-eval-sentiment-analysis=marabou.scripts.eval_sentiment_analysis:main',
-                            'marabou-rest-api=marabou.scripts.serve_rest_sentiment_analysis:main']
+                            'marabou-rest-api=marabou.scripts.serve_rest_model:main']
     },
     install_requires=INSTALL_REQUIREMENTS,
     tests_require=["pytest", ],
