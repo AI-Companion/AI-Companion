@@ -272,7 +272,7 @@ class RNNModel:
 
         # # archi 3: crf layer
         x = Bidirectional(LSTM(units=50, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
-        x_rnn = Bidirectional(LSTM(units=512, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
+        x_rnn = Bidirectional(LSTM(units=50, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
         x = add([x, x_rnn])  # residual connection to the first biLSTM
         x = TimeDistributed(Dense(50, activation='relu'))(x)
         crf = CRF(self.n_labels)
