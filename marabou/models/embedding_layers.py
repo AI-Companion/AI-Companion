@@ -2,8 +2,8 @@ import subprocess
 import os
 import io
 import numpy as np
-from tensorflow.keras.layers import Embedding
-from tensorflow.keras.initializers import Constant
+from keras.layers import Embedding
+from keras.initializers import Constant
 
 
 class Glove6BEmbedding():
