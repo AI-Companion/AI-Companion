@@ -15,7 +15,7 @@ from sklearn.metrics import classification_report
 from keras.models import Model, Input, load_model
 from keras.preprocessing.sequence import pad_sequences
 from keras.utils import to_categorical
-from keras.layers import LSTM, Dense, TimeDistributed, Embedding, Bidirectional
+from keras.layers import LSTM, Dense, TimeDistributed, Embedding, Bidirectional, add
 from keras.preprocessing.text import Tokenizer
 from keras_contrib.layers import CRF
 from keras_contrib.losses import crf_loss
@@ -272,11 +272,13 @@ class RNNModel:
 
         # # archi 3: crf layer
         x = Bidirectional(LSTM(units=50, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
+        x_rnn = Bidirectional(LSTM(units=512, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
+        x = add([x, x_rnn])  # residual connection to the first biLSTM
         x = TimeDistributed(Dense(50, activation='relu'))(x)
         crf = CRF(self.n_labels)
         x = crf(x)
         model = Model(inputs=input_layer, outputs=x)
-        model.compile(loss=crf.loss_function, optimizer='adam', metrics=[crf.accuracy], sample_weight_mode='temporal')
+        model.compile(loss=crf.loss_function, optimizer='adam', metrics=[crf.accuracy])
 
         print(model.summary())
         return model
@@ -323,12 +325,12 @@ class RNNModel:
         """
         wts = 10 * np.ones((y_train.shape[0], y_train.shape[1]))
         classes = np.argmax(y_train, axis=2)
-        wts[classes == self.labels_to_idx["O"]] = 1
+        wts[classes == self.labels_to_idx["pad"]] = 1
         if (X_test is not None) and (y_test is not None):
-            history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=64,
-                                    sample_weight=wts, validation_split=0.1, verbose=2)
-            # history = self.model.fit(X_train, y_train, batch_size=64, epochs=self.n_iter,
-            #                         validation_split=0.1)
+            # history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=64,
+            #                        sample_weight=wts, validation_split=0.1, verbose=2)
+            history = self.model.fit(X_train, y_train, batch_size=64, epochs=self.n_iter,
+                                     validation_split=0.1)
             y_hat = self.predict(X_test, labels_to_idx)
             true_classes = np.argmax(y_test, axis=2).tolist()
             y = [self.convert_idx_to_labels(sublist, labels_to_idx) for sublist in true_classes]
