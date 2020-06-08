@@ -12,15 +12,12 @@ nltk.download('punkt')
 from nltk.tokenize import word_tokenize
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
-from tf2crf import CRF
-from tensorflow.keras import Model
-from tensorflow.keras.utils import to_categorical
-# from tensorflow.keras.layers import add
-from tensorflow.keras.preprocessing.text import Tokenizer
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.models import load_model
-from tensorflow.keras.layers import Embedding, Dense, LSTM, Input, TimeDistributed, Bidirectional
-# from tensorflow.keras.layers import Dropout
+from keras.models import Model, Input, load_model
+from keras.preprocessing.sequence import pad_sequences
+from keras.utils import to_categorical
+from keras.layers import LSTM, Dense, TimeDistributed, Embedding, Bidirectional
+from keras.preprocessing.text import Tokenizer
+from keras_contrib.layers import CRF
 from marabou.utils.config_loader import NamedEntityRecognitionConfigReader
 from marabou.models.embedding_layers import FastTextEmbedding, Glove6BEmbedding
 
@@ -272,7 +269,7 @@ class RNNModel:
         crf = CRF(self.n_labels)
         x = crf(x)
         model = Model(inputs=input_layer, outputs=x)
-        model.compile(loss=crf.loss, optimizer='adam', metrics=[crf.accuracy])
+        model.compile(loss=crf.loss_function, optimizer='adam', metrics=[crf.accuracy])
 
         print(model.summary())
         return model
@@ -323,7 +320,7 @@ class RNNModel:
         if (X_test is not None) and (y_test is not None):
             #history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=64,
             #                         sample_weight=wts, validation_data=(X_test, y_test), verbose=2)
-            history = model.fit(X_train, y_train, batch_size=64, epochs=self.n_iter,
+            history = self.model.fit(X_train, y_train, batch_size=64, epochs=self.n_iter,
                                 validation_split=0.1)
             y_hat = self.predict(X_test, labels_to_idx)
             true_classes = np.argmax(y_test, axis=2).tolist()
@@ -407,8 +404,8 @@ class RNNModel:
         if not os.path.isdir(plot_folder):
             os.mkdir(plot_folder)
 
-        acc = history.history['accuracy']
-        val_acc = history.history['val_accuracy']
+        acc = history.history['crf_viterbi_accuracy']
+        val_acc = history.history['val_crf_viterbi_accuracy']
         loss = history.history['loss']
         val_loss = history.history['val_loss']
         epochs = range(len(acc))
