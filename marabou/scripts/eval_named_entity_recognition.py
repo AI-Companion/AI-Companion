@@ -30,14 +30,14 @@ def parse_arguments():
     Parse file arguments
     """
     parser = argparse.ArgumentParser(description="Predict NER for a given input text")
-    parser.add_argument('question', help="text or list of texts to perform inference on")
+    parser.add_argument('text', help="texts separated by space, each text must be surrounded with quotes", nargs='+')
     return parser.parse_args()
 
 
 def main():
     """main function"""
     args = parse_arguments()
-    qlist = args.question.strip('][').split(',')
+    qlist = args.text
     evaluate_model(qlist)
 
 

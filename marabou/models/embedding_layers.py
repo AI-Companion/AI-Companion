@@ -49,12 +49,12 @@ class Glove6BEmbedding():
     def build_embedding(self):
         """
         build the embedding layer which will be called by the model
-        :return: An instance of tensorflow.keras.layers.Embedding
+        :return: An instance of keras.layers.Embedding
         """
         embeddings_matrix = self.get_embedding_matrix()
         embedding_layer = Embedding(input_dim=self.vocab_size, output_dim=self.embedding_dimension,
                                     embeddings_initializer=Constant(embeddings_matrix),
-                                    input_length=self.max_length, trainable=False)
+                                    input_length=self.max_length, trainable=True)
         return embedding_layer
 
 
@@ -104,7 +104,7 @@ class FastTextEmbedding():
     def build_embedding(self):
         """
         build the embedding layer which will be called by the model
-        :return: An instance of tensorflow.keras.layers.Embedding
+        :return: An instance of keras.layers.Embedding
         """
         embeddings_matrix = self.get_embedding_matrix()
         embedding_layer = Embedding(input_dim=self.vocab_size, output_dim=self.embedding_dimension,

@@ -2,20 +2,20 @@
 cd $PWD
 set -e
 export file_url=$1
-export data_file_name=data/imdb.tar.gz
+export zipped_file_name=data/imdb.tar.gz
 
 download_data () {
     echo "----> download ongoing"
-    wget -q --show-progress -O $data_file_name $file_url
-    tar -xzf $data_file_name --directory data/
-    rm $data_file_name
+    wget -q --show-progress -O $zipped_file_name $file_url
+    tar -xzf $zipped_file_name --directory data/
+    rm $zipped_file_name
 }
 
 if [ ! -d "data" ] # if data folder doesnt exist
 then # load data from gdrive
     mkdir -p data/
     download_data
-elif [ ! "$(ls -A data)" ] # data folder exists and is empty
+elif [ ! -d "data/aclImdb" ] # check dataset folder exist
 then # load data from gdrive
     download_data
 else

@@ -38,7 +38,7 @@ def parse_arguments():
     Parse file arguments
     """
     parser = argparse.ArgumentParser(description="Predict sentiment from a given text")
-    parser.add_argument('question', help="text or list of texts to perform inference on")
+    parser.add_argument('question', help="text or list of texts to perform inference on", nargs='+')
 
     return parser.parse_args()
 
@@ -46,7 +46,7 @@ def parse_arguments():
 def main():
     """main function"""
     args = parse_arguments()
-    qlist = args.question.strip('][').split(',')
+    qlist = args.question
     valid_config = SentimentAnalysisConfigReader("config/config_sentiment_analysis.json")
     evaluate_model(qlist, valid_config)
 
