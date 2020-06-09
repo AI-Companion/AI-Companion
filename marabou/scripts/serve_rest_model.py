@@ -48,7 +48,8 @@ class PredictSentiment(Resource):
         """
         # use parser and find the user's query
         args = parser.parse_args()
-        query_list = args['query'].strip('][').split(',')
+        query_list = args['query']
+        print(query_list)
         if self.model.model_name == "rnn":
             query_list = SAPreprocessor.preprocess_data(query_list, self.pre_processor)
         probs = self.model.predict_proba(query_list)
@@ -64,7 +65,7 @@ def sentiment_analysis():
         task_content = request.form['content']
         new_prediction = PredictSentiment(model=global_model_config[0], pre_processor=global_model_config[1])
         output = new_prediction.get_from_service([task_content])
-        return render_template('sentiment_analysis.html', output=round(output[0]*100,2))
+        return render_template('sentiment_analysis.html', output=int(output[0] * 100))
     else:
         return render_template('sentiment_analysis.html')
 
@@ -135,9 +136,10 @@ def main():
         sentiment_analysis_model = DumbModel.load_model()
     elif sentiment_analysis_config.eval_model_name == "rnn":
         sentiment_analysis_model, preprocessor_file = SARNN.load_model()
-        sentiment_analysis_pre_processor = SAPreprocessor.load_preprocessor(preprocessor_file)
-    else:
+    if sentiment_analysis_model is None or preprocessor_file is None:
         raise ValueError("there is no corresponding model file")
+    if sentiment_analysis_config.eval_model_name == "rnn":
+        sentiment_analysis_pre_processor = SAPreprocessor.load_preprocessor(preprocessor_file)
 
     ner_model, preprocessor_file = NERRNN.load_model()
     ner_pre_processor = NERPreprocessor.load_preprocessor(preprocessor_file)

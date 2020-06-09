@@ -15,8 +15,8 @@ def get_training_validation_data(X: List, y: List, data_processor: DataPreproces
     :param data_processor: a data handler object
     :return: tuple containing the training data, validation data
     """
-    # preprocessed_input = data_processor.clean_data(X)
-    preprocessed_input, y = data_processor.tokenize_text(X, y)
+    preprocessed_input = data_processor.clean_data(X)
+    preprocessed_input, y = data_processor.tokenize_text(preprocessed_input, y)
     X_train, X_test, y_train, y_test = data_processor.split_train_test(preprocessed_input, y)
     return X_train, X_test, y_train, y_test
 

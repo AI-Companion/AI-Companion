@@ -142,18 +142,14 @@ class DataPreprocessor:
         :return: preprocessed data
         """
         lines = list()
-        print("data",data)
-        print("preprocessor",preprocessor['tokenizer_obj'])
+        print("data", data)
+        print("preprocessor", preprocessor['tokenizer_obj'])
         n_tokens_list = list()
         for line in data:
             if not isinstance(line, list):
                 line = word_tokenize(line)
-            tokens = [w.lower() for w in line]
-            table = str.maketrans('', '', string.punctuation)
-            stripped = [w.translate(table) for w in tokens]
-            words = [word for word in stripped if word.isalpha()]
-            lines.append(words)
-            n_tokens_list.append(len(words))
+            lines.append(line)
+            n_tokens_list.append(len(line))
         data = preprocessor['tokenizer_obj'].texts_to_sequences(lines)
         data = pad_sequences(data, maxlen=preprocessor['max_sequence_length'], padding="post",
                              value=preprocessor['tokenizer_obj'].word_index["pad"])

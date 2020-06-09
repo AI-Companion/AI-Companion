@@ -10,11 +10,11 @@ import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from sklearn.model_selection import train_test_split
-from tensorflow.keras import Model
-from tensorflow.keras.preprocessing.text import Tokenizer
-from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
-from tensorflow.keras.layers import Embedding, Dense, LSTM, Input
+from keras.preprocessing.text import Tokenizer
+from keras.preprocessing.sequence import pad_sequences
+from keras.models import Model, Input
+from keras.layers import Embedding, Dense, LSTM
 from marabou.utils.config_loader import SentimentAnalysisConfigReader
 from marabou.models.embedding_layers import Glove6BEmbedding, FastTextEmbedding
 nltk.download('punkt')
@@ -65,10 +65,11 @@ class DataPreprocessor:
         tokenizer_obj.fit_on_texts(X)
         self.tokenizer_obj = tokenizer_obj
         sequences = tokenizer_obj.texts_to_sequences(X)
-        word_index = tokenizer_obj.word_index
-        review_pad = pad_sequences(sequences, maxlen=self.max_sequence_length)
+        self.tokenizer_obj.word_index["pad"] = 0
+        review_pad = pad_sequences(sequences, maxlen=self.max_sequence_length, padding="post",
+                                   value=self.tokenizer_obj.word_index["pad"])
         print("----> data tokenization finish")
-        print("found %i unique tokens" % len(word_index))
+        print("found %i unique tokens" % len(self.tokenizer_obj.word_index))
         print("features tensor shape ", review_pad.shape)
         return review_pad
 
@@ -126,7 +127,8 @@ class DataPreprocessor:
         :return: preprocessed data
         """
         data = preprocessor['tokenizer_obj'].texts_to_sequences(data)
-        data = pad_sequences(data, maxlen=preprocessor['max_sequence_length'])
+        data = pad_sequences(data, maxlen=preprocessor['max_sequence_length'], padding="post",
+                             value=preprocessor['tokenizer_obj'].word_index["pad"])
         return data
 
 

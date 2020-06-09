@@ -50,13 +50,12 @@
                 <div class="row no-gutters">
                     <div class="col-lg-4 col-sm-6">
             {% if output >= 50 %}
-
-                            <img class="img-fluid" src="/static/assets/img/portfolio/thumbnails/Smiling_Face.png" alt="Happy Sentiment" />
+                            <img class="img-fluid" src="/static/assets/img/portfolio/thumbnails/Smiling_Face.png" alt="Happy Sentiment" width="100" height="100"/>
                         </div>
                         <div class="col-lg-4 col-sm-6">
                             <output ><h2><b>{{ output }}%</b></h2></output>
             {% else %}
-                            <img class="img-fluid" src="/static/assets/img/portfolio/thumbnails/Angry_Face.png" alt="Angry Sentiment" />
+                            <img class="img-fluid" src="/static/assets/img/portfolio/thumbnails/Angry_Face.png" alt="Angry Sentiment" width="100" height="100"/>
                         </div>
                         <div class="col-lg-4 col-sm-6">
                             <output ><h2><b>{{ 100 - output }}%</b></h2></output>
