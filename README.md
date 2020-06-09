@@ -46,5 +46,6 @@ Several training parameters can be adjusted:
 2. `embedding_dimension`: In case you choose to train an RNN model, you can select among multiple embedding dimensions  
 For more information, you can refer to each parameter's help under `config/config_sentiment_anylsis.json`  
 
-## Model evaluation
-Once you finished training at least one mode, you can call it up to perform inference agains a given string list.  
+## Activate pre-commit checks
+If you wish to have your code automatically checked for quality before every commit, you can activate the githook  
+Under the git repo type `git config core.hooksPath .githooks/`
