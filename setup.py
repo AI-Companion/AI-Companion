@@ -38,6 +38,8 @@ setup(name='marabou',
     entry_points={
         'console_scripts': ['marabou-train-sentiment-analysis=marabou.scripts.train_sentiment_analysis:main',
                             'marabou-eval-sentiment-analysis=marabou.scripts.eval_sentiment_analysis:main',
+                            'marabou-train-ner=marabou.scripts.train_named_entity_recognition:main',
+                            'marabou-eval-ner=marabou.scripts.eval_named_entity_recognition:main',
                             'marabou-rest-api=marabou.scripts.serve_rest_model:main']
     },
     dependency_links = ['git+https://www.github.com/keras-team/keras-contrib.git#egg=keras-contrib'],
