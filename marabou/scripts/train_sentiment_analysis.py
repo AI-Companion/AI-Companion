@@ -10,11 +10,13 @@ from marabou.models.sentiment_analysis_tfidf import DumbModel
 def get_training_validation_data(X: List, y: List, data_processor: DataPreprocessor)\
         -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
-    wrapper method which yields the training and validation datasets
-    :param X: list of texts (features)
-    :param y: list of ratings
-    :param data_processor: a data handler object
-    :return: tuple containing the training data, validation data
+    Wrapper method which yields the training and validation datasets
+    Args:
+        X: list of texts (features)
+        y: list of ratings
+        data_processor: a data handler object
+    Return:
+        tuple containing the training data, validation data
     """
     preprocessed_input = data_processor.clean_data(X)
     preprocessed_input = data_processor.tokenize_text(preprocessed_input)
@@ -24,9 +26,11 @@ def get_training_validation_data(X: List, y: List, data_processor: DataPreproces
 
 def train_model(config: SentimentAnalysisConfigReader) -> None:
     """
-    training function which prints classification summary as as result
-    :param config: Configuration object containing parsed .json file parameters
-    :return: None
+    Training function which prints classification summary as as result
+    Args:
+        config: Configuration object containing parsed .json file parameters
+    Return:
+        None
     """
     X, y = [], []
     if config.dataset_name == "imdb":

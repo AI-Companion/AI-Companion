@@ -10,9 +10,11 @@ from marabou.models.named_entity_recognition_rnn import RNNModel, DataPreprocess
 def evaluate_model(questions_list: List[str]) -> None:
     """
     Wrapper function that calls the model deserializer and returns prediction
-    :param model_file_url: relative path for the model file
-    :param questions_list: list of strings to perform inference on
-    :return: list of probabilies for positive class for each input word
+    Args:
+        model_file_url: relative path for the model file
+        questions_list: list of strings to perform inference on
+    Return:
+        list of probabilies for positive class for each input word
     """
     pre_processor = None
     trained_model = None
@@ -20,9 +22,11 @@ def evaluate_model(questions_list: List[str]) -> None:
     if trained_model is None:
         raise ValueError("there is no corresponding model file")
     pre_processor = DataPreprocessor.load_preprocessor(preprocessor_file)
-    questions_list, n_tokens = DataPreprocessor.preprocess_data(questions_list, pre_processor)
-    labels_list = trained_model.predict(questions_list, pre_processor["labels_to_idx"], n_tokens)
-    print(labels_list)
+    questions_list_encoded, questions_list_tokenized, n_tokens =\
+        DataPreprocessor.preprocess_data(questions_list, pre_processor)
+    labels_list = trained_model.predict(questions_list_encoded, pre_processor["labels_to_idx"], n_tokens)
+    display_result = trained_model.visualize(questions_list_tokenized, labels_list)
+    print(display_result)
 
 
 def parse_arguments():

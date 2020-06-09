@@ -37,10 +37,12 @@ class DataPreprocessor:
 
     def clean_data(self, X: List):
         """
-        performs data cleaning operations such as removing html breaks, lower case,
+        Performs data cleaning operations such as removing html breaks, lower case,
         remove stopwords ...
-        :param X: input reviews to be cleaned
-        :return: None
+        Args:
+            X: input reviews to be cleaned
+        Returns:
+            None
         """
         print("===========> data cleaning")
         review_lines = list()
@@ -57,9 +59,11 @@ class DataPreprocessor:
 
     def tokenize_text(self, X: List, y: List):
         """
-        performs data tokenization into a format that is digestible by the model
-        :param X: list of predictors already cleaned
-        :return: tokenizer object and tokenized input features
+        Performs data tokenization into a format that is digestible by the model
+        Args:
+            X: list of predictors already cleaned
+        Returns:
+            tokenizer object and tokenized input features
         """
         print("===========> data tokenization")
         # features tokenization
@@ -85,10 +89,12 @@ class DataPreprocessor:
 
     def split_train_test(self, X, y):
         """
-        wrapper method to split training data into a validation set and a training set
-        :param X: tokenized predictors
-        :param y: labels
-        :return: a tuple consisting of training predictors, training labels, validation predictors, validation labels
+        Wrapper method to split training data into a validation set and a training set
+        Args:
+            X: tokenized predictors
+            y: labels
+        Returns:
+            tuple consisting of training predictors, training labels, validation predictors, validation labels
         """
         print("===========> data split")
         y = [to_categorical(i, num_classes=len(self.labels_to_idx)) for i in y]
@@ -102,9 +108,11 @@ class DataPreprocessor:
 
     def save_preprocessor(self, file_name_prefix):
         """
-        stores the data preprocessor under 'models folder'
-        :param file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
-        :return: None
+        Stores the data preprocessor under 'models folder'
+        Args:
+            file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
+        Returns:
+            None
         """
         model_folder = os.path.join(os.getcwd(), "models")
         if not os.path.isdir(model_folder):
@@ -120,9 +128,11 @@ class DataPreprocessor:
     @staticmethod
     def load_preprocessor(preprocessor_file_name):
         """
-        loads preprocessing tools for the model
-        :param preprocessor_file_name: data to evaluate
-        :return: preprocessed object
+        Loads preprocessing tools for the model
+        Args:
+            preprocessor_file_name: data to evaluate
+        Return:
+            preprocessed object
         """
         preprocessor = {}
         preprocessor_file_name = os.path.join(os.getcwd(), "models", preprocessor_file_name)
@@ -136,14 +146,14 @@ class DataPreprocessor:
     @staticmethod
     def preprocess_data(data, preprocessor):
         """
-        performs data preprocessing before inference
-        :param data: data to evaluate
-        :param preprocessor: tokenizer object
-        :return: preprocessed data
+        Performs data preprocessing before inference
+        Args:
+            data: data to evaluate
+            preprocessor: tokenizer object
+        Return:
+            preprocessed data
         """
         lines = list()
-        print("data", data)
-        print("preprocessor", preprocessor['tokenizer_obj'])
         n_tokens_list = list()
         for line in data:
             if not isinstance(line, list):
@@ -153,7 +163,7 @@ class DataPreprocessor:
         data = preprocessor['tokenizer_obj'].texts_to_sequences(lines)
         data = pad_sequences(data, maxlen=preprocessor['max_sequence_length'], padding="post",
                              value=preprocessor['tokenizer_obj'].word_index["pad"])
-        return data, n_tokens_list
+        return data, lines, n_tokens_list
 
 
 class RNNModel:
@@ -181,11 +191,12 @@ class RNNModel:
 
     def init_from_files(self, h5_file, class_file):
         """
-        initialize the class from a previously saved model
-        :param h5_file: url to a saved class
-        :return: None
+        Initialize the class from a previously saved model
+        Args:
+            h5_file: url to a saved class
+        Return:
+            None
         """
-        print("h5 file %s" % h5_file)
         self.model = load_model(h5_file, custom_objects={'CRF': CRF,
                                                          'crf_loss': crf_loss,
                                                          'crf_viterbi_accuracy': crf_viterbi_accuracy})
@@ -200,10 +211,12 @@ class RNNModel:
 
     def init_from_config_file(self, config: NamedEntityRecognitionConfigReader, data_preprocessor: DataPreprocessor):
         """
-        initialize the class for the first time from a given configuration file and data processor
-        :param config: .json configuration reader
-        :param data_preprocessor: preprocessing tool for the training data
-        :return: None
+        Initializes the class for the first time from a given configuration file and data processor
+        Args:
+            config: .json configuration reader
+            data_preprocessor: preprocessing tool for the training data
+        Return:
+            None
         """
         self.use_pretrained_embedding = config.pre_trained_embedding
         self.vocab_size = config.vocab_size
@@ -222,10 +235,11 @@ class RNNModel:
 
     def build_embedding(self):
         """
-        builds the embedding layer. depending on the configuration, it will either
+        Builds the embedding layer. depending on the configuration, it will either
         load a pretrained embedding or create an empty embedding to be trained along
         with the data
-        :return: None
+        Return:
+            None
         """
         if self.use_pretrained_embedding and self.embeddings_name == "glove":
             glove_embeddings = Glove6BEmbedding(self.embedding_dimension, self.word_index,
@@ -243,8 +257,9 @@ class RNNModel:
 
     def build_model(self):
         """
-        builds an RNN model according to fixed architecture
-        :return: None
+        Builds an RNN model according to fixed architecture
+        Return:
+            None
         """
         print("===========> build model")
         # Run the function
@@ -281,22 +296,25 @@ class RNNModel:
 
     def convert_idx_to_labels(self, classes_vector, labels_to_idx):
         """
-        utility function to convert encoded target idx to original labels
-        :param classes_vector: target vector containing indexed classes
-        :param labels_to_idx: a dictionary containing the conversion from each class label to its id
-        :return: a numpy array containing the corresponding labels
+        Utility function to convert encoded target idx to original labels
+        Args:
+            classes_vector: target vector containing indexed classes
+            labels_to_idx: a dictionary containing the conversion from each class label to its id
+        Return:
+            numpy array containing the corresponding labels
         """
         idx_to_labels = {v: k for k, v in labels_to_idx.items()}
         return [idx_to_labels[cl] for cl in classes_vector]
 
     def predict(self, encoded_text_list, labels_to_idx, n_tokens_list=None):
         """
-        inference method
-        :param encoded_text_list: a list of texts to be evaluated. the input is assumed to have been
-        preprocessed
-        :param n_tokens_list: number of tokens in each input string before padding
-        :param labels_to_idx: a dictionary containing the conversion from each class label to its id
-        :return: a numpy array containing the class for token character in the sentence
+        Inference method
+        Args:
+            encoded_text_list: a list of texts to be evaluated. the input is assumed to have been preprocessed
+            n_tokens_list: number of tokens in each input string before padding
+            labels_to_idx: a dictionary containing the conversion from each class label to its id
+        Return:
+            numpy array containing the class for token character in the sentence
         """
         probs = self.model.predict(encoded_text_list)
         labels_list = []
@@ -311,13 +329,15 @@ class RNNModel:
 
     def fit(self, X_train, y_train, X_test=None, y_test=None, labels_to_idx=None):
         """
-        fits the model object to the data
-        :param X_train: numpy array containing encoded training features
-        :param y_train: numpy array containing training targets
-        :paran X_test: numpy array containing encoded test features
-        :param y_test: numpy array containing test targets
-        :param labels_to_idx: a dictionary containing the conversion from each class label to its id
-        :return: list of values related to each datasets and loss function
+        Fits the model object to the data
+        Args:
+            X_train: numpy array containing encoded training features
+            y_train: numpy array containing training targets
+            X_test: numpy array containing encoded test features
+            y_test: numpy array containing test targets
+            labels_to_idx: a dictionary containing the conversion from each class label to its id
+        Return:
+            list of values related to each datasets and loss function
         """
         wts = 10 * np.ones((y_train.shape[0], y_train.shape[1]))
         classes = np.argmax(y_train, axis=2)
@@ -342,11 +362,12 @@ class RNNModel:
 
     def predict_proba(self, encoded_text_list, n_tokens_list):
         """
-        inference method
-        :param encoded_text_list: a list of texts to be evaluated. the input is assumed to have been
-        preprocessed
-        :param n_tokens_list: number of tokens in each input string before padding
-        :return: a numpy array containing the probabilities of a positive review for each list entry
+        Inference method
+        Args:
+            encoded_text_list: a list of texts to be evaluated. the input is assumed to have been preprocessed
+            n_tokens_list: number of tokens in each input string before padding
+        Return:
+            numpy array containing the probabilities of a positive review for each list entry
         """
         probs = self.model.predict(encoded_text_list)
         real_probs_list = []
@@ -357,9 +378,11 @@ class RNNModel:
 
     def save_model(self, file_name_prefix):
         """
-        saves the trained model into a h5 file
-        :param file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
-        :return: None
+        Saves the trained model into a h5 file
+        Args:
+            file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
+        Return:
+            None
         """
         model_folder = os.path.join(os.getcwd(), "models")
         if not os.path.isdir(model_folder):
@@ -379,10 +402,12 @@ class RNNModel:
 
     def save_classification_report(self, report, file_name_prefix):
         """
-        saves the classification report to a txt file
-        :param report: a classification report object
-        :param file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
-        :return: None
+        Saves the classification report to a txt file
+        Args:
+            report: a classification report object
+            file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
+        Return:
+            None
         """
         plot_folder = os.path.join(os.getcwd(), "perf")
         report_file_url = os.path.join(plot_folder, file_name_prefix + "_report.txt")
@@ -399,11 +424,13 @@ class RNNModel:
 
     def save_learning_curve(self, history, file_name_prefix):
         """
-        saves the learning curve plot
-        :param history: a dictionary object containing training and validation dataset loss function values and
+        Saves the learning curve plot
+        Args:
+            history: a dictionary object containing training and validation dataset loss function values and
         objective function values for each training iteration
-        :param file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
-        :return: None
+            file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
+        Return:
+            None
         """
         plot_folder = os.path.join(os.getcwd(), "perf")
         if not os.path.isdir(plot_folder):
@@ -435,8 +462,9 @@ class RNNModel:
     @staticmethod
     def load_model():
         """
-        extracts a model saved using the save_model function
-        :return: a model object and a tokenizer object
+        Extracts a model saved using the save_model function
+        Return:
+            model object and a tokenizer object
         """
         trained_model = None
         model_dir = os.path.join(os.getcwd(), "models")
@@ -457,3 +485,38 @@ class RNNModel:
                 return None, None
             return None, None
         return None, None
+
+    def visualize(self, questions_list_tokenized, labels_list):
+        """
+        Visualization method for the nlp model classes
+        Args:
+            questions_list_tokenized: a tokenized list corresponding to the input text
+            labels_list: a list of predicted labels for each input text
+        Return:
+            display of the result stored in a string
+        """
+        result = "{:15} | {:5}\n".format("Word", "Pred")
+        result += "=" * 20
+        result += "\n"
+        for i in range(len(labels_list)):
+            for word, label in zip(questions_list_tokenized[i], labels_list[i]):
+                label = label.replace("B-geo", "Geographical Entity")
+                label = label.replace("I-geo", "Geographical Entity")
+                label = label.replace("B-tim", "Time indicator")
+                label = label.replace("I-tim", "Time indicator")
+                label = label.replace("B-org", "Organization")
+                label = label.replace("I-org", "Organization")
+                label = label.replace("B-gpe", "Geopolitical Entity")
+                label = label.replace("I-gpe", "Geopolitical Entity")
+                label = label.replace("B-per", "Person")
+                label = label.replace("I-per", "Person")
+                label = label.replace("B-eve", "Event")
+                label = label.replace("I-eve", "Event")
+                label = label.replace("B-art", "Artifact")
+                label = label.replace("I-art", "Artifact")
+                label = label.replace("B-nat", "Natural Phenomenon")
+                label = label.replace("I-nat", "Natural Phenomenon")
+                label = label.replace("O", "no Label")
+                result += "{:15} | {:5}\n".format(word, label)
+            result += "\n"
+        return result

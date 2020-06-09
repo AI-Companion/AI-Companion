@@ -30,7 +30,7 @@
         <!-- Form -->
         <section class="container-form" id="form">
             <div class="container">
-                <h2 class="text-center mt-0">Input</h2>
+                <h2 class="text-center mt-0">Paste a piece of news</h2>
                 <hr class="divider my-4" />
                 <div class="row justify-content-center">
                     <div class="col-lg-8 text-center">
@@ -47,20 +47,13 @@
         {% if output|length > 0 %}
         <section class="container" id="output">
             <div class="container">
-                <h2 class="text-center mt-0">Results</h2>
+                <h2 class="text-center mt-0">Tagged text</h2>
                 <hr class="divider my-4" />
                 <div class="row justify-content-center">
                     <div class="col-lg-8 text-center">
-                            <table class="table-fill">
-                                <thead>
-                                    <tr>
-                                        <th class="text-left">Prob</th>
-                                    </tr>
-                                </thead>
-                                    <tr>
-                                        <td class="text-left">{{ output[0] }}</td>
-                                    </tr>
-                            </table>
+                        <tr>
+                            <td class="text-left">{{ output }}</td>
+                        </tr>
                     </div>
                 </div>
             </div>

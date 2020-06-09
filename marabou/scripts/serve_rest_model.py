@@ -33,7 +33,8 @@ class PredictSentiment(Resource):
         """
         gets the user's query strings.
         The query could either be a single string or a list of multiple strings
-        :return: a dictionary containing probilities prediction as value sorted by each string as key
+        Return:
+            dictionary containing probilities prediction as value sorted by each string as key
         """
         if self.model.model_name == "rnn":
             query_list = SAPreprocessor.preprocess_data(input_list, self.pre_processor)
@@ -42,9 +43,10 @@ class PredictSentiment(Resource):
 
     def get(self):
         """
-        gets the user's query strings.
+        Gets the user's query strings.
         The query could either be a single string or a list of multiple strings
-        :return: a dictionary containing probilities prediction as value sorted by each string as key
+        Return:
+            dictionary containing probilities prediction as value sorted by each string as key
         """
         # use parser and find the user's query
         args = parser.parse_args()
@@ -83,24 +85,30 @@ class PredictEntities(Resource):
         """
         gets the user's query strings.
         The query could either be a single string or a list of multiple strings
-        :return: a dictionary containing probilities prediction as value sorted by each string as key
+        Return:
+            dictionary containing probilities prediction as value sorted by each string as key
         """
-        query_list = NERPreprocessor.preprocess_data(input_list, self.pre_processor)
-        preds = self.model.predict(query_list)
-        return preds
+        questions_list_encoded, questions_list_tokenized, n_tokens =\
+            NERPreprocessor.preprocess_data(input_list, self.pre_processor)
+        preds = self.model.predict(questions_list_encoded, self.pre_processor["labels_to_idx"], n_tokens)
+        display_result = self.model.visualize(questions_list_tokenized, preds)
+        return display_result
 
     def get(self):
         """
         gets the user's query strings.
         The query could either be a single string or a list of multiple strings
-        :return: a dictionary containing probilities prediction as value sorted by each string as key
+        Return:
+            dictionary containing probilities prediction as value sorted by each string as key
         """
         # use parser and find the user's query
         args = parser.parse_args()
         query_list = args['query'].strip('][').split(',')
-        query_list = NERPreprocessor.preprocess_data(query_list, self.pre_processor)
-        preds = self.model.predict(query_list)
-        return self.model.get_output(preds, query_list)
+        questions_list_encoded, questions_list_tokenized, n_tokens =\
+            NERPreprocessor.preprocess_data(query_list, self.pre_processor)
+        preds = self.model.predict(questions_list_encoded, self.pre_processor["labels_to_idx"], n_tokens)
+        display_result = self.model.visualize(questions_list_tokenized, preds)
+        return display_result
 
 
 @app.route('/namedEntityRecognition', methods=['POST', 'GET'])
@@ -151,7 +159,7 @@ def main():
     if app_up:
         # the PredictSentiment methode will be executed in the sentimentAnalysis() method
         port = int(os.environ.get('PORT', 5000))
-        app.run(debug=True, host='0.0.0.0', port=port)
+        app.run(host='0.0.0.0', port=port, threaded=False)
     else:
         print(PredictSentiment(sentiment_analysis_model, sentiment_analysis_pre_processor))
         print(PredictEntities(ner_model, ner_pre_processor))

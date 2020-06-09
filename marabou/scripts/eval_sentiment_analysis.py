@@ -10,9 +10,11 @@ from marabou.utils.config_loader import SentimentAnalysisConfigReader
 def evaluate_model(questions_list: List[str], valid_config: SentimentAnalysisConfigReader) -> None:
     """
     Wrapper function that calls the model deserializer and returns prediction
-    :param model_file_url: relative path for the model file
-    :param questions_list: list of strings to perform inference on
-    :return: list of probabilies for positive class for each input word
+    Args:
+        model_file_url: relative path for the model file
+        questions_list: list of strings to perform inference on
+    Return:
+        list of probabilies for positive class for each input word
     """
     pre_processor = None
     trained_model = None

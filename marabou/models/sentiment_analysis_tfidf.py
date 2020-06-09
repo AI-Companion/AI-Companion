@@ -19,10 +19,12 @@ class DumbModel():
 
     def fit(self, X_train, y_train):
         """
-        training function
-        :param X_train: training features
-        :param y_train: training targets
-        :return: None
+        Training function
+        Args:
+            X_train: training features
+            y_train: training targets
+        Return:
+            None
         """
         self.vectorizer = TfidfVectorizer(max_features=self.vocab_size)
         X_train = self.vectorizer.fit_transform(X_train)
@@ -33,8 +35,10 @@ class DumbModel():
     def predict_proba(self, X):
         """
         Inference function
-        :param X: features to perform inference on
-        :return: probability array
+        Args:
+            X: features to perform inference on
+        Return:
+            probability array
         """
         X = self.vectorizer.transform(X)
         probs = self.clf.predict_proba(X)
@@ -44,8 +48,10 @@ class DumbModel():
     def predict(self, X):
         """
         Prediction function
-        :param X: features to perform inference on
-        :return: prediction label
+        Args:
+            X: features to perform inference on
+        Return:
+            prediction label
         """
         X = self.vectorizer.transform(X)
         y_pred = self.clf.predict(X)
@@ -53,9 +59,11 @@ class DumbModel():
 
     def save_model(self, file_name_prefix):
         """
-        saves the model using a pickle serializable
-        :param file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
-        :return: None
+        Saves the model using a pickle serializable
+        Args:
+            file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
+        Return:
+            None
         """
         model_folder = os.path.join(os.getcwd(), "models")
         if not os.path.isdir(model_folder):
@@ -68,10 +76,12 @@ class DumbModel():
 
     def get_output(self, probs, query_list):
         """
-        gets probability from a given vector of probabilities
-        :param probs: probability vector for the given query
-        :query_list: a list of the strings given to the model to predict
-        :return: a dict containing probability prediction for each queried string
+        Gets probability from a given vector of probabilities
+        Args:
+            probs: probability vector for the given query
+            query_list: a list of the strings given to the model to predict
+        Return:
+            dict containing probability prediction for each queried string
         """
         vals = [round(p[1], 4) for p in probs]
         keys = ["class1_probs_%s" % name for name in query_list]
@@ -82,8 +92,9 @@ class DumbModel():
     @staticmethod
     def load_model():
         """
-        find the most recent saved model and loads it, otherwise returns None object
-        :return: a model object
+        Finds the most recent saved model and loads it, otherwise returns None object
+        Return:
+            model object
         """
         model = None
         model_dir = os.path.join(os.getcwd(), "models")

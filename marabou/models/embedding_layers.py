@@ -8,7 +8,7 @@ from keras.initializers import Constant
 
 class Glove6BEmbedding():
     """
-    loads glove embedding from stanford
+    Loads glove embedding from stanford
     """
     def __init__(self, embedding_dimension, word_index, vocab_size, embeddings_path, max_length):
         self.embedding_dimension = embedding_dimension
@@ -20,8 +20,9 @@ class Glove6BEmbedding():
 
     def get_embedding_matrix(self):
         """
-        gets the embedding matrix according to the specified embedding dimension
-        :return: None
+        Gets the embedding matrix according to the specified embedding dimension
+        Returns:
+            None
         """
         print("===========> collecting pretrained embedding")
         script_path = os.path.join(os.getcwd(), "bash_scripts/load_stanford_6B_embedding.sh")
@@ -48,8 +49,9 @@ class Glove6BEmbedding():
 
     def build_embedding(self):
         """
-        build the embedding layer which will be called by the model
-        :return: An instance of keras.layers.Embedding
+        Builds the embedding layer which will be called by the model
+        Returns:
+            An instance of keras.layers.Embedding
         """
         embeddings_matrix = self.get_embedding_matrix()
         embedding_layer = Embedding(input_dim=self.vocab_size, output_dim=self.embedding_dimension,
@@ -60,7 +62,7 @@ class Glove6BEmbedding():
 
 class FastTextEmbedding():
     """
-    loads fasttext embedding from facebook research
+    Loads fasttext embedding from facebook research
     @inproceedings{mikolov2018advances,
     title={Advances in Pre-Training Distributed Word Representations},
     author={Mikolov, Tomas and Grave, Edouard and Bojanowski, Piotr and Puhrsch, Christian and Joulin, Armand},
@@ -78,8 +80,9 @@ class FastTextEmbedding():
 
     def get_embedding_matrix(self):
         """
-        gets the embedding matrix according to the specified embedding dimension
-        :return: None
+        Gets the embedding matrix according to the specified embedding dimension
+        Returns:
+            None
         """
         print("===========> collecting pretrained embedding")
         script_path = os.path.join(os.getcwd(), "bash_scripts/load_fasttext_16B_embedding.sh")
@@ -103,8 +106,9 @@ class FastTextEmbedding():
 
     def build_embedding(self):
         """
-        build the embedding layer which will be called by the model
-        :return: An instance of keras.layers.Embedding
+        Builds the embedding layer which will be called by the model
+        Returns:
+            An instance of keras.layers.Embedding
         """
         embeddings_matrix = self.get_embedding_matrix()
         embedding_layer = Embedding(input_dim=self.vocab_size, output_dim=self.embedding_dimension,

@@ -10,10 +10,9 @@ import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from sklearn.model_selection import train_test_split
-from tensorflow.keras.models import load_model
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
-from keras.models import Model, Input
+from keras.models import Model, Input, load_model
 from keras.layers import Embedding, Dense, LSTM
 from marabou.utils.config_loader import SentimentAnalysisConfigReader
 from marabou.models.embedding_layers import Glove6BEmbedding, FastTextEmbedding
@@ -33,10 +32,12 @@ class DataPreprocessor:
 
     def clean_data(self, X: List):
         """
-        performs data cleaning operations such as removing html breaks, lower case,
+        Performs data cleaning operations such as removing html breaks, lower case,
         remove stopwords ...
-        :param X: input reviews to be cleaned
-        :return: None
+        Args:
+            X: input reviews to be cleaned
+        Return:
+            None
         """
         print("===========> data cleaning")
         review_lines = list()
@@ -56,9 +57,11 @@ class DataPreprocessor:
 
     def tokenize_text(self, X: List):
         """
-        performs data tokenization into a format that is digestible by the model
-        :param X: list of predictors already cleaned
-        :return: tokenizer object and tokenized input features
+        Performs data tokenization into a format that is digestible by the model
+        Args:
+            X: list of predictors already cleaned
+        Return:
+            tokenizer object and tokenized input features
         """
         print("===========> data tokenization")
         tokenizer_obj = Tokenizer(num_words=self.vocab_size)
@@ -75,10 +78,12 @@ class DataPreprocessor:
 
     def split_train_test(self, X, y):
         """
-        wrapper method to split training data into a validation set and a training set
-        :param X: tokenized predictors
-        :param y: labels
-        :return: a tuple consisting of training predictors, training labels, validation predictors, validation labels
+        Wrapper method to split training data into a validation set and a training set
+        Args:
+            X: tokenized predictors
+            y: labels
+        Return:
+            tuple consisting of training predictors, training labels, validation predictors, validation labels
         """
         print("===========> data split")
         X_train, X_test, y_train, y_test = train_test_split(X, y, shuffle=True, test_size=self.validation_split)
@@ -91,9 +96,11 @@ class DataPreprocessor:
 
     def save_preprocessor(self, file_name_prefix):
         """
-        stores the data preprocessor under 'models folder'
-        :param file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
-        :return: None
+        Stores the data preprocessor under 'models folder'
+        Args:
+            file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
+        Return:
+            None
         """
         model_folder = os.path.join(os.getcwd(), "models")
         if not os.path.isdir(model_folder):
@@ -107,9 +114,11 @@ class DataPreprocessor:
     @staticmethod
     def load_preprocessor(preprocessor_file_name):
         """
-        loads preprocessing tools for the model
-        :param preprocessor_file_name: data to evaluate
-        :return: preprocessed object
+        Loads preprocessing tools for the model
+        Args:
+            preprocessor_file_name: data to evaluate
+        Return:
+            preprocessed object
         """
         preprocessor = {}
         preprocessor_file_name = os.path.join(os.getcwd(), "models", preprocessor_file_name)
@@ -121,10 +130,12 @@ class DataPreprocessor:
     @staticmethod
     def preprocess_data(data, preprocessor):
         """
-        performs data preprocessing before inference
-        :param data: data to evaluate
-        :param preprocessor: tokenizer object
-        :return: preprocessed data
+        Performs data preprocessing before inference
+        Args:
+            data: data to evaluate
+            preprocessor: tokenizer object
+        Return:
+            preprocessed data
         """
         data = preprocessor['tokenizer_obj'].texts_to_sequences(data)
         data = pad_sequences(data, maxlen=preprocessor['max_sequence_length'], padding="post",
@@ -154,9 +165,11 @@ class RNNModel:
 
     def init_from_files(self, h5_file, class_file):
         """
-        initialize the class from a previously saved model
-        :param h5_file: url to a saved class
-        :return: None
+        Initializes the class from a previously saved model
+        Args:
+            h5_file: url to a saved class
+        Return:
+            None
         """
         self.model = load_model(h5_file)
         with open(class_file, 'rb') as f:
@@ -170,9 +183,11 @@ class RNNModel:
     def init_from_config_file(self, config: SentimentAnalysisConfigReader, data_preprocessor: DataPreprocessor):
         """
         initialize the class for the first time from a given configuration file and data processor
-        :param config: .json configuration reader
-        :param data_preprocessor: preprocessing tool for the training data
-        :return: None
+        Args:
+            config: .json configuration reader
+            data_preprocessor: preprocessing tool for the training data
+        Return:
+            None
         """
         self.use_pretrained_embedding = config.pre_trained_embedding
         self.vocab_size = config.vocab_size
@@ -190,10 +205,11 @@ class RNNModel:
 
     def build_embedding(self):
         """
-        builds the embedding layer. depending on the configuration, it will either
+        Builds the embedding layer. depending on the configuration, it will either
         load a pretrained embedding or create an empty embedding to be trained along
         with the data
-        :return: None
+        Return:
+            None
         """
         if self.use_pretrained_embedding and self.embeddings_name == "glove":
             glove_embeddings = Glove6BEmbedding(self.embedding_dimension, self.word_index,
@@ -209,8 +225,9 @@ class RNNModel:
 
     def build_model(self):
         """
-        builds an RNN model according to fixed architecture
-        :return: None
+        Builds an RNN model according to fixed architecture
+        Return:
+            None
         """
         print("===========> build model")
         # Run the function
@@ -233,15 +250,18 @@ class RNNModel:
 
     def fit(self, X_train, y_train, X_test=None, y_test=None):
         """
-        fits the model object to the data
-        :param X_train: numpy array containing encoded training features
-        :param y_train: numpy array containing training targets
-        :paran X_test: numpy array containing encoded test features
-        :param y_test: numpy array containing test targets
-        :return: list of values related to each datasets and loss function
+        Fits the model object to the data
+        Args:
+            X_train: numpy array containing encoded training features
+            y_train: numpy array containing training targets
+            X_test: numpy array containing encoded test features
+            y_test: numpy array containing test targets
+        Return:
+            list of values related to each datasets and loss function
         """
         if (X_test is not None) and (y_test is not None):
-            history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=128, validation_data=(X_test, y_test),
+            history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter,
+                                     batch_size=128, validation_data=(X_test, y_test),
                                      verbose=2)
         else:
             history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=128, verbose=2)
@@ -249,10 +269,12 @@ class RNNModel:
 
     def predict(self, encoded_text_list):
         """
-        inference method
-        :param encoded_text_list: a list of texts to be evaluated. the input is assumed to have been
-        preprocessed
-        :return: a numpy array containing the probabilities of a positive review for each list entry
+        Inference method
+        Args:
+            encoded_text_list: a list of texts to be evaluated. the input is assumed to have been
+            preprocessed
+        Return:
+            numpy array containing the probabilities of a positive review for each list entry
         """
         probs = self.model.predict(encoded_text_list)
         boolean_result = probs > 0.5
@@ -260,19 +282,23 @@ class RNNModel:
 
     def predict_proba(self, encoded_text_list):
         """
-        inference method
-        :param encoded_text_list: a list of texts to be evaluated. the input is assumed to have been
-        preprocessed
-        :return: a numpy array containing the probabilities of a positive review for each list entry
+        Inference method
+        Args:
+            encoded_text_list: a list of texts to be evaluated. the input is assumed to have been
+            preprocessed
+        Return:
+            numpy array containing the probabilities of a positive review for each list entry
         """
         probs = self.model.predict(encoded_text_list)
         return [p[0] for p in probs]
 
     def save_model(self, file_name_prefix):
         """
-        saves the trained model into a h5 file
-        :param file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
-        :return: None
+        Saves the trained model into a h5 file
+        Args:
+            file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
+        Return:
+            None
         """
         model_folder = os.path.join(os.getcwd(), "models")
         if not os.path.isdir(model_folder):
@@ -292,11 +318,13 @@ class RNNModel:
 
     def save_learning_curve(self, history, file_name_prefix):
         """
-        saves the learning curve plot
-        :param history: a dictionary object containing training and validation dataset loss function values and
-        objective function values for each training iteration
-        :param file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
-        :return: None
+        Saves the learning curve plot
+        Args:
+            history: a dictionary object containing training and validation dataset loss function values and
+            objective function values for each training iteration
+            file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
+        Return:
+            None
         """
         plot_folder = os.path.join(os.getcwd(), "perf")
         if not os.path.isdir(plot_folder):
@@ -326,8 +354,9 @@ class RNNModel:
     @staticmethod
     def load_model():
         """
-        extracts a model saved using the save_model function
-        :return: a model object and a tokenizer object
+        Extracts a model saved using the save_model function
+        Return:
+            model object and a tokenizer object
         """
         trained_model = None
         model_dir = os.path.join(os.getcwd(), "models")
