@@ -12,9 +12,11 @@ class ImdbDataset:
 
     def _get_set(self, dataset_url):
         """
-        checks if imdb dataset is downloaded or not, if not it'll collect it
-        :param dataset_url: web address of the imdb dataset
-        :return: None
+        Checks if imdb dataset is downloaded or not, if not it'll collect it
+        Args:
+            dataset_url: web address of the imdb dataset
+        Return:
+            None
         """
         print("===========> imdb dataset collection")
         script_path = os.path.join(os.getcwd(), "bash_scripts/load_imdb_dataset.sh")
@@ -22,9 +24,11 @@ class ImdbDataset:
 
     def get_set(self, mode="train"):
         """
-        returns training data with the given number of rows
-        :param limit: max number of rows
-        :return: training features and targets
+        Returns training data with the given number of rows
+        Args:
+            limit: max number of rows
+        Return:
+            training features and targets
         """
         x = []
         y = []
@@ -60,9 +64,11 @@ class KaggleDataset:
 
     def _get_set(self, dataset_url):
         """
-        checks if imdb dataset is downloaded or not, if not it'll collect it
-        :param dataset_url: web address of the imdb dataset
-        :return: None
+        Checks if imdb dataset is downloaded or not, if not it'll collect it
+        Args:
+            dataset_url: web address of the imdb dataset
+        Return:
+            None
         """
         print("===========> extracting kaggle ner dataset")
         script_path = os.path.join(os.getcwd(), "bash_scripts/load_ner_dataset.sh")
@@ -72,7 +78,8 @@ class KaggleDataset:
         """
         Retrieves the compressed data file and extracts the training data.
         Then it deletes the extracted csv
-        :return: training features and targets
+        Return:
+            training features and targets
         """
         X = []
         y = []

@@ -3,7 +3,7 @@ import json
 
 class SentimentAnalysisConfigReader():
     """
-    load sentiment analysis use case parameters from a .json file
+    Loads sentiment analysis use case parameters from a .json file
     """
     def __init__(self, file_name):
         self.config = self.read_file(file_name)
@@ -11,7 +11,8 @@ class SentimentAnalysisConfigReader():
     def read_file(self, file_name):
         """
         used to load configuration file
-        :param file_name: relative path for the configuration .json file
+        Args:
+            file_name: relative path for the configuration .json file
         """
         with open(file_name, "r") as f:
             return json.load(f)
@@ -19,35 +20,35 @@ class SentimentAnalysisConfigReader():
     @property
     def dataset_name(self):
         """
-        name of the dataset to be used
+        Name of the dataset to be used
         """
         return self.config["dataset_name"]
 
     @property
     def dataset_url(self):
         """
-        web url for the training data
+        Web url for the training data
         """
         return self.config["dataset_url"]
 
     @property
     def embeddings_path_glove(self):
         """
-        web url for embedding matrix. will be used in case a pretraining embedding is required
+        Web url for embedding matrix. will be used in case a pretraining embedding is required
         """
         return self.config["embeddings_path_glove"]
 
     @property
     def embeddings_path_fasttext(self):
         """
-        web url for embedding matrix. will be used in case a pretraining embedding is required
+        Web url for embedding matrix. will be used in case a pretraining embedding is required
         """
         return self.config["embeddings_path_fasttext"]
 
     @property
     def pre_trained_embedding(self):
         """
-        weather to use a pretrained embedding or not.
+        Wether to use a pretrained embedding or not.
         in case yes, a pretrained embedding will be downloaded from the internet
         """
         return self.config["pre_trained_embedding"]
@@ -55,7 +56,7 @@ class SentimentAnalysisConfigReader():
     @property
     def embedding_algorithm(self):
         """
-        not in use currently, relates to the embedding algorithm to use
+        Not in use currently, relates to the embedding algorithm to use
         """
         return self.config["embedding_algorithm"]
 
@@ -119,7 +120,7 @@ class SentimentAnalysisConfigReader():
 
 class NamedEntityRecognitionConfigReader():
     """
-    load named entity recognition use case parameters from a .json file
+    Loads named entity recognition use case parameters from a .json file
     """
     def __init__(self, file_name):
         self.config = self.read_file(file_name)
@@ -127,7 +128,8 @@ class NamedEntityRecognitionConfigReader():
     def read_file(self, file_name):
         """
         used to load configuration file
-        :param file_name: relative path for the configuration .json file
+        Args:
+            file_name: relative path for the configuration .json file
         """
         with open(file_name, "r") as f:
             return json.load(f)

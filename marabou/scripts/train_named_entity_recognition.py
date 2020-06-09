@@ -10,10 +10,12 @@ def get_training_validation_data(X: List, y: List, data_processor: DataPreproces
         -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
     wrapper method which yields the training and validation datasets
-    :param X: list of texts (features)
-    :param y: list of ratings
-    :param data_processor: a data handler object
-    :return: tuple containing the training data, validation data
+    Args:
+        X: list of texts (features)
+        y: list of ratings
+        data_processor: a data handler object
+    Return:
+        tuple containing the training data, validation data
     """
     preprocessed_input = data_processor.clean_data(X)
     preprocessed_input, y = data_processor.tokenize_text(preprocessed_input, y)
@@ -24,8 +26,10 @@ def get_training_validation_data(X: List, y: List, data_processor: DataPreproces
 def train_model(config: NamedEntityRecognitionConfigReader) -> None:
     """
     training function which prints classification summary as as result
-    :param config: Configuration object containing parsed .json file parameters
-    :return: None
+    Args:
+        config: Configuration object containing parsed .json file parameters
+    Return:
+        None
     """
     X, y = [], []
     if config.dataset_name == "kaggle_ner":
