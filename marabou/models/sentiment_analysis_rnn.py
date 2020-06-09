@@ -178,6 +178,7 @@ class RNNModel:
         self.vocab_size = config.vocab_size
         self.embedding_dimension = config.embedding_dimension
         self.embeddings_name = config.embedding_algorithm
+        self.n_iter = 5
         if self.embeddings_name == "glove":
             self.embeddings_path = config.embeddings_path_glove
         elif self.embeddings_name == "fasttext":
@@ -240,10 +241,10 @@ class RNNModel:
         :return: list of values related to each datasets and loss function
         """
         if (X_test is not None) and (y_test is not None):
-            history = self.model.fit(x=X_train, y=y_train, epochs=10, batch_size=128, validation_data=(X_test, y_test),
+            history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=128, validation_data=(X_test, y_test),
                                      verbose=2)
         else:
-            history = self.model.fit(x=X_train, y=y_train, epochs=10, batch_size=128, verbose=2)
+            history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=128, verbose=2)
         return history
 
     def predict(self, encoded_text_list):
@@ -297,7 +298,7 @@ class RNNModel:
         :param file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
         :return: None
         """
-        plot_folder = os.path.join(os.getcwd(), "plots")
+        plot_folder = os.path.join(os.getcwd(), "perf")
         if not os.path.isdir(plot_folder):
             os.mkdir(plot_folder)
 
