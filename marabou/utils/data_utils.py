@@ -1,6 +1,9 @@
 import os
 import subprocess
 import pandas as pd
+import numpy as np
+from cv2 import cv2
+from keras.datasets import fashion_mnist
 
 
 class ImdbDataset:
@@ -94,4 +97,40 @@ class KaggleDataset:
         X = [[w[0] for w in s] for s in sent_list]
         y = [[w[2] for w in s] for s in sent_list]
         os.remove(dataset_path)
+        return X, y
+
+class FashionImageNet:
+    """
+    Dataset handler for the fashion imagenet dataset
+    """
+    def __init__(self):
+        pass
+
+    def get_set(self):
+        """
+        Retrieves fashion imagenet from zipped file on the disk
+        Return:
+            features, targets
+        """
+        print("===========> extracting fashion imagenet dataset")
+        script_path = os.path.join(os.getcwd(), "bash_scripts/load_fashion_dataset.sh")
+        subprocess.call("%s" % (script_path), shell=True)
+        data_folder = os.path.join(os.getcwd(), "data/fashion_imagenet")
+        if not os.path.exists(data_folder):
+            X = None
+            y = None
+        else:
+            subfolders_list = os.listdir(data_folder)
+            subfolders_list.remove('classes_url')
+            X = []
+            y = []
+            for folder in subfolders_list:
+                class_folder = os.path.join(os.getcwd(), "data/fashion_imagenet", folder)
+                files_list = [f for f in os.listdir(class_folder) if os.path.isfile(os.path.join(class_folder, f))]
+                for f in files_list:
+                    file_url = os.path.join(class_folder, f)
+                    im = cv2.imread(file_url)
+                    if im is not None:
+                        X.append(file_url)
+                        y.append(folder)
         return X, y
