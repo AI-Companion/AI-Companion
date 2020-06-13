@@ -103,7 +103,7 @@ class CNNClothing:
         self.use_pretrained_cnn = config.pre_trained_cnn
         self.pretrained_cnn_name = config.pretrained_network_name
         self.model = None
-        self.n_iter = 5
+        self.n_iter = 10
         self.image_height = config.image_height
         self.image_width = config.image_width
         self.idx_to_labels = idx_to_labels
@@ -125,12 +125,11 @@ class CNNClothing:
         for layer in vggmodel.layers:
 	        layer.trainable = False
         x = Flatten()(vggmodel.outputs)
-        x = Dense(124, activation='relu')(x)
+        x = Dense(1024, activation='relu')(x)
         x = Dense(self.n_labels, activation='softmax')(x)
         # define new model
         model = Model(inputs=vggmodel.inputs, outputs=x)
         # summarize
-        model.summary()
         model.compile(loss='categorical_crossentropy', optimizer="adam", metrics=['acc'])
         print(model.summary())
         return model
