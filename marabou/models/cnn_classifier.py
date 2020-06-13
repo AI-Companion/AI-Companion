@@ -131,7 +131,7 @@ class CNNClothing:
         model = Model(inputs=vggmodel.inputs, outputs=x)
         # summarize
         model.summary()
-        model.compile(loss='binary_crossentropy', optimizer="adam", metrics=['acc'])
+        model.compile(loss='categorical_crossentropy', optimizer="adam", metrics=['acc'])
         print(model.summary())
         return model
 
