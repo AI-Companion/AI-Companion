@@ -1,9 +1,9 @@
 import os
-import string
 import pickle
 import re
+import subprocess
+import time
 from itertools import compress
-from typing import List
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -21,7 +21,7 @@ class DataPreprocessor:
     """
     Utility class performing several data preprocessing steps
     """
-    def __init__(self, config:FashionClassifierConfigReader):
+    def __init__(self, config: FashionClassifierConfigReader):
         self.validation_split = config.validation_split
         self.image_height = config.image_height
         self.image_width = config.image_width
@@ -40,7 +40,7 @@ class DataPreprocessor:
         n_labels = len(unique_labels)
         labels_to_idx = {t: i for i, t in enumerate(unique_labels)}
         idx_to_labels = {i: t for i, t in enumerate(unique_labels)}
-        y = [ labels_to_idx[i] for i in y]
+        y = [labels_to_idx[i] for i in y]
         y = to_categorical(y, num_classes=n_labels)
         X_train, X_test, y_train, y_test = train_test_split(X, y, shuffle=True, test_size=self.validation_split)
         print("----> data split finish")
@@ -51,6 +51,13 @@ class DataPreprocessor:
         return X_train, X_test, np.asarray(y_train), np.asarray(y_test), idx_to_labels
 
     def load_images(self, X):
+        """
+        Loads an array containing training images ready to be injected in the CNN
+        Args:
+            X: list of image urls
+        Returns:
+            array having shape (n_images, image_height, image_width, 3)
+        """
         X_result = []
         for image_url in X:
             im = cv2.imread(image_url, 1)
@@ -72,6 +79,7 @@ class CNNClothing:
         self.model = None
         self.n_labels = None
         self.idx_to_labels = None
+        self.batch_size = None
         keys = kwargs.keys()
         if 'config' in keys:
             self.init_from_config_file(args[0], kwargs['config'])
@@ -108,6 +116,7 @@ class CNNClothing:
         self.image_height = config.image_height
         self.image_width = config.image_width
         self.idx_to_labels = idx_to_labels
+        self.batch_size = config.batch_size
         self.n_labels = len(idx_to_labels)
         if self.pretrained_network_name == "vgg16":
             self.pretrained_network_path = config.pretrained_network_vgg
@@ -124,7 +133,7 @@ class CNNClothing:
         print("===========> build model")
         vggmodel = VGG16(include_top=False, input_shape=(self.image_height, self.image_width, 3))
         for layer in vggmodel.layers:
-	        layer.trainable = False
+            layer.trainable = False
         x = vggmodel.layers[-1].output
         x = Flatten()(x)
         x = Dense(512, activation='relu')(x)
@@ -151,7 +160,7 @@ class CNNClothing:
         report = None
         if (X_test is not None) and (y_test is not None):
             history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter,
-                                     batch_size=128, validation_data=(X_test, y_test),
+                                     batch_size=self.batch_size, validation_data=(X_test, y_test),
                                      verbose=2)
             y_hat = self.predict(X_test)
             y = np.argmax(y_test, axis=1)
@@ -160,7 +169,7 @@ class CNNClothing:
             df = pd.DataFrame(report).transpose().round(2)
             print(df)
         else:
-            history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=128, verbose=2)
+            history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=self.batch_size, verbose=2)
         return history, report
 
     def predict(self, X_test):
@@ -266,27 +275,46 @@ class CNNClothing:
         print("----> learning curve saved to %s" % plot_file_url)
 
     @staticmethod
-    def load_model():
+    def load_model(h5_file_url=None, class_file_url=None, collect_from_gdrive=False):
         """
         Extracts a model saved using the save_model function
+        Args:
+            h5_file_url: gdrive link for the trained model
+            class_file_url: gdrive link for the class file
+            collect_from_gdrive: whether to collect the model file from google drive
         Return:
             model object and a tokenizer object
         """
         trained_model = None
         model_dir = os.path.join(os.getcwd(), "models")
-        model_files_list = os.listdir(os.path.join(os.getcwd(), "models"))
-        if len(model_files_list) > 0:
-            rnn_models_idx = [("fashion_mnist" in f) and ("rnn" in f) for f in model_files_list]
-            if np.sum(rnn_models_idx) > 0:
-                rnn_model = list(compress(model_files_list, rnn_models_idx))
-                model_dates = [int(''.join(re.findall(r'\d+', f))) for f in rnn_model]
-                h5_file_name = rnn_model[np.argmax(model_dates)]
-                class_file = h5_file_name.replace("rnn_model.h5", "rnn_class.pkl")
-                if (os.path.isfile(os.path.join(model_dir, preprocessor_file))) and\
-                        (os.path.isfile(os.path.join(model_dir, class_file))):
-                    trained_model = CNNClothing(h5_file=os.path.join(model_dir, h5_file_name),
-                                                class_file=os.path.join(model_dir, class_file))
-                    return trained_model
+        if not collect_from_gdrive:
+            model_files_list = os.listdir(os.path.join(os.getcwd(), "models"))
+            if len(model_files_list) > 0:
+                rnn_models_idx = [("fashion_imagenet" in f) and ("rnn" in f) for f in model_files_list]
+                if np.sum(rnn_models_idx) > 0:
+                    rnn_model = list(compress(model_files_list, rnn_models_idx))
+                    model_dates = [int(''.join(re.findall(r'\d+', f))) for f in rnn_model]
+                    h5_file_name = rnn_model[np.argmax(model_dates)]
+                    class_file = h5_file_name.replace("rnn_model.h5", "rnn_class.pkl")
+                    if os.path.isfile(os.path.join(model_dir, class_file)):
+                        trained_model = CNNClothing(h5_file=os.path.join(model_dir, h5_file_name),
+                                                    class_file=os.path.join(model_dir, class_file))
+                        return trained_model
+                    return None
                 return None
             return None
-        return None
+        else:
+            print("===========> collecting model file from link")
+            script_path = os.path.join(os.getcwd(), "bash_scripts/load_fashion_model_file.sh")
+            file_prefix = "fashion_imagenet_loaded_%s" % time.strftime("%Y%m%d_%H%M%S")
+            h5_file_name = file_prefix + "_rnn_model.h5"
+            class_file_name = h5_file_name.replace("rnn_model.h5", "rnn_class.pkl")
+            h5_file_local_url = os.path.join(model_dir, h5_file_name)
+            class_file_local_url = os.path.join(model_dir, class_file_name)
+            subprocess.call("%s %s %s %s %s" % (script_path, h5_file_url,
+                                                h5_file_local_url, class_file_url, class_file_local_url), shell=True)
+            if (os.path.isfile(h5_file_local_url) and os.path.isfile(class_file_local_url)):
+                trained_model = CNNClothing(h5_file=h5_file_local_url, class_file=class_file_local_url)
+                return trained_model
+            else:
+                return None

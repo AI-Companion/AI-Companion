@@ -21,7 +21,10 @@ def evaluate_model(questions_list: List[str], valid_config: SentimentAnalysisCon
     if valid_config.eval_model_name == "tfidf":
         trained_model = DumbModel.load_model()
     if valid_config.eval_model_name == "rnn":
-        trained_model, preprocessor_file = RNNModel.load_model()
+        trained_model, preprocessor_file = RNNModel.load_model(valid_config.h5_model_url,
+                                                               valid_config.class_file_url,
+                                                               valid_config.preprocessor_file_url,
+                                                               collect_from_gdrive=True)
     if trained_model is None:
         raise ValueError("there is no corresponding model file")
     if valid_config.eval_model_name == "rnn":

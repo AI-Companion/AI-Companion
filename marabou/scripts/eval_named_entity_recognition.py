@@ -5,9 +5,10 @@ warnings.filterwarnings('ignore')
 import argparse
 from typing import List
 from marabou.models.named_entity_recognition_rnn import RNNModel, DataPreprocessor
+from marabou.utils.config_loader import NamedEntityRecognitionConfigReader
 
 
-def evaluate_model(questions_list: List[str]) -> None:
+def evaluate_model(questions_list: List[str], config: NamedEntityRecognitionConfigReader) -> None:
     """
     Wrapper function that calls the model deserializer and returns prediction
     Args:
@@ -18,7 +19,8 @@ def evaluate_model(questions_list: List[str]) -> None:
     """
     pre_processor = None
     trained_model = None
-    trained_model, preprocessor_file = RNNModel.load_model()
+    trained_model, preprocessor_file = RNNModel.load_model(config.h5_model_url, config.class_file_url,
+                                                           config.preprocessor_file_url, collect_from_gdrive=True)
     if trained_model is None:
         raise ValueError("there is no corresponding model file")
     pre_processor = DataPreprocessor.load_preprocessor(preprocessor_file)
@@ -42,7 +44,8 @@ def main():
     """main function"""
     args = parse_arguments()
     qlist = args.text
-    evaluate_model(qlist)
+    config_file = NamedEntityRecognitionConfigReader("config/config_named_entity_recognition.json")
+    evaluate_model(qlist, config_file)
 
 
 if __name__ == '__main__':

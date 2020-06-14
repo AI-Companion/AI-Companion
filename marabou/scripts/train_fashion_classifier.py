@@ -1,4 +1,3 @@
-from typing import List, Tuple
 import time
 import numpy as np
 from marabou.utils.data_utils import FashionImageNet

@@ -117,6 +117,27 @@ class SentimentAnalysisConfigReader():
         """
         return self.config["eval_model_name"]
 
+    @property
+    def h5_model_url(self):
+        """
+        gdrive fileid for the trained model
+        """
+        return self.config["h5_model_url"]
+
+    @property
+    def class_file_url(self):
+        """
+        gdrive fileid for the class file
+        """
+        return self.config["class_file_url"]
+
+    @property
+    def preprocessor_file_url(self):
+        """
+        gdrive fileid for the class file
+        """
+        return self.config["preprocessor_file_url"]
+
 
 class NamedEntityRecognitionConfigReader():
     """
@@ -220,6 +241,27 @@ class NamedEntityRecognitionConfigReader():
         """
         return self.config["embeddings_path_fasttext"]
 
+    @property
+    def h5_model_url(self):
+        """
+        gdrive fileid for the trained model
+        """
+        return self.config["h5_model_url"]
+
+    @property
+    def class_file_url(self):
+        """
+        gdrive fileid for the class file
+        """
+        return self.config["class_file_url"]
+
+    @property
+    def preprocessor_file_url(self):
+        """
+        gdrive fileid for the class file
+        """
+        return self.config["preprocessor_file_url"]
+
 
 class FashionClassifierConfigReader():
     """
@@ -243,13 +285,6 @@ class FashionClassifierConfigReader():
         name of the dataset to be used
         """
         return self.config["dataset_name"]
-
-    @property
-    def dataset_url(self):
-        """
-        web url for the training data
-        """
-        return self.config["dataset_url"]
 
     @property
     def validation_split(self):
@@ -320,3 +355,17 @@ class FashionClassifierConfigReader():
         gdrive fileid for the specified dataset
         """
         return self.config["dataset_url"]
+
+    @property
+    def h5_model_url(self):
+        """
+        gdrive fileid for the trained model
+        """
+        return self.config["h5_model_url"]
+
+    @property
+    def class_file_url(self):
+        """
+        gdrive fileid for the class file
+        """
+        return self.config["class_file_url"]

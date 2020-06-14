@@ -23,5 +23,11 @@
     "vocab_size":35000,
     "__help_vocab_size":"count of unique tokens",
     "pre_trained_embedding":true,
-    "__help_pre_trained_embedding":"set to true if you want to use a pre-trained embedding, otherwise the model will learn the embedding"
+    "__help_pre_trained_embedding":"set to true if you want to use a pre-trained embedding, otherwise the model will learn the embedding",
+    "h5_model_url":"148OeDlWhoGc0dGSxz5nGEvXz3PJiCGb5",
+    "_help_h5_model_url":"gdrive url for the trained h5 model",
+    "class_file_url":"1Sw-UHBs6VHiCOUbmgsP3eFUCHM3pAYVK",
+    "_help_class_file_url":"gdrive url for the trained class file",
+    "preprocessor_file_url":"1krWj5UzzbM5ROkRAcZFTOzzDTIjlmEo3",
+    "_help_preprocessor_file_url":"gdrive url for the trained preprocessor file"
 }

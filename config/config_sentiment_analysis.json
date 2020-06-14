@@ -25,5 +25,11 @@
     "model_optimizer":"Adam",
     "__help_model_optimizer":"ignored for now",
     "eval_model_name":"rnn",
-    "__help_eval_model_name":"algorithm to be evaluated, possible values are 'rnn' or 'tfidf'. application will exit if another value"
+    "__help_eval_model_name":"algorithm to be evaluated, possible values are 'rnn' or 'tfidf'. application will exit if another value",
+    "h5_model_url":"1vBULUibUAVXrgKBD49qbuBJYG4XX9Gp3",
+    "_help_h5_model_url":"gdrive url for the trained h5 model",
+    "class_file_url":"1_YNFKYDQwT-wGh8TDjykxYYpkAUb_Mal",
+    "_help_class_file_url":"gdrive url for the trained class file",
+    "preprocessor_file_url":"1Cy2NtJbbHptgcEubTnxxKJs64LVbEoRb",
+    "_help_preprocessor_file_url":"gdrive url for the trained preprocessor file"
 }
