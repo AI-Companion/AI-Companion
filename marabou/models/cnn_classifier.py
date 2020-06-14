@@ -124,7 +124,8 @@ class CNNClothing:
         vggmodel = VGG16(include_top=False, input_shape=(self.image_height, self.image_width, 3))
         for layer in vggmodel.layers:
 	        layer.trainable = False
-        x = Flatten()(vggmodel.outputs)
+        x = vggmodel.layers[-1].output
+        x = Flatten()(x)
         x = Dense(1024, activation='relu')(x)
         x = Dense(self.n_labels, activation='softmax')(x)
         # define new model
