@@ -126,7 +126,7 @@ class CNNClothing:
 	        layer.trainable = False
         x = vggmodel.layers[-1].output
         x = Flatten()(x)
-        x = Dense(1024, activation='relu')(x)
+        x = Dense(128, activation='relu')(x)
         x = Dense(self.n_labels, activation='softmax')(x)
         # define new model
         model = Model(inputs=vggmodel.inputs, outputs=x)
