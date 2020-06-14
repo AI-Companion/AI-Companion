@@ -21,7 +21,7 @@ def train_model(config: FashionClassifierConfigReader) -> None:
     if X is None or y is None:
         raise ValueError("please make sure you have the correct dataset link in the config file")
     if config.experimental_mode:
-        ind = np.random.randint(0, len(X), 1000)
+        ind = np.random.randint(0, len(X), 500)
         X = [X[i] for i in ind]
         y = [y[i] for i in ind]
     preprocessor = DataPreprocessor(config)
@@ -35,8 +35,7 @@ def train_model(config: FashionClassifierConfigReader) -> None:
     trained_model.save_learning_curve(history, file_prefix)
     trained_model.save_classification_report(report, file_prefix)
     print("===========> saving trained model and preprocessor under models/")
-    #trained_model.save_model(file_prefix)
-    #data_preprocessor.save_preprocessor(file_prefix)
+    trained_model.save_model(file_prefix)
 
 
 def main():

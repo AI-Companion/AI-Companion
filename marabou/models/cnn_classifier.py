@@ -53,7 +53,7 @@ class DataPreprocessor:
     def load_images(self, X):
         X_result = []
         for image_url in X:
-            im = cv2.imread(image_url, 1)                
+            im = cv2.imread(image_url, 1)
             im = cv2.resize(im, (self.image_width, self.image_height))
             X_result.append(im)
         X_result = np.asarray(X_result)
@@ -88,8 +88,9 @@ class CNNClothing:
         """
         self.model = load_model(h5_file)
         with open(class_file, 'rb') as f:
-            self.use_pretrained_cnn = pickle.load(f)
-            self.pretrained_network_path = pickle.load(f)
+            self.image_height = pickle.load(f)
+            self.image_width = pickle.load(f)
+            self.idx_to_labels = pickle.load(f)
 
     def init_from_config_file(self, idx_to_labels, config: FashionClassifierConfigReader):
         """
@@ -154,6 +155,7 @@ class CNNClothing:
                                      verbose=2)
             y_hat = self.predict(X_test)
             y = np.argmax(y_test, axis=1)
+            y = [self.idx_to_labels[i] for i in y]
             report = classification_report(y, y_hat, output_dict=True)
             df = pd.DataFrame(report).transpose().round(2)
             print(df)
@@ -161,30 +163,29 @@ class CNNClothing:
             history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=128, verbose=2)
         return history, report
 
-    def predict(self, X_test, labels_to_idx=None):
+    def predict(self, X_test):
         """
         Inference method
         Args:
             X_test: predictors array
-            idx_to_labels: a dictionary containing the conversion from idx to its original label class
         Return:
             numpy array containing the class for token character in the sentence
         """
         probs = self.model.predict(X_test)
         labels = np.argmax(probs, axis=1)
+        labels = [self.idx_to_labels[i] for i in labels]
         return labels
 
-    def predict_proba(self, encoded_text_list):
+    def predict_proba(self, X_test):
         """
         Inference method
         Args:
-            encoded_text_list: a list of texts to be evaluated. the input is assumed to have been
-            preprocessed
+            X_test: array of predictors
         Return:
             numpy array containing the probabilities of a positive review for each list entry
         """
-        probs = self.model.predict(encoded_text_list)
-        return [p[0] for p in probs]
+        probs = self.model.predict(X_test)
+        return probs
 
     def save_model(self, file_name_prefix):
         """
@@ -201,12 +202,9 @@ class CNNClothing:
         self.model.save(file_url_keras_model)
         file_url_class = os.path.join(model_folder, file_name_prefix + "_rnn_class.pkl")
         with open(file_url_class, 'wb') as handle:
-            pickle.dump(self.use_pretrained_embedding, handle)
-            pickle.dump(self.vocab_size, handle)
-            pickle.dump(self.embedding_dimension, handle)
-            pickle.dump(self.embeddings_path, handle)
-            pickle.dump(self.max_length, handle)
-            pickle.dump(self.word_index, handle)
+            pickle.dump(self.image_height, handle)
+            pickle.dump(self.image_width, handle)
+            pickle.dump(self.idx_to_labels, handle)
         print("----> model saved to %s" % file_url_keras_model)
         print("----> class saved to %s" % file_url_class)
 
@@ -238,7 +236,7 @@ class CNNClothing:
         Args:
             history: a dictionary object containing training and validation dataset loss function values and
             objective function values for each training iteration
-            file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
+            file_name_prefix: a file name prefix having the following format 'fashion_mnist_%Y%m%d_%H%M%S'
         Return:
             None
         """
@@ -278,18 +276,17 @@ class CNNClothing:
         model_dir = os.path.join(os.getcwd(), "models")
         model_files_list = os.listdir(os.path.join(os.getcwd(), "models"))
         if len(model_files_list) > 0:
-            rnn_models_idx = [("sentiment_analysis" in f) and ("rnn" in f) for f in model_files_list]
+            rnn_models_idx = [("fashion_mnist" in f) and ("rnn" in f) for f in model_files_list]
             if np.sum(rnn_models_idx) > 0:
                 rnn_model = list(compress(model_files_list, rnn_models_idx))
                 model_dates = [int(''.join(re.findall(r'\d+', f))) for f in rnn_model]
                 h5_file_name = rnn_model[np.argmax(model_dates)]
-                preprocessor_file = h5_file_name.replace("rnn_model.h5", "preprocessor.pkl")
                 class_file = h5_file_name.replace("rnn_model.h5", "rnn_class.pkl")
                 if (os.path.isfile(os.path.join(model_dir, preprocessor_file))) and\
                         (os.path.isfile(os.path.join(model_dir, class_file))):
-                    trained_model = RNNModel(h5_file=os.path.join(model_dir, h5_file_name),
-                                             class_file=os.path.join(model_dir, class_file))
-                    return trained_model, preprocessor_file
-                return None, None
-            return None, None
-        return None, None
+                    trained_model = CNNClothing(h5_file=os.path.join(model_dir, h5_file_name),
+                                                class_file=os.path.join(model_dir, class_file))
+                    return trained_model
+                return None
+            return None
+        return None
