@@ -42,6 +42,7 @@ setup(name='marabou',
                             'marabou-train-ner=marabou.scripts.train_named_entity_recognition:main',
                             'marabou-eval-ner=marabou.scripts.eval_named_entity_recognition:main',
                             'marabou-train-fashion-classifier=marabou.scripts.train_fashion_classifier:main',
+                            'marabou-eval-fashion-classifier=marabou.scripts.eval_fashion_classifier:main',
                             'marabou-rest-api=marabou.scripts.serve_rest_model:main']
     },
     dependency_links = ['git+https://www.github.com/keras-team/keras-contrib.git#egg=keras-contrib'],

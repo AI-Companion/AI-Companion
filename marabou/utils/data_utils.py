@@ -1,9 +1,7 @@
 import os
 import subprocess
 import pandas as pd
-import numpy as np
 from cv2 import cv2
-from keras.datasets import fashion_mnist
 
 
 class ImdbDataset:
@@ -98,6 +96,7 @@ class KaggleDataset:
         y = [[w[2] for w in s] for s in sent_list]
         os.remove(dataset_path)
         return X, y
+
 
 class FashionImageNet:
     """
