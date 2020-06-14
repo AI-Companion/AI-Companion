@@ -2,7 +2,7 @@
     "dataset_name":"fashion_mnist",
     "dataset_url":"1JtPkRIkirOg9NRc9wqCTVkm110sIACxt",
     "__help_dataset_url":"gdrive id for the specified dataset",
-    "experimental_mode":false,
+    "experimental_mode":true,
     "__help_experimental_mode":"set to true if you just looking for a 'quick and dirty model'",
     "batch_size":64,
     "__help_batch_size":"used to train the model, must be power of 2",

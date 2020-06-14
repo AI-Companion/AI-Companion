@@ -12,7 +12,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 from keras.applications.vgg16 import VGG16
 from keras.models import Model, load_model
-from keras.layers import Dense, Flatten
+from keras.layers import Dense, Flatten, Dropout
 from keras.utils import to_categorical
 from marabou.utils.config_loader import FashionClassifierConfigReader
 
@@ -126,7 +126,8 @@ class CNNClothing:
 	        layer.trainable = False
         x = vggmodel.layers[-1].output
         x = Flatten()(x)
-        x = Dense(128, activation='relu')(x)
+        x = Dense(512, activation='relu')(x)
+        x = Dropout(0.5)(x)
         x = Dense(self.n_labels, activation='softmax')(x)
         # define new model
         model = Model(inputs=vggmodel.inputs, outputs=x)
@@ -144,28 +145,34 @@ class CNNClothing:
             X_test: numpy array containing encoded test features
             y_test: numpy array containing test targets
         Return:
-            list of values related to each datasets and loss function
+            history of mertrics + classification report
         """
+        report = None
         if (X_test is not None) and (y_test is not None):
             history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter,
                                      batch_size=128, validation_data=(X_test, y_test),
                                      verbose=2)
+            y_hat = self.predict(X_test)
+            y = np.argmax(y_test, axis=1)
+            report = classification_report(y, y_hat, output_dict=True)
+            df = pd.DataFrame(report).transpose().round(2)
+            print(df)
         else:
             history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter, batch_size=128, verbose=2)
-        return history
+        return history, report
 
-    def predict(self, encoded_text_list):
+    def predict(self, X_test, labels_to_idx=None):
         """
         Inference method
         Args:
-            encoded_text_list: a list of texts to be evaluated. the input is assumed to have been
-            preprocessed
+            X_test: predictors array
+            idx_to_labels: a dictionary containing the conversion from idx to its original label class
         Return:
-            numpy array containing the probabilities of a positive review for each list entry
+            numpy array containing the class for token character in the sentence
         """
-        probs = self.model.predict(encoded_text_list)
-        boolean_result = probs > 0.5
-        return [int(b) for b in boolean_result]
+        probs = self.model.predict(X_test)
+        labels = np.argmax(probs, axis=1)
+        return labels
 
     def predict_proba(self, encoded_text_list):
         """
@@ -202,6 +209,28 @@ class CNNClothing:
             pickle.dump(self.word_index, handle)
         print("----> model saved to %s" % file_url_keras_model)
         print("----> class saved to %s" % file_url_class)
+
+    def save_classification_report(self, report, file_name_prefix):
+        """
+        Saves the classification report to a txt file
+        Args:
+            report: a classification report object
+            file_name_prefix: a file name prefix having the following format 'sentiment_analysis_%Y%m%d_%H%M%S'
+        Return:
+            None
+        """
+        plot_folder = os.path.join(os.getcwd(), "perf")
+        report_file_url = os.path.join(plot_folder, file_name_prefix + "_report.txt")
+        df = pd.DataFrame(report).transpose().round(2)
+        df['classes'] = df.index
+        f = open(report_file_url, "w")
+        line = "{:15} |{:10} |{:10} |{:10} |{:10}|\n".format("classes", "precision", "recall", "f1-score", "support")
+        f.write(line)
+        for _, row in df.iterrows():
+            line = "{:15} |{:10} |{:10} |{:10} |{:10}|\n".format(row[4], row[0], row[1], row[2], row[3])
+            f.write(line)
+        f.close()
+        print("----> classification report saved to %s" % report_file_url)
 
     def save_learning_curve(self, history, file_name_prefix):
         """
