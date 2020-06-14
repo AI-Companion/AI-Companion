@@ -103,7 +103,7 @@ class CNNClothing:
         self.use_pretrained_cnn = config.pre_trained_cnn
         self.pretrained_cnn_name = config.pretrained_network_name
         self.model = None
-        self.n_iter = 5
+        self.n_iter = 10
         self.image_height = config.image_height
         self.image_width = config.image_width
         self.idx_to_labels = idx_to_labels
@@ -152,7 +152,6 @@ class CNNClothing:
             history = self.model.fit(x=X_train, y=y_train, epochs=self.n_iter,
                                      batch_size=128, validation_data=(X_test, y_test),
                                      verbose=2)
-            print(history)
             y_hat = self.predict(X_test)
             y = np.argmax(y_test, axis=1)
             report = classification_report(y, y_hat, output_dict=True)
