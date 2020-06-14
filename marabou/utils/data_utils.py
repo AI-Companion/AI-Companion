@@ -103,8 +103,8 @@ class FashionImageNet:
     """
     Dataset handler for the fashion imagenet dataset
     """
-    def __init__(self):
-        pass
+    def __init__(self, dataset_url=None):
+        self.dataset_url = dataset_url
 
     def get_set(self):
         """
@@ -114,7 +114,7 @@ class FashionImageNet:
         """
         print("===========> extracting fashion imagenet dataset")
         script_path = os.path.join(os.getcwd(), "bash_scripts/load_fashion_dataset.sh")
-        subprocess.call("%s" % (script_path), shell=True)
+        subprocess.call("%s %s" % (script_path, self.dataset_url), shell=True)
         data_folder = os.path.join(os.getcwd(), "data/fashion_imagenet")
         if not os.path.exists(data_folder):
             X = None

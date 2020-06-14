@@ -313,3 +313,10 @@ class FashionClassifierConfigReader():
         image width
         """
         return self.config["image_width"]
+
+    @property
+    def dataset_url(self):
+        """
+        gdrive fileid for the specified dataset
+        """
+        return self.config["dataset_url"]

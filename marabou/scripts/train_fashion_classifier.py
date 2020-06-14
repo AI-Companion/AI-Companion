@@ -16,15 +16,15 @@ def train_model(config: FashionClassifierConfigReader) -> None:
     """
     X, y = [], []
     if config.dataset_name == "fashion_mnist":
-        dataset = FashionImageNet()
+        dataset = FashionImageNet(config.dataset_url)
         X, y = dataset.get_set()
     if X is None or y is None:
-        raise ValueError("please make sure to 'git lfs pull' data files from repo")
+        raise ValueError("please make sure you have the correct dataset link in the config file")
     if config.experimental_mode:
         ind = np.random.randint(0, len(X), 1000)
         X = [X[i] for i in ind]
         y = [y[i] for i in ind]
-    preprocessor = DataPreprocessor(config.validation_split, config.image_height, config.image_width)
+    preprocessor = DataPreprocessor(config)
     X = preprocessor.load_images(X)
     X_train, X_test, y_train, y_test, idx_to_labels = preprocessor.split_train_test(X, y)
 
@@ -32,8 +32,8 @@ def train_model(config: FashionClassifierConfigReader) -> None:
     trained_model = CNNClothing(idx_to_labels, config=config)
     history, report = trained_model.fit(X_train, y_train, X_test, y_test)
     print("===========> saving learning curve and classification report under perf/")
-    trained_model.save_learning_curve(history, file_prefix)
-    trained_model.save_classification_report(report, file_prefix)
+    #trained_model.save_learning_curve(history, file_prefix)
+    #trained_model.save_classification_report(report, file_prefix)
     print("===========> saving trained model and preprocessor under models/")
     #trained_model.save_model(file_prefix)
     #data_preprocessor.save_preprocessor(file_prefix)

@@ -21,10 +21,10 @@ class DataPreprocessor:
     """
     Utility class performing several data preprocessing steps
     """
-    def __init__(self, validation_split: float, image_height: int, image_width: int):
-        self.validation_split = validation_split
-        self.image_height = image_height
-        self.image_width = image_width
+    def __init__(self, config:FashionClassifierConfigReader):
+        self.validation_split = config.validation_split
+        self.image_height = config.image_height
+        self.image_width = config.image_width
 
     def split_train_test(self, X, y):
         """
