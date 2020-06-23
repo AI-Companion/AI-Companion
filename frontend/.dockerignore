@@ -1,0 +1,5 @@
+Dockerfile
+README.txt
+node_modules/
+dist/
+run.sh

@@ -1,0 +1,3 @@
+[console_scripts]
+marabou-evaluation = src.app:main
+

@@ -1,0 +1,1 @@
+git+https://www.github.com/keras-team/keras-contrib.git/@master#egg=keras-contrib
