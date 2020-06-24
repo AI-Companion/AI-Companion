@@ -122,9 +122,12 @@ def named_entity_recognition():
         task_content = request.form['content']
         new_prediction = PredictEntities(model=global_model_config[2], pre_processor=global_model_config[3])
         output = new_prediction.get_from_service([task_content])
-        return render_template('named_entity_recognition.html', output=output)
-    else:
-        return render_template('named_entity_recognition.html')
+        print("output")
+        print(output)
+        return json.dumps(output)
+    #    return render_template('named_entity_recognition.html', output=output)
+    #else:
+    #    return render_template('named_entity_recognition.html')
 
 
 @app.route('/', methods=['POST', 'GET'])

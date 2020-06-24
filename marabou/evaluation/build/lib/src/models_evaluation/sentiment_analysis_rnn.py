@@ -110,9 +110,7 @@ class RNNModel:
         Return:
             numpy array containing the probabilities of a positive review for each list entry
         """
-        print("bbbbbbbbbbbbbbbbbbbbbbbbbbb"+str(encoded_text_list))
         probs = self.model.predict(encoded_text_list)
-        print("cccccccccccccccccccccccccc"+str(probs))
         return [p[0] for p in probs]
 
     @staticmethod
