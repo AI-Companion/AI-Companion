@@ -37,7 +37,6 @@ class PredictSentiment(Resource):
             dictionary containing probilities prediction as value sorted by each string as key
         """
         if self.model.model_name == "rnn":
-            print("aaaaaaaaaaaaaaaaaaaaaa"+str(input_list))
             query_list = SAPreprocessor.preprocess_data(input_list, self.pre_processor)
         probs = self.model.predict_proba(query_list)
         return probs
@@ -52,7 +51,6 @@ class PredictSentiment(Resource):
         # use parser and find the user's query
         args = parser.parse_args()
         query_list = args['query']
-        print(query_list)
         if self.model.model_name == "rnn":
             query_list = SAPreprocessor.preprocess_data(query_list, self.pre_processor)
         probs = self.model.predict_proba(query_list)
@@ -106,6 +104,8 @@ class PredictEntities(Resource):
         # use parser and find the user's query
         args = parser.parse_args()
         query_list = args['query'].strip('][').split(',')
+        print("query list")
+        print(args['query'])
         questions_list_encoded, questions_list_tokenized, n_tokens =\
             NERPreprocessor.preprocess_data(query_list, self.pre_processor)
         preds = self.model.predict(questions_list_encoded, self.pre_processor["labels_to_idx"], n_tokens)

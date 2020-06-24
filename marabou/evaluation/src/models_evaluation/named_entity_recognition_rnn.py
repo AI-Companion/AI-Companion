@@ -107,7 +107,18 @@ class RNNModel:
             self.max_length = pickle.load(f)
             self.word_index = pickle.load(f)
 
- 
+    def convert_idx_to_labels(self, classes_vector, labels_to_idx):
+        """
+        Utility function to convert encoded target idx to original labels
+        Args:
+            classes_vector: target vector containing indexed classes
+            labels_to_idx: a dictionary containing the conversion from each class label to its id
+        Return:
+            numpy array containing the corresponding labels
+        """
+        idx_to_labels = {v: k for k, v in labels_to_idx.items()}
+        return [idx_to_labels[cl] for cl in classes_vector]
+
     def predict(self, encoded_text_list, labels_to_idx, n_tokens_list=None):
         """
         Inference method
