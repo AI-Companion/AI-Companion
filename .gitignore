@@ -2,6 +2,8 @@ build/*
 dist/*
 env/*
 data/*
-marabou.egg-info/*
-*/marabou.egg-info/*
+*.egg*
 *.pyc
+*node_modules
+*dist
+*build
