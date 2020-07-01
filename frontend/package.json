@@ -1,24 +1,18 @@
 {
-  "name": "frontend",
+  "name": "frontend2",
   "version": "0.1.0",
-  "description": "Frontend for Marabou project",
-  "main": "static/index.html",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "private": true,
+  "proxy": "http://0.0.0.0:5000/",
+  "dependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "0.9.5"
   },
-  "proxy":"localhost:8000",
-  "author": "Youssef Azzouz & Marouen Azzouz",
-  "license": "Unlicense",
-  "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.5",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "html-webpack-plugin": "^3.2.0",
-    "react": "^16.4.2",
-    "react-dom": "^16.4.2",
-    "webpack": "^4.16.5",
-    "webpack-cli": "^3.1.0"
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   }
 }

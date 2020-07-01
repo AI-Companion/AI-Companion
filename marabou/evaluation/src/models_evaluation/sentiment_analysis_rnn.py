@@ -7,7 +7,7 @@ import subprocess
 from itertools import compress
 from typing import List
 import numpy as np
-from keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
 
 

@@ -1,5 +1,5 @@
 ==build:
-docker build -t src .
+docker build -t evaluation .
 
 ==run:
 runs evaluation on port 8000, available by any address

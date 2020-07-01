@@ -57,13 +57,13 @@ class PredictSentiment(Resource):
         return self.model.get_output(probs, query_list)
 
 
-@app.route('/sentimentAnalysis', methods=['POST', 'GET'])
+@app.route('/api/sentimentAnalysis', methods=['POST', 'GET'])
 def sentiment_analysis():
     """
     sentiment analysis service function
     """
     if request.method == 'POST':
-        task_content = request.form['content']
+        task_content = request.json['content']
         new_prediction = PredictSentiment(model=global_model_config[0], pre_processor=global_model_config[1])
         output = new_prediction.get_from_service([task_content])
         return json.dumps(output[0] * 100)
@@ -113,13 +113,13 @@ class PredictEntities(Resource):
         return display_result
 
 
-@app.route('/namedEntityRecognition', methods=['POST', 'GET'])
+@app.route('/api/namedEntityRecognition', methods=['POST', 'GET'])
 def named_entity_recognition():
     """
     named entity recognition service function
     """
     if request.method == 'POST':
-        task_content = request.form['content']
+        task_content = request.json['content']
         new_prediction = PredictEntities(model=global_model_config[2], pre_processor=global_model_config[3])
         output = new_prediction.get_from_service([task_content])
         return json.dumps(output)
