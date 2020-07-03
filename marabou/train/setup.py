@@ -1,5 +1,5 @@
 import subprocess
-from setuptools import setup, find_packages, Command
+from setuptools import setup, find_packages
 from setuptools.command.install import install
 
 
@@ -30,25 +30,24 @@ class InstallCommand(install):
         install.run(self)
 
 setup(name='marabou',
-    #package_dir={'':'marabou'},
-    packages=find_packages(include=['marabou','marabou.*']),
-    author='Marouen Azzouz, Youssef Azzouz',
-    author_email='azzouz.marouen@gmail.com, youssef.azzouz1512@gmail.com',
-    version='0.1.0',
-    zip_safe=False,
-    entry_points={
-        'console_scripts': ['marabou-train-sentiment-analysis=src.scripts.train_sentiment_analysis:main',
-                            'marabou-eval-sentiment-analysis=src.scripts.eval_sentiment_analysis:main',
-                            'marabou-train-ner=src.scripts.train_named_entity_recognition:main',
-                            'marabou-eval-ner=src.scripts.eval_named_entity_recognition:main',
-                            'marabou-train-fashion-classifier=src.scripts.train_fashion_classifier:main',
-                            'marabou-eval-fashion-classifier=src.scripts.eval_fashion_classifier:main']
-    },
-    dependency_links = ['git+https://www.github.com/keras-team/keras-contrib.git#egg=keras-contrib'],
-    install_requires=INSTALL_REQUIREMENTS,
-    tests_require=["pytest", ],
-    package_data={},
-    include_package_data=True,
-    cmdClass={
-        'install':InstallCommand
-    })
+      packages=find_packages(include=['marabou', 'marabou.*']),
+      author='Marouen Azzouz, Youssef Azzouz',
+      author_email='azzouz.marouen@gmail.com, youssef.azzouz1512@gmail.com',
+      version='0.1.0',
+      zip_safe=False,
+      entry_points={
+          'console_scripts': ['marabou-train-sentiment-analysis=src.scripts.train_sentiment_analysis:main',
+                              'marabou-eval-sentiment-analysis=src.scripts.eval_sentiment_analysis:main',
+                              'marabou-train-ner=src.scripts.train_named_entity_recognition:main',
+                              'marabou-eval-ner=src.scripts.eval_named_entity_recognition:main',
+                              'marabou-train-fashion-classifier=src.scripts.train_fashion_classifier:main',
+                              'marabou-eval-fashion-classifier=src.scripts.eval_fashion_classifier:main']
+      },
+      dependency_links=['git+https://www.github.com/keras-team/keras-contrib.git#egg=keras-contrib'],
+      install_requires=INSTALL_REQUIREMENTS,
+      tests_require=["pytest", ],
+      package_data={},
+      include_package_data=True,
+      cmdClass={
+          'install':InstallCommand
+      })
