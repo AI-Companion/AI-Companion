@@ -1,8 +1,8 @@
 import time
 import numpy as np
-from marabou.utils.data_utils import FashionImageNet
-from marabou.utils.config_loader import FashionClassifierConfigReader
-from marabou.models.cnn_classifier import DataPreprocessor, CNNClothing
+from src.utils.data_utils import FashionImageNet
+from src.utils.config_loader import FashionClassifierConfigReader
+from src.models.cnn_classifier import DataPreprocessor, CNNClothing
 
 
 def train_model(config: FashionClassifierConfigReader) -> None:

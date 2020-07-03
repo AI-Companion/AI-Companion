@@ -25,5 +25,7 @@
     "h5_model_url":"19F-YcnZvKuK5ic0Xv5zJ-rSiKmRJqDIO",
     "_help_h5_model_url":"gdrive url for the trained h5 model",
     "class_file_url":"1Li2VvQ0rY2DpOcSUWnwCRatDlM9fmRfA",
-    "_help_class_file_url":"gdrive url for the trained class file"
+    "_help_class_file_url":"gdrive url for the trained class file",
+    "repo_root":"/home/marouen/mongit/marabou",
+    "_help_repo_root":"url to the root of the repo"
 }

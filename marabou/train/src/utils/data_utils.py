@@ -1,7 +1,7 @@
 import os
 import subprocess
-import pandas as pd
 from cv2 import cv2
+import pandas as pd
 
 
 class ImdbDataset:

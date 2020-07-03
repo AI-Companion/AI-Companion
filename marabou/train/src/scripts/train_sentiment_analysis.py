@@ -1,10 +1,10 @@
 import time
 from typing import List, Tuple
 import numpy as np
-from marabou.utils.data_utils import ImdbDataset
-from marabou.utils.config_loader import SentimentAnalysisConfigReader
-from marabou.models.sentiment_analysis_rnn import RNNModel, DataPreprocessor
-from marabou.models.sentiment_analysis_tfidf import DumbModel
+from src.utils.data_utils import ImdbDataset
+from src.utils.config_loader import SentimentAnalysisConfigReader
+from src.models.sentiment_analysis_rnn import RNNModel, DataPreprocessor
+from src.models.sentiment_analysis_tfidf import DumbModel
 
 
 def get_training_validation_data(X: List, y: List, data_processor: DataPreprocessor)\

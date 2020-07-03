@@ -5,4 +5,4 @@ set -e
 docker build -t frontend .
 
 # # run docker image ( on port 8000)
-docker run -d -p 8000:8000 --name frontend frontend:latest
+docker run -d -p 3000:3000 --name frontend frontend:latest

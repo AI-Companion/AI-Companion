@@ -31,5 +31,7 @@
     "class_file_url":"1_YNFKYDQwT-wGh8TDjykxYYpkAUb_Mal",
     "_help_class_file_url":"gdrive url for the trained class file",
     "preprocessor_file_url":"1Cy2NtJbbHptgcEubTnxxKJs64LVbEoRb",
-    "_help_preprocessor_file_url":"gdrive url for the trained preprocessor file"
+    "_help_preprocessor_file_url":"gdrive url for the trained preprocessor file",
+    "repo_root":"/home/marouen/mongit/marabou",
+    "_help_repo_root":"url to the root of the repo"
 }

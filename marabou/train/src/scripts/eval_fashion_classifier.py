@@ -4,9 +4,9 @@ import warnings
 warnings.filterwarnings('ignore')
 import argparse
 import numpy as np
-from cv2.cv2 import imread, resize
-from marabou.models.cnn_classifier import CNNClothing
-from marabou.utils.config_loader import FashionClassifierConfigReader
+from cv2 import cv2
+from src.models.cnn_classifier import CNNClothing
+from src.utils.config_loader import FashionClassifierConfigReader
 
 
 def evaluate_model(image_url: str, config: FashionClassifierConfigReader) -> None:
@@ -21,10 +21,10 @@ def evaluate_model(image_url: str, config: FashionClassifierConfigReader) -> Non
     trained_model = CNNClothing.load_model(config.h5_model_url, config.class_file_url, collect_from_gdrive=True)
     if trained_model is None:
         raise ValueError("there is no corresponding model file")
-    im = imread(image_url)
+    im = cv2.imread(image_url)
     if im is not None:
-        im = imread(image_url, 1)
-        im = resize(im, (trained_model.image_height, trained_model.image_width))
+        im = cv2.imread(image_url, 1)
+        im = cv2.resize(im, (trained_model.image_height, trained_model.image_width))
         im = np.asarray(im).reshape(1, trained_model.image_height, trained_model.image_width, 3)
     else:
         raise ValueError("please input a valid image url")

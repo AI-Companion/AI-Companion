@@ -1,9 +1,9 @@
 from typing import List, Tuple
 import time
 import numpy as np
-from marabou.utils.data_utils import KaggleDataset
-from marabou.utils.config_loader import NamedEntityRecognitionConfigReader
-from marabou.models.named_entity_recognition_rnn import DataPreprocessor, RNNModel
+from src.utils.data_utils import KaggleDataset
+from src.utils.config_loader import NamedEntityRecognitionConfigReader
+from src.models.named_entity_recognition_rnn import DataPreprocessor, RNNModel
 
 
 def get_training_validation_data(X: List, y: List, data_processor: DataPreprocessor)\

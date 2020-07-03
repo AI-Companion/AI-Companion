@@ -2,9 +2,9 @@ import warnings
 warnings.filterwarnings('ignore')
 import argparse
 from typing import List
-from marabou.models.sentiment_analysis_tfidf import DumbModel
-from marabou.models.sentiment_analysis_rnn import RNNModel, DataPreprocessor
-from marabou.utils.config_loader import SentimentAnalysisConfigReader
+from src.models.sentiment_analysis_tfidf import DumbModel
+from src.models.sentiment_analysis_rnn import RNNModel, DataPreprocessor
+from src.utils.config_loader import SentimentAnalysisConfigReader
 
 
 def evaluate_model(questions_list: List[str], valid_config: SentimentAnalysisConfigReader) -> None:

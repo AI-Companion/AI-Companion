@@ -20,10 +20,13 @@ class App extends Component {
         <div className="App">
         <Switch>
             <Route path="/sentimentAnalysis">
-              <Service serv="namedEntity"/>
+              <Service serv=""/>
             </Route>
             <Route path="/namedEntityRecognition">
               <Service serv="namedEntity"/>
+            </Route>
+            <Route path="/clothingClassifier">
+              <Service serv="clothingService"/>
             </Route>
             <Route exact={true} path="/">
               <MasterHead/>

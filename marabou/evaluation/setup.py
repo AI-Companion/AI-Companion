@@ -1,6 +1,5 @@
-import os
 import subprocess
-from setuptools import setup, find_packages, Command
+from setuptools import setup, find_packages
 from setuptools.command.install import install
 
 INSTALL_REQUIREMENTS = [
@@ -24,18 +23,18 @@ class InstallCommand(install):
         install.run(self)
 
 setup(name='marabou',
-    packages=find_packages(include=['.*','src','src.*']),
-    author='Marouen Azzouz, Youssef Azzouz',
-    author_email='azzouz.marouen@gmail.com, youssef.azzouz1512@gmail.com',
-    version='0.1.0',
-    zip_safe=False,
-    entry_points={
-        'console_scripts': ['marabou-evaluation=src.app:main']
-    },
-    dependency_links = ['git+https://www.github.com/keras-team/keras-contrib.git/@master#egg=keras-contrib'],
-    install_requires=[INSTALL_REQUIREMENTS,"keras-contrib"],
-    package_data = {},
-    include_package_data=True,
-    cmdClass={
-        'install':InstallCommand
-    })
+      packages=find_packages(include=['.*', 'src', 'src.*']),
+      author='Marouen Azzouz, Youssef Azzouz',
+      author_email='azzouz.marouen@gmail.com, youssef.azzouz1512@gmail.com',
+      version='0.1.0',
+      zip_safe=False,
+      entry_points={
+          'console_scripts': ['marabou-evaluation=src.app:main']
+      },
+      dependency_links=['git+https://www.github.com/keras-team/keras-contrib.git/@master#egg=keras-contrib'],
+      install_requires=[INSTALL_REQUIREMENTS, "keras-contrib"],
+      package_data={},
+      include_package_data=True,
+      cmdClass={
+          'install':InstallCommand
+      })

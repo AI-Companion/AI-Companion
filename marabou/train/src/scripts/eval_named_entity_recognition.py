@@ -4,8 +4,8 @@ import warnings
 warnings.filterwarnings('ignore')
 import argparse
 from typing import List
-from marabou.models.named_entity_recognition_rnn import RNNModel, DataPreprocessor
-from marabou.utils.config_loader import NamedEntityRecognitionConfigReader
+from src.models.named_entity_recognition_rnn import RNNModel, DataPreprocessor
+from src.utils.config_loader import NamedEntityRecognitionConfigReader
 
 
 def evaluate_model(questions_list: List[str], config: NamedEntityRecognitionConfigReader) -> None:

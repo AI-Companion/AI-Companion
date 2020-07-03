@@ -4,6 +4,7 @@ import {
   } from "react-router-dom";
 import NamedEntityRec from './service/NamedEntityRec';
 import SentimentAnalysis from './service/SentimentAnalysis';
+import ClothingCNN from './service/clothingCNN';
 
 export default class Service extends React.Component {
     
@@ -16,8 +17,10 @@ export default class Service extends React.Component {
     console.log("here we go again ", this.props.serv)
     if (this.props.serv == "namedEntity")
         ret = <NamedEntityRec/>
-    else
+    else if (this.props.serv == "")
         ret = <SentimentAnalysis/>
+    else
+        ret = <ClothingCNN/>
     return (
         <div>
             <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav" >
