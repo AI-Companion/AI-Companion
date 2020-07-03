@@ -8,6 +8,7 @@ from src.models.sentiment_analysis_rnn import RNNModel as SARNN
 from src.models.sentiment_analysis_rnn import DataPreprocessor as SAPreprocessor
 from src.models.named_entity_recognition_rnn import RNNModel as NERRNN
 from src.models.named_entity_recognition_rnn import DataPreprocessor as NERPreprocessor
+from src.models.cnn_classifier import CNNClothing
 
 
 app = Flask(__name__)
@@ -32,6 +33,8 @@ class PredictSentiment(Resource):
         """
         gets the user's query strings.
         The query could either be a single string or a list of multiple strings
+        Args:
+            input_list: textual input
         Return:
             dictionary containing probilities prediction as value sorted by each string as key
         """
@@ -39,21 +42,6 @@ class PredictSentiment(Resource):
             query_list = SAPreprocessor.preprocess_data(input_list, self.pre_processor)
         probs = self.model.predict_proba(query_list)
         return probs
-
-    def get(self):
-        """
-        Gets the user's query strings.
-        The query could either be a single string or a list of multiple strings
-        Return:
-            dictionary containing probilities prediction as value sorted by each string as key
-        """
-        # use parser and find the user's query
-        args = parser.parse_args()
-        query_list = args['query']
-        if self.model.model_name == "rnn":
-            query_list = SAPreprocessor.preprocess_data(query_list, self.pre_processor)
-        probs = self.model.predict_proba(query_list)
-        return self.model.get_output(probs, query_list)
 
 
 @app.route('/api/sentimentAnalysis', methods=['POST', 'GET'])
@@ -83,29 +71,13 @@ class PredictEntities(Resource):
         """
         gets the user's query strings.
         The query could either be a single string or a list of multiple strings
+        Args:
+            input_list: textual input
         Return:
             dictionary containing probilities prediction as value sorted by each string as key
         """
         questions_list_encoded, questions_list_tokenized, n_tokens =\
             NERPreprocessor.preprocess_data(input_list, self.pre_processor)
-        preds = self.model.predict(questions_list_encoded, self.pre_processor["labels_to_idx"], n_tokens)
-        display_result = self.model.visualize(questions_list_tokenized, preds)
-        return display_result
-
-    def get(self):
-        """
-        gets the user's query strings.
-        The query could either be a single string or a list of multiple strings
-        Return:
-            dictionary containing probilities prediction as value sorted by each string as key
-        """
-        # use parser and find the user's query
-        args = parser.parse_args()
-        query_list = args['query'].strip('][').split(',')
-        print("query list")
-        print(args['query'])
-        questions_list_encoded, questions_list_tokenized, n_tokens =\
-            NERPreprocessor.preprocess_data(query_list, self.pre_processor)
         preds = self.model.predict(questions_list_encoded, self.pre_processor["labels_to_idx"], n_tokens)
         display_result = self.model.visualize(questions_list_tokenized, preds)
         return display_result
@@ -124,6 +96,42 @@ def named_entity_recognition():
     else:
         return None
 
+# clothing classifier callers
+class ClothingClassifier(Resource):
+    """
+    utility class for the api_resource method
+    """
+    def __init__(self, model):
+        self.model = model
+
+    def get_from_service(self, image_url: str):
+        """
+        gets the user's query strings.
+        The query could either be a single string or a list of multiple strings
+        Args:
+            image_url: url containing image to be tested
+        Return:
+            dictionary containing probilities prediction as value sorted by each string as key
+        """
+        image = self.model.load_image(image_url)
+        image_class = self.model.predict(image)
+        print(image_class)
+        return image_class
+
+
+@app.route('/api/clothingCNN', methods=['POST', 'GET'])
+def clothing_classifier():
+    """
+    sentiment analysis service function
+    """
+    if request.method == 'POST':
+        task_content = request.json['content']
+        new_prediction = ClothingClassifier(model=global_model_config[4])
+        output = new_prediction.get_from_service([task_content])
+        return json.dumps(output[0] * 100)
+    else:
+        return None
+
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
@@ -137,22 +145,23 @@ def main():
     """ if boolean is true bring the application up"""
     app_up = len(sys.argv) < 2
 
-    model_to_evaluate = "rnn"
-    sentiment_analysis_pre_processor = None
     sentiment_analysis_model = None
     sentiment_analysis_model, preprocessor_file = SARNN.load_model()
     if sentiment_analysis_model is None or preprocessor_file is None:
         raise ValueError("there is no corresponding model file")
-    if model_to_evaluate == "rnn":
-        sentiment_analysis_pre_processor = SAPreprocessor.load_preprocessor(preprocessor_file)
+    sentiment_analysis_pre_processor = SAPreprocessor.load_preprocessor(preprocessor_file)
 
     ner_model, preprocessor_file = NERRNN.load_model()
     ner_pre_processor = NERPreprocessor.load_preprocessor(preprocessor_file)
     if ner_model is None or ner_pre_processor is None:
         raise ValueError("there is no corresponding model file")
 
+    clothing_model = CNNClothing.load_model()
+    if clothing_model is None:
+        raise ValueError("there is no corresponding model file")
+
     global_model_config.extend([sentiment_analysis_model, sentiment_analysis_pre_processor,
-                                ner_model, ner_pre_processor])
+                                ner_model, ner_pre_processor, clothing_model])
     if app_up:
         # the PredictSentiment methode will be executed in the sentimentAnalysis() method
         port = int(os.environ.get('PORT', 5000))
