@@ -119,7 +119,7 @@ class ClothingClassifier(Resource):
         return image_class
 
 
-@app.route('/api/clothingCNN', methods=['POST', 'GET'])
+@app.route('/api/clothingClassifier', methods=['POST', 'GET'])
 def clothing_classifier():
     """
     sentiment analysis service function
@@ -127,8 +127,8 @@ def clothing_classifier():
     if request.method == 'POST':
         task_content = request.json['content']
         new_prediction = ClothingClassifier(model=global_model_config[4])
-        output = new_prediction.get_from_service([task_content])
-        return json.dumps(output[0] * 100)
+        img_class = new_prediction.get_from_service([task_content])
+        return json.dumps(img_class)
     else:
         return None
 
@@ -148,17 +148,20 @@ def main():
     sentiment_analysis_model = None
     sentiment_analysis_model, preprocessor_file = SARNN.load_model()
     if sentiment_analysis_model is None or preprocessor_file is None:
-        raise ValueError("there is no corresponding model file")
+        raise ValueError("Please make sure to set the correct model path and Project root\
+                         as environment variable MARABOU_HOME")
     sentiment_analysis_pre_processor = SAPreprocessor.load_preprocessor(preprocessor_file)
 
     ner_model, preprocessor_file = NERRNN.load_model()
     ner_pre_processor = NERPreprocessor.load_preprocessor(preprocessor_file)
     if ner_model is None or ner_pre_processor is None:
-        raise ValueError("there is no corresponding model file")
+        raise ValueError("Please make sure to set the correct model path and Project root\
+                         as environment variable MARABOU_HOME")
 
     clothing_model = CNNClothing.load_model()
     if clothing_model is None:
-        raise ValueError("there is no corresponding model file")
+        raise ValueError("Please make sure to set the correct model path and Project root\
+                         as environment variable MARABOU_HOME")
 
     global_model_config.extend([sentiment_analysis_model, sentiment_analysis_pre_processor,
                                 ner_model, ner_pre_processor, clothing_model])

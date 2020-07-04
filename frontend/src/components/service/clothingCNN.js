@@ -15,7 +15,7 @@ export default class ClothingCNN extends React.Component {
 
     handleSubmit = (event) => {
       const { content } = this.state;
-      fetch('/api/namedEntityRecognition', {
+      fetch('/api/clothingClassifier', {
           method: 'POST',
           body: JSON.stringify({content : this.state.content}),
           headers: {
