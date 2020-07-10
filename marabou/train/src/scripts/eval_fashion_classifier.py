@@ -18,7 +18,7 @@ def evaluate_model(image_url: str, config: FashionClassifierConfigReader) -> Non
     Return:
         list of probabilies for positive class for each input word
     """
-    trained_model = CNNClothing.load_model(config.h5_model_url, config.class_file_url, collect_from_gdrive=True)
+    trained_model = CNNClothing.load_model(config.h5_model_url, config.class_file_url, collect_from_gdrive=False)
     if trained_model is None:
         raise ValueError("there is no corresponding model file")
     im = cv2.imread(image_url)
@@ -44,7 +44,9 @@ def parse_arguments():
 def main():
     """main function"""
     args = parse_arguments()
-    config_file = FashionClassifierConfigReader("config/config_fashion_classifier.json")
+    root_dir = os.environ.get("MARABOU_HOME")
+    config_file_path = os.path.join(root_dir, "marabou/train/config/config_fashion_classifier.json")
+    config_file = FashionClassifierConfigReader(config_file_path)
     evaluate_model(args.image_url, config_file)
 
 

@@ -1,4 +1,5 @@
 import time
+import os
 import numpy as np
 from src.utils.data_utils import FashionImageNet
 from src.utils.config_loader import FashionClassifierConfigReader
@@ -39,7 +40,9 @@ def train_model(config: FashionClassifierConfigReader) -> None:
 
 def main():
     """main function"""
-    train_config = FashionClassifierConfigReader("config/config_fashion_classifier.json")
+    root_dir = os.environ.get("MARABOU_HOME")
+    config_file_path = os.path.join(root_dir, "train/config/config_fashion_classifier.json")
+    train_config = FashionClassifierConfigReader(config_file_path)
     train_model(train_config)
 
 

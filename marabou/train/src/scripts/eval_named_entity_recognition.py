@@ -20,7 +20,7 @@ def evaluate_model(questions_list: List[str], config: NamedEntityRecognitionConf
     pre_processor = None
     trained_model = None
     trained_model, preprocessor_file = RNNModel.load_model(config.h5_model_url, config.class_file_url,
-                                                           config.preprocessor_file_url, collect_from_gdrive=True)
+                                                           config.preprocessor_file_url, collect_from_gdrive=False)
     if trained_model is None:
         raise ValueError("there is no corresponding model file")
     pre_processor = DataPreprocessor.load_preprocessor(preprocessor_file)
@@ -44,7 +44,9 @@ def main():
     """main function"""
     args = parse_arguments()
     qlist = args.text
-    config_file = NamedEntityRecognitionConfigReader("config/config_named_entity_recognition.json")
+    root_dir = os.environ.get("MARABOU_HOME")
+    config_file_path = os.path.join(root_dir, "marabou/train/config/config_named_entity_recognition.json")
+    config_file = NamedEntityRecognitionConfigReader(config_file_path)
     evaluate_model(qlist, config_file)
 
 

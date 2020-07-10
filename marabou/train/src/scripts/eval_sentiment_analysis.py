@@ -1,6 +1,7 @@
 import warnings
 warnings.filterwarnings('ignore')
 import argparse
+import os
 from typing import List
 from src.models.sentiment_analysis_tfidf import DumbModel
 from src.models.sentiment_analysis_rnn import RNNModel, DataPreprocessor
@@ -52,7 +53,9 @@ def main():
     """main function"""
     args = parse_arguments()
     qlist = args.question
-    valid_config = SentimentAnalysisConfigReader("config/config_sentiment_analysis.json")
+    root_dir = os.environ.get("MARABOU_HOME")
+    config_file_path = os.path.join(root_dir, "marabou/train/config/config_sentiment_analysis.json")
+    valid_config = SentimentAnalysisConfigReader(config_file_path)
     evaluate_model(qlist, valid_config)
 
 

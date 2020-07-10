@@ -1,5 +1,6 @@
 import time
 from typing import List, Tuple
+import os
 import numpy as np
 from src.utils.data_utils import ImdbDataset
 from src.utils.config_loader import SentimentAnalysisConfigReader
@@ -65,7 +66,9 @@ def train_model(config: SentimentAnalysisConfigReader) -> None:
 
 def main():
     """main function"""
-    train_config = SentimentAnalysisConfigReader("config/config_sentiment_analysis.json")
+    root_dir = os.environ.get("MARABOU_HOME")
+    config_file_path = os.path.join(root_dir, "train/config/config_sentiment_analysis.json")
+    train_config = SentimentAnalysisConfigReader(config_file_path)
     train_model(train_config)
 
 

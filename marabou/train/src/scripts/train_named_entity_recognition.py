@@ -1,5 +1,6 @@
 from typing import List, Tuple
 import time
+import os
 import numpy as np
 from src.utils.data_utils import KaggleDataset
 from src.utils.config_loader import NamedEntityRecognitionConfigReader
@@ -55,7 +56,9 @@ def train_model(config: NamedEntityRecognitionConfigReader) -> None:
 
 def main():
     """main function"""
-    train_config = NamedEntityRecognitionConfigReader("config/config_named_entity_recognition.json")
+    root_dir = os.environ.get("MARABOU_HOME")
+    config_file_path = os.path.join(root_dir, "train/config/config_named_entity_recognition.json")
+    train_config = NamedEntityRecognitionConfigReader(config_file_path)
     train_model(train_config)
 
 
