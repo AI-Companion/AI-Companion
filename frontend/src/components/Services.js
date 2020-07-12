@@ -12,29 +12,34 @@ export default class Services extends React.Component {
                 <div class="col-lg-3 col-md-6 text-center">
                     <div class="mt-5">
                         <i class="fas fa-4x fa-gem text-primary mb-4"></i>
-                        <h3 class="h4 mb-2">Sturdy Themes</h3>
-                        <p class="text-muted mb-0">Our themes are updated regularly to keep them bug free!</p>
+                        <h3 class="h4 mb-2">Made with innovation</h3>
+                        <p class="text-muted mb-0">We work with you to deliver actionable ariticial intelligence products</p>
+                        <p class="text-muted mb-0">Our solutions consider users, business value and programming standards at the heart of our development strategies</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 text-center">
                     <div class="mt-5">
                         <i class="fas fa-4x fa-laptop-code text-primary mb-4"></i>
-                        <h3 class="h4 mb-2">Up to Date</h3>
-                        <p class="text-muted mb-0">All dependencies are kept current to keep things fresh.</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 text-center">
-                    <div class="mt-5">
-                        <i class="fas fa-4x fa-globe text-primary mb-4"></i>
-                        <h3 class="h4 mb-2">Ready to Publish</h3>
-                        <p class="text-muted mb-0">You can use this design as is, or you can make changes!</p>
+                        <h3 class="h4 mb-2">Made with ease</h3>
+                        <p class="text-muted mb-0">Our solutions are designed to be easy to deploy, use and maintain</p>
+                        <p class="text-muted mb-0">You will not need a big machine learning crew to keep uptodate with state of the art artificial intelligence</p>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 text-center">
                     <div class="mt-5">
                         <i class="fas fa-4x fa-heart text-primary mb-4"></i>
-                        <h3 class="h4 mb-2">Made with Love</h3>
+                        <h3 class="h4 mb-2">Made with love</h3>
                         <p class="text-muted mb-0">Is it really open source if it's not made with love?</p>
+                        <p class="text-muted mb-0">Please visit our github repository</p>
+                        <p class="text-muted mb-0">https://github.com/mmarouen/marabou</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 text-center">
+                    <div class="mt-5">
+                        <i class="fas fa-4x fa-graduation-cap text-primary mb-4"></i>
+                        <h3 class="h4 mb-2">Made with care</h3>
+                        <p class="text-muted mb-0">Make use of our extensive professionnal experience</p>
+                        <p class="text-muted mb-0">We specialize in improving your operations and provide new services!</p>
                     </div>
                 </div>
             </div>

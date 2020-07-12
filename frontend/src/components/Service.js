@@ -25,7 +25,7 @@ export default class Service extends React.Component {
         <div>
             <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav" >
             <Link class="navbar-brand js-scroll-trigger" to="/" style={{color: 'black'}}>
-                Marabou
+                Companion.ai
             </Link>
             </nav>
             <br/>

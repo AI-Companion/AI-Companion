@@ -1,7 +1,7 @@
 import React from 'react';
 import sentimentIm from '../assets/img/portfolio/thumbnails/sentiment_analysis_2.jpg';
-import namedEntityIm from '../assets/img/portfolio/thumbnails/NamedEntityRecognition2.jpg';
-import clothingClassIm from '../assets/img/portfolio/thumbnails/clothing_classifier.jpeg';
+import namedEntityIm from '../assets/img/portfolio/thumbnails/named_entity_recognition.png';
+import clothingClassIm from '../assets/img/portfolio/thumbnails/fashion_classifier.png';
 
 export default class Portfolio extends React.Component {
   render() {
