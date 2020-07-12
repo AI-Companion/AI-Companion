@@ -23,7 +23,7 @@ export default class Portfolio extends React.Component {
                         ><img class="img-fluid" src={namedEntityIm} alt="Named Entity Recognition" />
                         <div class="portfolio-box-caption">
                             <div class="project-category text-white-50">Named Entity Recognition</div>
-                            <div class="project-name">Description for Named Entity Recognition</div> 
+                            <div class="project-name">Extract information to identify and segment the named entities or categorize them under various predefined classes</div> 
                         </div>
                     </a>
                 </div>
@@ -32,7 +32,7 @@ export default class Portfolio extends React.Component {
                         ><img class="img-fluid" src={clothingClassIm} alt="Clothing tagging" />
                         <div class="portfolio-box-caption">
                             <div class="project-category text-white-50">Tagging of clothing</div>
-                            <div class="project-name">Description for Named Entity Recognition</div> 
+                            <div class="project-name">Classifying clothing images into different categories using state of the art computer vision algorithms</div> 
                         </div>
                     </a>
                 </div>
