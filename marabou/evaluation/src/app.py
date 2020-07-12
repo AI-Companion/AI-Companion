@@ -96,6 +96,7 @@ def named_entity_recognition():
     else:
         return None
 
+
 # clothing classifier callers
 class ClothingClassifier(Resource):
     """

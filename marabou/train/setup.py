@@ -20,7 +20,7 @@ INSTALL_REQUIREMENTS = [
     'opencv-python'
 ]
 
-#test2
+
 class InstallCommand(install):
     """
     will call activate githooks for install mode
@@ -28,6 +28,7 @@ class InstallCommand(install):
     def run(self):
         subprocess.call("git config core.hooksPath .githooks/", shell=True)
         install.run(self)
+
 
 setup(name='marabou',
       packages=find_packages(include=['marabou', 'marabou.*']),
@@ -49,5 +50,5 @@ setup(name='marabou',
       package_data={},
       include_package_data=True,
       cmdClass={
-          'install':InstallCommand
+          'install': InstallCommand
       })
