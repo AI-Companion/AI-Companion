@@ -1,16 +1,20 @@
 #!/bin/bash
-cd $PWD
+cd "$MARABOU_HOME/marabou/train"
 set -e
-export file_url=$1
-export file_name=data/ner_dataset.csv
+export zipfile=data/ner_dataset.zip
+export file_url=data/ner_dataset.csv
+export FILEID=$1
 
-if [ ! -d "data" ] # if data folder doesnt exist
-then # uncompress data
-    mkdir -p data/
-    unzip -q $file_url -d data
-elif [ ! -f "$file_name" ] # check if file exists
-then # uncompress data
-    unzip -q $file_url -d data
-else
-    echo "----> csv file is already stored, it will be removed after training"
+if [ -f $file_url ] # dataset exists, do nothing
+then
+    echo "----> data extracted"
+elif [ -f $zipfile ] # zip file exists, inflate it
+then
+    echo "----> dataset downloaded, inflating ..."
+    unzip -q $zipfile -d $PWD"/data"
+else # zip file doesnt exist, download then inflate
+    echo "----> downloading dataset"
+    wget -q --show-progress --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id='$FILEID -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id="$FILEID -O $zipfile && rm -rf /tmp/cookies.txt
+    echo "----> dataset downloaded, inflating ..."
+    unzip -q $zipfile -d $PWD"/data"
 fi

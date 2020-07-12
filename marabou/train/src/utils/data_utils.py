@@ -20,7 +20,8 @@ class ImdbDataset:
             None
         """
         print("===========> imdb dataset collection")
-        script_path = os.path.join(os.getcwd(), "bash_scripts/load_imdb_dataset.sh")
+        root_dir = os.environ.get("MARABOU_HOME")
+        script_path = os.path.join(root_dir, "marabou/train/bash_scripts/load_imdb_dataset.sh")
         subprocess.call("%s %s" % (script_path, dataset_url), shell=True)
 
     def get_set(self, mode="train"):
@@ -33,7 +34,8 @@ class ImdbDataset:
         """
         x = []
         y = []
-        directory = os.path.join(os.getcwd(), "data/aclImdb")
+        root_dir = os.environ.get("MARABOU_HOME")
+        directory = os.path.join(root_dir, "marabou/train/data/aclImdb")
         if mode == "train":
             directory = os.path.join(directory, "train")
         else:
@@ -72,7 +74,8 @@ class KaggleDataset:
             None
         """
         print("===========> extracting kaggle ner dataset")
-        script_path = os.path.join(os.getcwd(), "bash_scripts/load_ner_dataset.sh")
+        root_dir = os.environ.get("MARABOU_HOME")
+        script_path = os.path.join(root_dir, "marabou/train/bash_scripts/load_ner_dataset.sh")
         subprocess.call("%s %s" % (script_path, dataset_url), shell=True)
 
     def get_set(self):
@@ -84,7 +87,8 @@ class KaggleDataset:
         """
         X = []
         y = []
-        dataset_path = os.path.join(os.getcwd(), "data/ner_dataset.csv")
+        root_dir = os.environ.get("MARABOU_HOME")
+        dataset_path = os.path.join(root_dir, "marabou/train/data/ner_dataset.csv")
         data = pd.read_csv(dataset_path, encoding="latin1")
         data = data.fillna(method="ffill")
         agg_func = lambda s: [(w, p, t) for w, p, t in zip(s["Word"].values.tolist(),
@@ -112,9 +116,10 @@ class FashionImageNet:
             features, targets
         """
         print("===========> extracting fashion imagenet dataset")
-        script_path = os.path.join(os.getcwd(), "bash_scripts/load_fashion_dataset.sh")
+        root_dir = os.environ.get("MARABOU_HOME")
+        script_path = os.path.join(root_dir, "marabou/train/bash_scripts/load_fashion_dataset.sh")
         subprocess.call("%s %s" % (script_path, self.dataset_url), shell=True)
-        data_folder = os.path.join(os.getcwd(), "data/fashion_imagenet")
+        data_folder = os.path.join(root_dir, "marabou/train/data/fashion_imagenet")
         if not os.path.exists(data_folder):
             X = None
             y = None
@@ -124,7 +129,7 @@ class FashionImageNet:
             X = []
             y = []
             for folder in subfolders_list:
-                class_folder = os.path.join(os.getcwd(), "data/fashion_imagenet", folder)
+                class_folder = os.path.join(data_folder, folder)
                 files_list = [f for f in os.listdir(class_folder) if os.path.isfile(os.path.join(class_folder, f))]
                 for f in files_list:
                     file_url = os.path.join(class_folder, f)

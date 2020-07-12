@@ -1,6 +1,6 @@
 #!/bin/bash
 # loads glove 6B embedding
-cd $PWD
+cd "$MARABOU_HOME/marabou/train"
 set -e
 export file_url=$1
 export embedding_file_name=embeddings/stanford_embedding.zip

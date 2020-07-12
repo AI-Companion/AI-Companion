@@ -2,7 +2,7 @@
     "dataset_name":"kaggle_ner",
     "model_name":"rnn",
     "__help_model_name":"can be either 'rnn' or 'tfidf'",
-    "dataset_url":"data/ner_dataset.zip",
+    "dataset_url":"1-7xNk5FieLZQPxbV3iSu5owv4EzAK-pr",
     "__help_dataset_url":"url for the specified dataset",
     "experimental_mode":false,
     "__help_experimental_mode":"set to true if you just looking for a 'quick and dirty model'",

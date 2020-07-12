@@ -42,7 +42,7 @@ def train_model(config: NamedEntityRecognitionConfigReader) -> None:
         X = [X[i] for i in ind]
         y = [y[i] for i in ind]
     X_train, X_test, y_train, y_test = get_training_validation_data(X, y, data_preprocessor)
-
+    
     file_prefix = "named_entity_recognition_%s" % time.strftime("%Y%m%d_%H%M%S")
     trained_model = RNNModel(config=config, data_preprocessor=data_preprocessor)
     history, report = trained_model.fit(X_train, y_train, X_test, y_test, data_preprocessor.labels_to_idx)
@@ -52,12 +52,15 @@ def train_model(config: NamedEntityRecognitionConfigReader) -> None:
     print("===========> saving trained model and preprocessor under models/")
     trained_model.save_model(file_prefix)
     data_preprocessor.save_preprocessor(file_prefix)
+    
 
 
 def main():
     """main function"""
     root_dir = os.environ.get("MARABOU_HOME")
-    config_file_path = os.path.join(root_dir, "train/config/config_named_entity_recognition.json")
+    if root_dir is None:
+        raise ValueError("please make sure to setup the environment variable MARABOU_ROOT to point for the root of the project")
+    config_file_path = os.path.join(root_dir, "marabou/train/config/config_named_entity_recognition.json")
     train_config = NamedEntityRecognitionConfigReader(config_file_path)
     train_model(train_config)
 

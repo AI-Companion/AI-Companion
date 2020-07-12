@@ -1,5 +1,5 @@
 #!/bin/bash
-cd $PWD
+cd "$MARABOU_HOME/marabou/train"
 set -e
 export file_url=$1
 export zipped_file_name=data/imdb.tar.gz

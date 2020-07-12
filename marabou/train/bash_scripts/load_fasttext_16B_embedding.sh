@@ -1,5 +1,5 @@
 #!/bin/bash
-cd $PWD
+cd "$MARABOU_HOME/marabou/train"
 set -e
 export file_url=$1
 export embedding_file_name=embeddings/fast_text_embedding.zip

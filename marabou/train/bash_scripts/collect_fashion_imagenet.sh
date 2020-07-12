@@ -1,5 +1,5 @@
 #!/bin/bash
-cd $PWD
+cd "$MARABOU_HOME/marabou/train"
 set -e
 export folder_url=data/fashion_cnn/classes_url
 

@@ -27,7 +27,6 @@ def train_model(config: FashionClassifierConfigReader) -> None:
     preprocessor = DataPreprocessor(config)
     X = preprocessor.load_images(X)
     X_train, X_test, y_train, y_test, idx_to_labels = preprocessor.split_train_test(X, y)
-
     file_prefix = "fashion_imagenet_%s" % time.strftime("%Y%m%d_%H%M%S")
     trained_model = CNNClothing(idx_to_labels, config=config)
     history, report = trained_model.fit(X_train, y_train, X_test, y_test)
@@ -36,12 +35,14 @@ def train_model(config: FashionClassifierConfigReader) -> None:
     trained_model.save_classification_report(report, file_prefix)
     print("===========> saving trained model and preprocessor under models/")
     trained_model.save_model(file_prefix)
-
+    
 
 def main():
     """main function"""
     root_dir = os.environ.get("MARABOU_HOME")
-    config_file_path = os.path.join(root_dir, "train/config/config_fashion_classifier.json")
+    if root_dir is None:
+        raise ValueError("please make sure to setup the environment variable MARABOU_ROOT to point for the root of the project")
+    config_file_path = os.path.join(root_dir, "marabou/train/config/config_fashion_classifier.json")
     train_config = FashionClassifierConfigReader(config_file_path)
     train_model(train_config)
 

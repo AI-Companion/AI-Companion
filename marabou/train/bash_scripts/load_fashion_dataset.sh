@@ -1,5 +1,5 @@
 #!/bin/bash
-cd $PWD
+cd "$MARABOU_HOME/marabou/train"
 set -e
 export zipfile=data/fashion_imagenet.zip
 export folder_url=data/fashion_imagenet/classes_url
@@ -18,4 +18,3 @@ else # zip file doesnt exist, download then inflate
     echo "----> dataset downloaded, inflating ..."
     unzip -q $zipfile -d $PWD"/data"
 fi
-

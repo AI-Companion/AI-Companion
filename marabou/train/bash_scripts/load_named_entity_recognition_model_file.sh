@@ -1,5 +1,5 @@
 #!/bin/bash
-cd $PWD
+cd "$MARABOU_HOME/marabou/train"
 set -e
 export fileid_h5_file=$1
 export filename_h5_file=$2
