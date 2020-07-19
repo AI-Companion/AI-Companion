@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import 'antd/dist/antd.css'
 import MasterHead from './components/MasterHead';
 import Navigation from './components/Navigation';
 import Portfolio from'./components/Portfolio';
@@ -10,7 +11,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
 } from "react-router-dom";
 
 class App extends Component {

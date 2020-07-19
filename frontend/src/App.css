@@ -1716,10 +1716,6 @@ pre code {
     display: block;
     width: 100%;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  .table-responsive-sm > .table-bordered {
-    border: 0;
   }
 }
 @media (max-width: 767.98px) {
@@ -1754,15 +1750,6 @@ pre code {
   .table-responsive-xl > .table-bordered {
     border: 0;
   }
-}
-.table-responsive {
-  display: block;
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-.table-responsive > .table-bordered {
-  border: 0;
 }
 
 .form-control {
@@ -9703,14 +9690,10 @@ h3 {
   .table {
     border-collapse: collapse !important;
   }
-  .table td,
-.table th {
-    background-color: #fff !important;
-  }
 
   .table-bordered th,
 .table-bordered td {
-    border: 1px solid #dee2e6 !important;
+    border: 1px solid !important;
   }
 }
 body,
@@ -9922,7 +9905,6 @@ input[type=submit]:hover {
 /*** Table Styles **/
 
 .table-fill {
-  background: white;
   border-radius:3px;
   border-collapse: collapse;
   height: 320px;
@@ -9931,14 +9913,11 @@ input[type=submit]:hover {
   padding:5px;
   width: 100%;
   box-shadow: 0 5px 10px;
-  animation: float 5s infinite;
 }
  
 th {
-  color:rgba(255, 255, 255, 0.9);
-  background:rgba(244, 98, 58, 0.9);
-  border-bottom:4px solid #000000;
-  border-right: 1px solid #000000;
+  border-bottom:4px solid ;
+  border-right: 1px solid ;
   font-size:23px;
   font-weight: 100;
   padding:24px;
@@ -9957,18 +9936,10 @@ th:last-child {
 }
   
 tr {
-  border-top: 1px solid #C1C3D1;
-  border-bottom: 1px solid #C1C3D1;
-  color:rgb(231, 80, 10);
+  border-top: 1px solid ;
+  border-bottom: 1px solid;
   font-size:16px;
   font-weight:normal;
-  text-shadow: 0 1px 1px;
-}
- 
-tr:hover td {
-  background:rgba(244, 98, 58, 0.9);
-  color:rgb(240, 134, 134);
-  border-top: 1px solid #22262e;
 }
  
 tr:first-child {
@@ -9977,14 +9948,6 @@ tr:first-child {
 
 tr:last-child {
   border-bottom:none;
-}
- 
-tr:nth-child(odd) td {
-  background:#EBEBEB;
-}
- 
-tr:nth-child(odd):hover td {
-  background:#4E5066;
 }
 
 tr:last-child td:first-child {
@@ -10001,7 +9964,6 @@ td {
   vertical-align:middle;
   font-weight:300;
   font-size:18px;
-  text-shadow: -1px -1px 1px;
   border-right: 1px solid rgb(0, 0, 0);
 }
 

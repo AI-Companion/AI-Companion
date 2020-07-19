@@ -27,8 +27,11 @@ export default class NamedEntityRec extends React.Component {
             <React.Fragment> 
               {tags.map(tag => {
                 let color = 'geekblue' ;
-                if (tag === 'no Labelrganization') {
+                if (tag == 'noLabelrganization' || tag == 'noLabel') {
                   color = 'volcano';
+                }
+                else if (tag == 'pad'){
+                  color = 'green';
                 }
                 return (
                   <Tag color={color} key={tag}>
@@ -54,7 +57,6 @@ export default class NamedEntityRec extends React.Component {
         }
         data.push(new_el);
       });
-      console.log("data",data)
       return(
         <Table columns={columns} dataSource={data} style={{all: 'initial'}} />
       )
