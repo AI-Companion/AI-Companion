@@ -19,6 +19,7 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "antd": "^4.4.0"
+    "antd": "^4.4.0",
+    "axios": "^0.19.2"
   }
 }

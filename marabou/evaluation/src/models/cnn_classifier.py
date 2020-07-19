@@ -73,8 +73,8 @@ class CNNClothing:
         im = cv2.imread(image_url)
         if im is not None:
             im = cv2.imread(image_url, 1)
-            im = cv2.resize(im, (self.model.image_height, self.model.image_width))
-            im = np.asarray(im).reshape(1, self.model.image_height, self.model.image_width, 3)
+            im = cv2.resize(im, (self.image_height, self.image_width))
+            im = np.asarray(im).reshape(1, self.image_height, self.image_width, 3)
         return im
 
     @staticmethod

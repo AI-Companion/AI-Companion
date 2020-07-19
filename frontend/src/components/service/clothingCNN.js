@@ -1,93 +1,72 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-
+import axios from 'axios';
 export default class ClothingCNN extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { content: '', response: undefined };
+    this.state = {response: undefined };
     }
-
-    handleChange = (event) => {
-      this.setState({[event.target.name]: event.target.value});
-    }
-
-    handleSubmit = (data) => {
-      fetch('/api/clothingCnn', {
-          method: 'POST',
-          body: JSON.stringify(data),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }).then(function(response) {
-          return response.json();
-        }).then((json)=>{
-          console.log("json",json)
-          this.setState({response: json});
-        });
   
+
+  handleChange = (event) => {
+    this.setState({[event.target.name]: event.target.value});
   }
-  
+    
+  state = {
+    title: '',
+    content: '',
+    image: null
+  };
 
-  uploadFile = (event) => {
-    event.preventDefault();
+  handleImageChange = (e) => {
+    var image = document.getElementById('output');
+    image.src = URL.createObjectURL(e.target.files[0]);
+    this.setState({
+      image: e.target.files[0]
+    })
+    this.setState({response: undefined})
+  };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(this.state);
     let form_data = new FormData();
-    form_data.append('content', this.state.content);
-    fetch('/api/clothingClassifier', {
-      method: 'POST',
-      body: form_data,
+    form_data.append('image', this.state.image, this.state.image.name);
+    let url = '/api/clothingClassifier';
+    axios.post(url, form_data, {
       headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    }).then(function(response) {
-      return response.json();
-    }).then((json)=>{
-      console.log("json",json)
-      this.setState({response: json});
-    });
-
-    }
-
-  returnOut(){
-    console.log("response", this.state.response)
-    if (this.state.response){
-      return(
-        <section class="container" id="output">
-          <div class="container">
-              <h2 class="text-center mt-0">Tagged text</h2>
-              <hr class="divider my-4" />
-              <div class="row justify-content-center">
-                  <div class="col-lg-8 text-center">
-                  <output >
-                          { this.state.response }
-                  </output>
-                  </div>
-              </div>
-          </div>
-        </section>
-      )
-    }
-    else
-    return(<div></div>)
-  }
+        'content-type': 'multipart/form-data'
+      }
+    })
+        .then(res => {
+          this.setState({response: res.data})
+        })
+        .catch(err => console.log(err))
+  };
 
   render() {
-    var out = this.returnOut();
+    if(this.state.response){
+    var out = (<div className="col-lg-5 col-sm-7">
+            <h2>{this.state.response}</h2>
+          </div>);
+    };
     return (
-      <div>
-        <section class="container-form" id="form">
-          <form onSubmit={this.uploadFile}>
-
-            <label>
-              File
-              <input type="file" name="content" onChange={this.handleChange} />
-            </label>
-
-            <input type="submit" value="Upload Image"/>
-          </form>
-        </section>
-        {out}
+      <div className="App">
+        <form onSubmit={this.handleSubmit}>
+          <p>
+            <input type="file"
+                   id="image"
+                   accept="image/png, image/jpeg"  onChange={this.handleImageChange} required/>
+          </p>
+          <input type="submit"/>
+        </form>
+        <div className="row no-gutters">
+          <div className="col-lg-4 col-sm-6">
+            <img id="output" />	
+          </div>
+          {out}
+        </div>
       </div>
-    );  
+    );
   }
 }

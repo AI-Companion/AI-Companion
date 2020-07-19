@@ -16,10 +16,10 @@ export default class Service extends React.Component {
     let ret;
     if (this.props.serv == "namedEntity")
         ret = <NamedEntityRec/>
-    else if (this.props.serv == "")
-        ret = <SentimentAnalysis/>
-    else
+    else if (this.props.serv == "clothingService")
         ret = <ClothingCNN/>
+    else
+        ret = <SentimentAnalysis/>
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav" >

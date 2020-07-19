@@ -28,7 +28,7 @@ export default class Portfolio extends React.Component {
                     </a>
                 </div>
                 <div className="col-lg-4 col-sm-6">
-                    <a className="portfolio-box" href="clothingclassNameifier"
+                    <a className="portfolio-box" href="clothingClassifier"
                         ><img className="img-fluid" src={fashion_classifier} alt="Clothing tagging" />
                         <div className="portfolio-box-caption">
                             <div className="project-category text-white-50">Tagging of clothing</div>
