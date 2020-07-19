@@ -38,10 +38,10 @@ export default class SentimentAnalysis extends React.Component {
         console.log("happy");
         return(
               <div className="row">
-                <div class="col-lg-4 col-sm-6">
-                    <img class="img-fluid" src={Smiling_Face} alt="Happy Sentiment" width="100" height="100"/>
+                <div className="col-lg-4 col-sm-6">
+                    <img className="img-fluid" src={Smiling_Face} alt="Happy Sentiment" width="100" height="100"/>
                 </div>
-                <div class="col-lg-4 col-sm-6">
+                <div className="col-lg-4 col-sm-6">
                     <output ><h2><b>% { (this.state.response).toFixed(2) }</b></h2></output>
                 </div>
               </div>
@@ -50,10 +50,10 @@ export default class SentimentAnalysis extends React.Component {
       else{
         return(
         <div>
-          <div class="col-lg-4 col-sm-6">
-              <img class="img-fluid" src={Angry_Face} alt="Angry Sentiment" width="100" height="100"/>
+          <div className="col-lg-4 col-sm-6">
+              <img className="img-fluid" src={Angry_Face} alt="Angry Sentiment" width="100" height="100"/>
           </div>
-          <div class="col-lg-4 col-sm-6">
+          <div className="col-lg-4 col-sm-6">
               <output ><h2>%<b> { (100 - this.state.response).toFixed(2) }</b></h2></output>
           </div>
         </div>
@@ -68,23 +68,23 @@ export default class SentimentAnalysis extends React.Component {
     var out = this.returnOut();
     return( 
       <div>
-        <section class="container-form" id="form">
-            <div class="container">
-                <h2 class="text-center mt-0">Write your review about the last movie you watched</h2>
-                <hr class="divider my-4" />
-                <div class="row justify-content-center">
-                    <div class="col-lg-8 text-center">
+        <section className="container-form" id="form">
+            <div className="container">
+                <h2 className="text-center mt-0">Write your review about the last movie you watched</h2>
+                <hr className="divider my-4" />
+                <div className="row justify-content-center">
+                    <div className="col-lg-8 text-center">
                         <form onSubmit={this.handleSubmit}>
                             <textarea id="text" name="content" placeholder="Text to process ..." onChange={this.handleChange} ></textarea>
                         
-                            <input class="btn btn-primary btn-xl js-scroll-trigger" type="submit" value="Submit"/>
+                            <input className="btn btn-primary btn-xl js-scroll-trigger" type="submit" value="Submit"/>
                         </form>
                     </div>
                 </div>
             </div>
         </section>
         <section id="output">
-            <div class="container-fluid p-0">
+            <div className="container-fluid p-0">
                {out}
             </div>
         </section>

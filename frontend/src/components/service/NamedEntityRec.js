@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { Table, Tag } from 'antd';
 
 export default class NamedEntityRec extends React.Component {
 
@@ -10,6 +10,55 @@ export default class NamedEntityRec extends React.Component {
 
     handleChange = (event) => {
       this.setState({[event.target.name]: event.target.value});
+    }
+
+    modifOutput = (out) =>{
+      const columns = [
+        {
+          title: 'Word',
+          dataIndex: 'word',
+          key: 'word',
+        },
+        {
+          title: 'Pads',
+          key: 'pad',
+          dataIndex: 'tags',
+          render: tags => (
+            <React.Fragment> 
+              {tags.map(tag => {
+                let color = 'geekblue' ;
+                if (tag === 'no Labelrganization') {
+                  color = 'volcano';
+                }
+                return (
+                  <Tag color={color} key={tag}>
+                    {tag.toUpperCase()}
+                  </Tag>
+                );
+              })}
+            </React.Fragment>
+          ),
+        },
+      ];
+
+      const data = [
+
+      ];
+
+      out = out.replace(/(?:=){2,}/g, '|').split('\n').map((el) => el.replace(/\s/g,'')).filter((el) => el !== "" && el !== "|").slice(1);
+      out.forEach((el,i) => {
+        var new_el = {
+          key:i,
+          word: el.split('|')[0],
+          tags: [el.split('|')[1]]
+        }
+        data.push(new_el);
+      });
+      console.log("data",data)
+      return(
+        <Table columns={columns} dataSource={data} style={{all: 'initial'}} />
+      )
+
     }
   
 
@@ -24,24 +73,23 @@ export default class NamedEntityRec extends React.Component {
         }).then(function(response) {
           return response.json();
         }).then((json)=>{
-          console.log("json",json)
           this.setState({response: json});
         });
   
       event.preventDefault();
   }
   returnOut(){
-    console.log("response", this.state.response)
     if (this.state.response){
+      var response = this.modifOutput(this.state.response);
       return(
-        <section class="container" id="output">
-          <div class="container">
-              <h2 class="text-center mt-0">Tagged text</h2>
-              <hr class="divider my-4" />
-              <div class="row justify-content-center">
-                  <div class="col-lg-8 text-center">
+        <section className="container" id="output">
+          <div className="container">
+              <h2 className="text-center mt-0">Tagged text</h2>
+              <hr className="divider my-4" />
+              <div className="row justify-content-center">
+                  <div className="col-lg-8 text-center">
                   <output >
-                          { this.state.response }
+                          { response }
                   </output>
                   </div>
               </div>
@@ -57,16 +105,16 @@ export default class NamedEntityRec extends React.Component {
     var out = this.returnOut();
     return (
       <div>
-        <section class="container-form" id="form">
-              <div class="container">
-                  <h2 class="text-center mt-0">Paste a piece of news</h2>
-                  <hr class="divider my-4" />
-                  <div class="row justify-content-center">
-                      <div class="col-lg-8 text-center">
+        <section className="container-form" id="form">
+              <div className="container">
+                  <h2 className="text-center mt-0">Paste a piece of news</h2>
+                  <hr className="divider my-4" />
+                  <div className="row justify-content-center">
+                      <div className="col-lg-8 text-center">
                         <form onSubmit={this.handleSubmit}>
                               <textarea id="text" name="content" placeholder="Text to process ..." onChange={this.handleChange}></textarea>
                           
-                              <input class="btn btn-primary btn-xl js-scroll-trigger" type="submit" value="Submit"/>
+                              <input className="btn btn-primary btn-xl js-scroll-trigger" type="submit" value="Submit"/>
                         </form>
                       </div>
                   </div>

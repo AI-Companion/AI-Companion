@@ -11,13 +11,11 @@ export default class ClothingCNN extends React.Component {
     handleChange = (event) => {
       this.setState({[event.target.name]: event.target.value});
     }
-  
 
-    handleSubmit = (event) => {
-      const { content } = this.state;
-      fetch('/api/clothingClassifier', {
+    handleSubmit = (data) => {
+      fetch('/api/clothingCnn', {
           method: 'POST',
-          body: JSON.stringify({content : this.state.content}),
+          body: JSON.stringify(data),
           headers: {
             'Content-Type': 'application/json',
           },
@@ -28,8 +26,28 @@ export default class ClothingCNN extends React.Component {
           this.setState({response: json});
         });
   
-      event.preventDefault();
   }
+  
+
+  uploadFile = (event) => {
+    event.preventDefault();
+    let form_data = new FormData();
+    form_data.append('content', this.state.content);
+    fetch('/api/clothingClassifier', {
+      method: 'POST',
+      body: form_data,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }).then(function(response) {
+      return response.json();
+    }).then((json)=>{
+      console.log("json",json)
+      this.setState({response: json});
+    });
+
+    }
+
   returnOut(){
     console.log("response", this.state.response)
     if (this.state.response){
@@ -57,7 +75,18 @@ export default class ClothingCNN extends React.Component {
     var out = this.returnOut();
     return (
       <div>
-          Hi this is rendering for clothing CNN
+        <section class="container-form" id="form">
+          <form onSubmit={this.uploadFile}>
+
+            <label>
+              File
+              <input type="file" name="content" onChange={this.handleChange} />
+            </label>
+
+            <input type="submit" value="Upload Image"/>
+          </form>
+        </section>
+        {out}
       </div>
     );  
   }

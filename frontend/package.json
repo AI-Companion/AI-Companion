@@ -1,18 +1,24 @@
 {
-  "name": "frontend2",
+  "name": "frontend",
   "version": "0.1.0",
   "private": true,
   "proxy": "http://0.0.0.0:5000/",
   "dependencies": {
+    "build": "^0.1.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "0.9.5"
+    "react-scripts": "0.9.5",
+    "run": "^1.4.0",
+    "start": "^5.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "antd": "^4.4.0"
   }
 }

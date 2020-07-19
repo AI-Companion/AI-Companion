@@ -126,7 +126,8 @@ def clothing_classifier():
     sentiment analysis service function
     """
     if request.method == 'POST':
-        task_content = request.json['content']
+        task_content = request.form['content']
+        print(task_content)
         new_prediction = ClothingClassifier(model=global_model_config[4])
         img_class = new_prediction.get_from_service([task_content])
         return json.dumps(img_class)
