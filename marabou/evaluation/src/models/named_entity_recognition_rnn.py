@@ -228,23 +228,25 @@ class RNNModel:
         result += "\n"
         for i in range(len(labels_list)):
             for word, label in zip(questions_list_tokenized[i], labels_list[i]):
-                label = label.replace("B-geo", "Geographical Entity")
-                label = label.replace("I-geo", "Geographical Entity")
-                label = label.replace("B-tim", "Time indicator")
-                label = label.replace("I-tim", "Time indicator")
-                label = label.replace("B-org", "Organization")
-                label = label.replace("I-org", "Organization")
-                label = label.replace("B-gpe", "Geopolitical Entity")
-                label = label.replace("I-gpe", "Geopolitical Entity")
-                label = label.replace("B-per", "Person")
-                label = label.replace("I-per", "Person")
-                label = label.replace("B-eve", "Event")
-                label = label.replace("I-eve", "Event")
-                label = label.replace("B-art", "Artifact")
-                label = label.replace("I-art", "Artifact")
-                label = label.replace("B-nat", "Natural Phenomenon")
-                label = label.replace("I-nat", "Natural Phenomenon")
-                label = label.replace("O", "no Label")
-                result += "{:15} | {:5}\n".format(word, label)
+                formatted_label = "no Label"
+                if ("B-geo" or "I-geo") in label:
+                    formatted_label = "Geographical Entity"
+                if ("B-tim" or "I-tim") in label:
+                    formatted_label = "Time indicator"
+                if ("B-org" or "I-org") in label:
+                    formatted_label = "Organization"
+                if ("B-gpe" or "I-gpe") in label:
+                    formatted_label = "Geopolitical Entity"
+                if ("B-per" or "I-per") in label:
+                    formatted_label = "Person"
+                if ("B-eve" or "I-eve") in label:
+                    formatted_label = "Event"
+                if ("B-art" or "I-art") in label:
+                    formatted_label = "Artifact"
+                if ("B-nat" or "I-nat") in label:
+                    formatted_label = "Natural Phenomenon"
+                if ("B-nat" or "I-art") in label:
+                    formatted_label = "Artifact"
+                result += "{:15} | {:5}\n".format(word, formatted_label)
             result += "\n"
         return result
