@@ -27,11 +27,8 @@ export default class NamedEntityRec extends React.Component {
             <React.Fragment> 
               {tags.map(tag => {
                 let color = 'geekblue' ;
-                if (tag == 'noLabelrganization' || tag == 'noLabel') {
+                if (tag == 'noLabel') {
                   color = 'volcano';
-                }
-                else if (tag == 'pad'){
-                  color = 'green';
                 }
                 return (
                   <Tag color={color} key={tag}>
