@@ -29,7 +29,6 @@ export default class ClothingCNN extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(this.state);
     let form_data = new FormData();
     form_data.append('image', this.state.image, this.state.image.name);
     let url = '/api/clothingClassifier';

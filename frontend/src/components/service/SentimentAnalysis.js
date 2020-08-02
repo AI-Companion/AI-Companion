@@ -25,17 +25,14 @@ export default class SentimentAnalysis extends React.Component {
         }).then(function(response) {
           return response.json();
         }).then((json)=>{
-          console.log("json",json)
           this.setState({response: json});
         });
   
       event.preventDefault();
   }
   returnOut(){
-    console.log("response", this.response)
     if (this.state.response){
       if (this.state.response >= 50){
-        console.log("happy");
         return(
               <div className="row">
                 <div className="col-lg-4 col-sm-6">

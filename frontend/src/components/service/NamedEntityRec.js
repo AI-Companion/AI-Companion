@@ -25,11 +25,12 @@ export default class NamedEntityRec extends React.Component {
           dataIndex: 'tags',
           render: tags => (
             <React.Fragment> 
-              {tags.map(tag => {
+              {tags.filter((tag) => tag !== "pad" ).map(tag => {
                 let color = 'geekblue' ;
-                if (tag == 'noLabel') {
+                if (tag == 'noLabelrganization' || tag == 'noLabel') {
                   color = 'volcano';
                 }
+                
                 return (
                   <Tag color={color} key={tag}>
                     {tag.toUpperCase()}

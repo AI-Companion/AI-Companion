@@ -4,7 +4,9 @@ import json
 from typing import List
 from flask import Flask, render_template, request
 from flask_restful import reqparse, Api, Resource
-from numpy import uint8
+from numpy import fromfile, uint8
+from PIL import Image
+# from cv2 import imdecode, CV_LOAD_IMAGE_UNCHANGED
 from src.models.sentiment_analysis_rnn import RNNModel as SARNN
 from src.models.sentiment_analysis_rnn import DataPreprocessor as SAPreprocessor
 from src.models.named_entity_recognition_rnn import RNNModel as NERRNN
@@ -125,12 +127,11 @@ def clothing_classifier():
     """
     sentiment analysis service function
     """
-    if request.method == 'POST':
+    if request.method == 'POST':   
         image = request.files['image']
-        # img = Image.open(image.stream)
-        img_loc = "./" + str(image.filename)
-        # print("img_loc %s" % os.path.abspath(image))
-        # img.save(img_loc) # to set incase of need to save images
+        img = Image.open(image.stream)
+        img_loc = root_dir = os.environ.get("MARABOU_HOME") + "marabou/evaluation/clothing_service_images/"+str(image.filename)
+        img.save(img_loc)
         new_prediction = ClothingClassifier(model=global_model_config[4])
         img_class = new_prediction.get_from_service(img_loc)
         return json.dumps(img_class)
