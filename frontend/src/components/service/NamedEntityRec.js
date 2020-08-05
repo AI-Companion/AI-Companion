@@ -27,7 +27,7 @@ export default class NamedEntityRec extends React.Component {
             <React.Fragment> 
               {tags.filter((tag) => tag !== "pad" ).map(tag => {
                 let color = 'geekblue' ;
-                if (tag == 'noLabelrganization' || tag == 'noLabel') {
+                if (tag === 'noLabelrganization' || tag === 'noLabel') {
                   color = 'volcano';
                 }
                 
@@ -63,7 +63,7 @@ export default class NamedEntityRec extends React.Component {
   
 
     handleSubmit = (event) => {
-      const { content } = this.state;
+      // const { content } = this.state;
       fetch('/api/namedEntityRecognition', {
           method: 'POST',
           body: JSON.stringify({content : this.state.content}),

@@ -51,17 +51,22 @@ export default class ClothingCNN extends React.Component {
     };
     return (
       <div className="App">
+        <br/>
         <form onSubmit={this.handleSubmit}>
-          <p>
-            <input type="file"
-                   id="image"
-                   accept="image/png, image/jpeg"  onChange={this.handleImageChange} required/>
-          </p>
-          <input type="submit"/>
-        </form>
         <div className="row no-gutters">
           <div className="col-lg-4 col-sm-6">
-            <img id="output" />	
+            <p>
+              <input type="file"
+                    id="image"
+                    accept="image/png, image/jpeg"  onChange={this.handleImageChange} required/>
+            </p>
+            <input type="submit"/>
+          </div>
+        </div>
+        </form>
+        <div className="row no-gutters">
+          <div className="col-lg-6 col-sm-10">
+            <img alt="" id="output" />	
           </div>
           {out}
         </div>

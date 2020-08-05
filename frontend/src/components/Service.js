@@ -7,16 +7,12 @@ import SentimentAnalysis from './service/SentimentAnalysis';
 import ClothingCNN from './service/clothingCNN';
 
 export default class Service extends React.Component {
-    
-    constructor(props) {
-        super(props);
-        }
 
   render() {
     let ret;
-    if (this.props.serv == "namedEntity")
+    if (this.props.serv === "namedEntity")
         ret = <NamedEntityRec/>
-    else if (this.props.serv == "clothingService")
+    else if (this.props.serv === "clothingService")
         ret = <ClothingCNN/>
     else
         ret = <SentimentAnalysis/>

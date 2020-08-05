@@ -15,7 +15,6 @@ export default class SentimentAnalysis extends React.Component {
   
 
     handleSubmit = (event) => {
-      const { content } = this.state;
       fetch('/api/sentimentAnalysis', {
           method: 'POST',
           body: JSON.stringify({content : this.state.content}),
