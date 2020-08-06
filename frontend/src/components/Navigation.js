@@ -1,14 +1,7 @@
-import React, {useEffect} from 'react';
-import ReactDOM from 'react-dom';
-//import 'style.css';
-//import masterHead from './components/masterHead';
-
+import React from 'react';
 
 export default class Navigation extends React.Component {
-  constructor(){
-    super()
-  }
-  
+
   render() {
     return (
         <nav className="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">

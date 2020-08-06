@@ -1,5 +1,4 @@
-import React, {useEffect, Component} from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react';
 
 class MasterHead extends React.Component {
 
@@ -9,7 +8,7 @@ class MasterHead extends React.Component {
         <div className="container h-100">
             <div className="row h-100 align-items-center justify-content-center text-center">
                 <div className="col-lg-10 align-self-end">
-                    <h1 className="text-uppercase text-white font-weight-bold">We help you brige the AI gap for your business</h1>
+                    <h1 className="text-uppercase text-white font-weight-bold">We help you bridge the AI gap for your business</h1>
                     <hr className="divider my-4" />
                 </div>
                 <div className="col-lg-8 align-self-baseline">
