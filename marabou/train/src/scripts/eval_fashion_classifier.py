@@ -46,7 +46,8 @@ def main():
     args = parse_arguments()
     root_dir = os.environ.get("MARABOU_HOME")
     if root_dir is None:
-        raise ValueError("please make sure to setup the environment variable MARABOU_ROOT to point for the root of the project")
+        raise ValueError("please make sure to setup the environment variable MARABOU_ROOT to\
+                         point for the root of the project")
     config_file_path = os.path.join(root_dir, "marabou/train/config/config_fashion_classifier.json")
     config_file = FashionClassifierConfigReader(config_file_path)
     evaluate_model(args.image_url, config_file)

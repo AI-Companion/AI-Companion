@@ -35,13 +35,14 @@ def train_model(config: FashionClassifierConfigReader) -> None:
     trained_model.save_classification_report(report, file_prefix)
     print("===========> saving trained model and preprocessor under models/")
     trained_model.save_model(file_prefix)
-    
+
 
 def main():
     """main function"""
     root_dir = os.environ.get("MARABOU_HOME")
     if root_dir is None:
-        raise ValueError("please make sure to setup the environment variable MARABOU_ROOT to point for the root of the project")
+        raise ValueError("please make sure to setup the environment variable MARABOU_ROOT to\
+                         point for the root of the project")
     config_file_path = os.path.join(root_dir, "marabou/train/config/config_fashion_classifier.json")
     train_config = FashionClassifierConfigReader(config_file_path)
     train_model(train_config)

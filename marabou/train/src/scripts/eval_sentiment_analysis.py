@@ -55,7 +55,8 @@ def main():
     qlist = args.question
     root_dir = os.environ.get("MARABOU_HOME")
     if root_dir is None:
-        raise ValueError("please make sure to setup the environment variable MARABOU_ROOT to point for the root of the project")
+        raise ValueError("please make sure to setup the environment variable MARABOU_ROOT to\
+                         point for the root of the project")
     config_file_path = os.path.join(root_dir, "marabou/train/config/config_sentiment_analysis.json")
     valid_config = SentimentAnalysisConfigReader(config_file_path)
     evaluate_model(qlist, valid_config)

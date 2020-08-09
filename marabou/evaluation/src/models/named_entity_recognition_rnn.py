@@ -15,7 +15,6 @@ from keras_contrib.metrics import crf_viterbi_accuracy
 download('punkt')
 
 
-
 class DataPreprocessor:
     """
     Utility class performing several data preprocessing steps
