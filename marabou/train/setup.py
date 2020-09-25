@@ -16,7 +16,7 @@ INSTALL_REQUIREMENTS = [
     'pycodestyle',
     'nltk==3.5',
     'keras==2.3.1',
-    'tensorflow==2.2.0',
+    'tensorflow==2.2.1',
     'opencv-python'
 ]
 
