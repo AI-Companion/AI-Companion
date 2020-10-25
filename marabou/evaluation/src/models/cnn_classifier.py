@@ -90,10 +90,6 @@ class CNNClothing:
         """
         trained_model = None
         root_dir = os.environ.get("MARABOU_HOME")
-        if root_dir is None:
-            return None, None
-        if not os.path.isdir(os.path.join(root_dir, "marabou/evaluation/trained_models")):
-            return None, None
         model_dir = os.path.join(root_dir, "marabou/evaluation/trained_models")
         if not collect_from_gdrive:
             model_files_list = os.listdir(model_dir)

@@ -5,11 +5,11 @@ from typing import List
 from flask import Flask, render_template, request
 from flask_restful import reqparse, Api, Resource
 from PIL import Image
-from src.models.sentiment_analysis_rnn import RNNModel as SARNN
-from src.models.sentiment_analysis_rnn import DataPreprocessor as SAPreprocessor
-from src.models.named_entity_recognition_rnn import RNNModel as NERRNN
-from src.models.named_entity_recognition_rnn import DataPreprocessor as NERPreprocessor
-from src.models.cnn_classifier import CNNClothing
+from models.sentiment_analysis_rnn import RNNModel as SARNN
+from models.sentiment_analysis_rnn import DataPreprocessor as SAPreprocessor
+from models.named_entity_recognition_rnn import RNNModel as NERRNN
+from models.named_entity_recognition_rnn import DataPreprocessor as NERPreprocessor
+from models.cnn_classifier import CNNClothing
 
 
 app = Flask(__name__)
@@ -148,24 +148,28 @@ def index():
 def main():
     """ if boolean is true bring the application up"""
     app_up = len(sys.argv) < 2
-
+    root_dir = os.environ.get("MARABOU_HOME")
+    if root_dir is None:
+        raise ValueError("Please make sure to set the environment variable MARABOU_HOME to the root of the directory")
+    if not os.path.isdir(os.path.join(root_dir, "marabou/evaluation/trained_models")):
+        raise ValueError("You need to have trained models under marabou/evaluation/trained_models to use the evaluation app")
     sentiment_analysis_model = None
     sentiment_analysis_model, preprocessor_file = SARNN.load_model()
     if sentiment_analysis_model is None or preprocessor_file is None:
-        raise ValueError("Please make sure to set the correct model path and Project root\
-                         as environment variable MARABOU_HOME")
+        raise ValueError("Please make sure to set the correct model path and Project root \
+as environment variable MARABOU_HOME")
     sentiment_analysis_pre_processor = SAPreprocessor.load_preprocessor(preprocessor_file)
 
     ner_model, preprocessor_file = NERRNN.load_model()
     ner_pre_processor = NERPreprocessor.load_preprocessor(preprocessor_file)
     if ner_model is None or ner_pre_processor is None:
-        raise ValueError("Please make sure to set the correct model path and Project root\
-                         as environment variable MARABOU_HOME")
+        raise ValueError("Please make sure to set the correct model path and Project root \
+as environment variable MARABOU_HOME")
 
     clothing_model = CNNClothing.load_model()
     if clothing_model is None:
-        raise ValueError("Please make sure to set the correct model path and Project root\
-                         as environment variable MARABOU_HOME")
+        raise ValueError("Please make sure to set the correct model path and Project root \
+as environment variable MARABOU_HOME")
 
     global_model_config.extend([sentiment_analysis_model, sentiment_analysis_pre_processor,
                                 ner_model, ner_pre_processor, clothing_model])
