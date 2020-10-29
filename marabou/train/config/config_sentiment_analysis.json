@@ -8,7 +8,7 @@
     "__help_embeddings_path_glove":"url for glove embedding file",
     "embeddings_path_fasttext":"https://dl.fbaipublicfiles.com/fasttext/vectors-english/wiki-news-300d-1M.vec.zip",
     "__help_embeddings_path_fasttext":"url for fasttext embedding file",
-    "experimental_mode":true,
+    "experimental_mode":false,
     "__help_experimental_mode":"set to true if you just looking for a 'quick and dirty model'",
     "pre_trained_embedding":true,
     "__help_pre_trained_embedding":"set to true if you want to use a pre-trained embedding, otherwise the model will learn the embedding",
