@@ -4,7 +4,7 @@
     "__help_model_name":"can be either 'rnn' or 'tfidf'",
     "dataset_url":"1-7xNk5FieLZQPxbV3iSu5owv4EzAK-pr",
     "__help_dataset_url":"url for the specified dataset",
-    "experimental_mode":true,
+    "experimental_mode":false,
     "__help_experimental_mode":"set to true if you just looking for a 'quick and dirty model'",
     "batch_size":64,
     "__help_batch_size":"used to train the model, must be power of 2",
