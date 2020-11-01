@@ -9,7 +9,7 @@ data/*
 *build
 *models
 clothing_service_images
-marabou/train_modules/data
-marabou/train_modules/saved_embeddings
-marabou/train_modules/perf
-marabou/train_modules/train_models
+saved_perf
+saved_datasets
+saved_embeddings
+saved_models
