@@ -5,11 +5,10 @@ from typing import List
 from flask import Flask, render_template, request
 from flask_restful import reqparse, Api, Resource
 from PIL import Image
-#from models.cnn_classifier import CNNClothing
-from mlp.sentiment_analysis import SAPreprocessor, SARNN, SAConfigReader
-from mlp.named_entity_recognition import NERPreprocessor, NERRNN
-from commons.definitions import SA_CONFIG_FILE, NER_CONFIG_FILE, ROOT_DIR
-from evaluation.utils import load_model
+from dsg.sentiment_analysis import SAPreprocessor, SARNN, SAConfigReader
+from dsg.named_entity_recognition import NERPreprocessor, NERRNN
+from marabou.commons.definitions import SA_CONFIG_FILE, NER_CONFIG_FILE, ROOT_DIR
+from marabou.evaluation.utils import load_model
 
 
 app = Flask(__name__)

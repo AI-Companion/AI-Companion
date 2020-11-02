@@ -1,5 +1,5 @@
 """
-`train.utils` module gathers utility classes + functions + definitions 
+`marabou.training.utils` module gathers utility classes + functions + definitions 
 """
 
 from ._data_utils import FashionImageNet, ImdbDataset, KaggleDataset

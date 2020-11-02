@@ -5,7 +5,7 @@ import re
 import subprocess
 import time
 import gdown
-from commons.definitions import ROOT_DIR, MODELS_DIR
+from marabou.commons.definitions import ROOT_DIR, MODELS_DIR
 
 def load_model(h5_file_url=None, class_file_url=None, preprocessor_file_url=None, collect_from_gdrive=False, use_case="ner"):
     """

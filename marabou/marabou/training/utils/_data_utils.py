@@ -6,7 +6,7 @@ import wget
 import tarfile
 import gdown
 from zipfile import ZipFile, BadZipfile
-from commons.definitions import SCRIPT_DIR, DATA_DIR
+from marabou.commons.definitions import SCRIPT_DIR, DATA_DIR
 
 
 class ImdbDataset:

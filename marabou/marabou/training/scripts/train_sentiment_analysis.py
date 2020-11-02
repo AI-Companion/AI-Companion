@@ -2,9 +2,9 @@ import time
 from typing import List, Tuple
 import os
 import numpy as np
-from train.utils import ImdbDataset
-from commons.definitions import EMBEDDINGS_DIR, NER_CONFIG_FILE, ROOT_DIR, PLOTS_DIR, MODELS_DIR, SA_CONFIG_FILE
-from mlp.sentiment_analysis import SAConfigReader, SAPreprocessor, SARNN
+from marabou.training.utils import ImdbDataset
+from marabou.commons.definitions import EMBEDDINGS_DIR, NER_CONFIG_FILE, ROOT_DIR, PLOTS_DIR, MODELS_DIR, SA_CONFIG_FILE
+from dsg.sentiment_analysis import SAConfigReader, SAPreprocessor, SARNN
 
 def preprocess_data(X: List, y: List, data_preprocessor: SAPreprocessor)\
         -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:

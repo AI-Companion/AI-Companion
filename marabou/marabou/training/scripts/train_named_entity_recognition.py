@@ -2,9 +2,9 @@ from typing import List, Tuple
 import time
 import os
 import numpy as np
-from mlp.named_entity_recognition import NERConfigReader, NERPreprocessor, NERRNN
-from train.utils import KaggleDataset
-from commons.definitions import EMBEDDINGS_DIR, NER_CONFIG_FILE, ROOT_DIR, PLOTS_DIR, MODELS_DIR
+from dsg.named_entity_recognition import NERConfigReader, NERPreprocessor, NERRNN
+from marabou.training.utils import KaggleDataset
+from marabou.commons.definitions import EMBEDDINGS_DIR, NER_CONFIG_FILE, ROOT_DIR, PLOTS_DIR, MODELS_DIR
 
 def preprocess_data(X: List, y: List, data_processor: NERPreprocessor)\
     -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
