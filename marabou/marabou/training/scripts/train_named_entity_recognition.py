@@ -20,8 +20,8 @@ def preprocess_data(X: List, y: List, data_processor: NERPreprocessor)\
     X = data_processor.clean(X)
     X_train, X_test, y_train, y_test = data_processor.split_train_test(X, y)
     data_processor.fit(X_train, y_train)
-    X_train, _ , n_tokens_train, y_train = data_processor.preprocess(X_train, y_train)
-    X_test, _, n_tokens_test, y_test = data_processor.preprocess(X_test, y_test)
+    X_train, _, _, y_train = data_processor.preprocess(X_train, y_train)
+    X_test, _, _, y_test = data_processor.preprocess(X_test, y_test)
     return X_train, X_test, y_train, y_test
 
 

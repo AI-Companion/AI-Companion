@@ -1,6 +1,6 @@
 # Marabou machine learning toolkit
 
-Natural Language Processing and computer vision API. The goal is to enable non machine learning specialists to leverage the advantages of various nlp/ computer vision use cases using an easy interface. Our goal is to offer a toolkit enabling low cost integration of machine learning capabilities in the business use cases  
+Natural Language Processing and computer vision tool. The goal is to enable non machine learning specialists to leverage the advantages of various nlp/ computer vision use cases using an easy interface. We enable low cost integration of machine learning capabilities in the business use cases  
 The API offers 3 scenarios:  
 - Sentiment analysis: Deriving sentiments in sentences (positive, negative, neutral), in articles or in a stream of data such as tweets or product reviews.
 - Named entity recognition: Identifies predefined entities in a given text such as Date, Person, Location ... 
@@ -8,7 +8,7 @@ The API offers 3 scenarios:
 
 ## Online interface
 The application offers 3 use cases each accessibe through an easy to use interface.  
-Simply go to http://marabou.herokuapp.com/  
+Simply go to http://ai-companion.com/  
 ### Sentiment analysis
 For a simple interface in which you type an expression and get a classified output based on the text semantics,
 1. Inserting the text you want to analyse

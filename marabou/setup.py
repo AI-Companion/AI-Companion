@@ -15,6 +15,7 @@ TRAINING_REQUIREMENTS = [
     'pandas==1.0.4',
     'scikit-learn==0.23.1',
     'matplotlib',
+    'jupyter',
     'nltk==3.5',
     'keras==2.3.1',
     'tensorflow==2.2.0',
@@ -35,20 +36,20 @@ setup(name='marabou',
       author='Marouen Azzouz, Youssef Azzouz',
       author_email='azzouz.marouen@gmail.com, youssef.azzouz1512@gmail.com',
       version='0.1.0',
+      dependency_links=['git+https://www.github.com/keras-team/keras-contrib.git#egg=keras-contrib'],
+      install_requires=EVALUATION_REQUIREMENTS,
+      include_package_data=True,
       zip_safe=False,
       extras_require={
           'train': TRAINING_REQUIREMENTS,
       },
       entry_points={
-          'console_scripts': ['marabou-train-sentiment-analysis=marabou.training.scripts.train_sentiment_analysis:main[train]',
-                              'marabou-train-ner=marabou.training.scripts.train_named_entity_recognition:main[train]',
-                              'marabou-train-fashion-classifier=marabou.training.scripts.train_fashion_classifier:main[train]',
-                              'marabou-eval-server=marabou.evaluation.app:main'
+          'console_scripts': ['marabou-train-sentiment-analysis = marabou.training.scripts.train_sentiment_analysis:main [train]',
+                              'marabou-train-named-entity-recognition = marabou.training.scripts.train_named_entity_recognition:main [train]',
+                              'marabou-train-fashion-classifier = marabou.training.scripts.train_fashion_classifier:main [train]',
+                              'marabou-eval-server = marabou.evaluation.app:main'
                               ]
       },
-      dependency_links=['git+https://www.github.com/keras-team/keras-contrib.git#egg=keras-contrib'],
-      install_requires=EVALUATION_REQUIREMENTS,
-      include_package_data=True,
       cmdClass={
           'install': InstallCommand
       })
