@@ -22,7 +22,7 @@ Marabou is a python pipeline to perform training and evaluation for different de
 #### Evaluation
 pip install ds-gear
 #### Training
-training mode will also install evaluation mode
+training mode will also install evaluation mode  
 pip install ds-gear[train]
 
 ## Source code
