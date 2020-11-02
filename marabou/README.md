@@ -20,10 +20,10 @@ Marabou is a python pipeline to perform training and evaluation for different de
 
 ### User installation
 #### Evaluation
-pip install ds-gear
+`pip install marabou`
 #### Training
 training mode will also install evaluation mode  
-pip install ds-gear[train]
+`pip install marabou[train]`
 
 ## Source code
 You can check the latest sources with the command:
