@@ -19,7 +19,8 @@ TRAINING_REQUIREMENTS = [
     'nltk==3.5',
     'keras==2.3.1',
     'tensorflow==2.2.0',
-    'opencv-python'
+    'opencv-python',
+    'wget'
 ]
 
 class InstallCommand(install):
