@@ -27,8 +27,12 @@ Move to the root of the repository (containing `setup.py`)
 `pip install .`
 #### Training
 training mode will also install evaluation mode  
+1. Training on local machine
 Move to the root of the repository (containing `setup.py`)  
 `pip install .[train]`
+2. Training on google colab
+simply upload and run to google colab the files `sentiment_analysis.ipynb` or `named_entity_recognition.ipynb`  
+The script will generate model files and performance plots which can be downloaded to the models respository  
 
 ## Source code
 You can check the latest sources with the command:
