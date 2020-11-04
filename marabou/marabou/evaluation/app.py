@@ -5,10 +5,10 @@ from typing import List
 from flask import Flask, render_template, request
 from flask_restful import reqparse, Api, Resource
 from PIL import Image
-from dsg.sentiment_analysis import SAPreprocessor, SARNN, SAConfigReader
-from dsg.named_entity_recognition import NERPreprocessor, NERRNN
-from marabou.commons.definitions import SA_CONFIG_FILE, NER_CONFIG_FILE, ROOT_DIR
+from dsg.RNN_MTM_classifier import RNNMTMPreprocessor, RNNMTM 
+from dsg.RNN_MTO_classifier import RNNMTO, RNNMTOPreprocessor
 from marabou.evaluation.utils import load_model
+from marabou.commons import SA_CONFIG_FILE, NER_CONFIG_FILE, ROOT_DIR, SAConfigReader, NERConfigReader, rnn_classification_visualize
 
 
 app = Flask(__name__)
@@ -25,7 +25,7 @@ class PredictSentiment(Resource):
     """
     utility class for the api_resource method
     """
-    def __init__(self, model: SARNN, pre_processor: SAPreprocessor):
+    def __init__(self, model: RNNMTO, pre_processor: RNNMTOPreprocessor):
         self.model = model
         self.pre_processor = pre_processor
 
@@ -62,7 +62,7 @@ class PredictEntities(Resource):
     """
     utility class for the api_resource method
     """
-    def __init__(self, model:NERRNN, pre_processor:NERPreprocessor):
+    def __init__(self, model:RNNMTM, pre_processor:RNNMTMPreprocessor):
         self.model = model
         self.pre_processor = pre_processor
 
@@ -76,8 +76,10 @@ class PredictEntities(Resource):
             dictionary containing probilities prediction as value sorted by each string as key
         """
         questions_list_encoded, questions_list_tokenized, n_tokens, _ = self.pre_processor.preprocess(input_list)
+        print(questions_list_encoded)
+        print(questions_list_tokenized)
         preds = self.model.predict(questions_list_encoded, self.pre_processor.labels_to_idx, n_tokens)
-        display_result = self.model.visualize(questions_list_tokenized, preds)
+        display_result = rnn_classification_visualize(questions_list_tokenized, preds)
         return display_result
 
 
@@ -88,7 +90,6 @@ def named_entity_recognition():
     """
     if request.method == 'POST':
         data = request.get_json()
-        print(data)
         task_content = data['content']
         new_prediction = PredictEntities(model=global_model_config[2], pre_processor=global_model_config[3])
         output = new_prediction.get_from_service([task_content])
@@ -159,8 +160,8 @@ def main():
                                                               use_case="sa")
     if h5_model_file is None or preprocessor_file is None:
         raise ValueError("there is no corresponding SA model file")
-    sa_model = SARNN(h5_file=h5_model_file, class_file=class_file)
-    sa_preprocessor = SAPreprocessor(preprocessor_file=preprocessor_file)
+    sa_model = RNNMTO(h5_file=h5_model_file, class_file=class_file)
+    sa_preprocessor = RNNMTOPreprocessor(preprocessor_file=preprocessor_file)
 
     # load ner models
     valid_config = SAConfigReader(NER_CONFIG_FILE)
@@ -171,8 +172,8 @@ def main():
                                                               use_case="ner")
     if h5_model_file is None or preprocessor_file is None:
         raise ValueError("there is no corresponding NER model file")
-    ner_model = NERRNN(h5_file=h5_model_file, class_file=class_file)
-    ner_preprocessor = NERPreprocessor(preprocessor_file=preprocessor_file)
+    ner_model = RNNMTM(h5_file=h5_model_file, class_file=class_file)
+    ner_preprocessor = RNNMTMPreprocessor(preprocessor_file=preprocessor_file)
 
     global_model_config.extend([sa_model, sa_preprocessor, ner_model, ner_preprocessor])
     if app_up:

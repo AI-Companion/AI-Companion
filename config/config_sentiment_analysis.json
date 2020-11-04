@@ -10,6 +10,8 @@
     "__help_embeddings_path_fasttext":"url for fasttext embedding file",
     "experimental_mode":true,
     "__help_experimental_mode":"set to true if you just looking for a 'quick and dirty model'",
+    "n_iter":10,
+    "__help_n_iter":"number of backprop iterations",
     "pre_trained_embedding":true,
     "__help_pre_trained_embedding":"set to true if you want to use a pre-trained embedding, otherwise the model will learn the embedding",
     "embedding_algorithm":"fasttext",

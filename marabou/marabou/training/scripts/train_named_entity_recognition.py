@@ -2,11 +2,11 @@ from typing import List, Tuple
 import time
 import os
 import numpy as np
-from dsg.named_entity_recognition import NERConfigReader, NERPreprocessor, NERRNN
-from marabou.training.utils import KaggleDataset
-from marabou.commons.definitions import EMBEDDINGS_DIR, NER_CONFIG_FILE, ROOT_DIR, PLOTS_DIR, MODELS_DIR
+from dsg.RNN_MTM_classifier import RNNMTMPreprocessor, RNNMTM 
+from marabou.training.datasets import KaggleDataset
+from marabou.commons import EMBEDDINGS_DIR, NER_CONFIG_FILE, ROOT_DIR, PLOTS_DIR, MODELS_DIR, NERConfigReader
 
-def preprocess_data(X: List, y: List, data_processor: NERPreprocessor)\
+def preprocess_data(X: List, y: List, data_processor: RNNMTMPreprocessor)\
     -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
     wrapper method which yields the training and validation datasets
@@ -43,11 +43,18 @@ def train_model(config: NERConfigReader) -> None:
         y = [y[i] for i in ind]
     file_prefix = "named_entity_recognition_%s" % time.strftime("%Y%m%d_%H%M%S")
     print("===========> Data preprocessing")
-    data_preprocessor = NERPreprocessor(max_sequence_length=config.max_sequence_length,
+    data_preprocessor = RNNMTMPreprocessor(max_sequence_length=config.max_sequence_length,
                                         validation_split=config.validation_split, vocab_size=config.vocab_size)
     X_train, X_test, y_train, y_test = preprocess_data(X, y, data_preprocessor)
     print("===========> Model building")
-    trained_model = NERRNN(config=config, data_preprocessor=data_preprocessor, save_folder=EMBEDDINGS_DIR)
+    trained_model = RNNMTM(pre_trained_embedding=config.pre_trained_embedding,
+                           vocab_size=config.vocab_size,
+                           embedding_dimension=config.embedding_dimension,
+                           embedding_algorithm=config.embedding_algorithm,
+                           n_iter=config.n_iter,
+                           embeddings_path=config.embeddings_path,
+                           max_sequence_length=config.max_sequence_length,
+                           data_preprocessor=data_preprocessor, save_folder=EMBEDDINGS_DIR)
     history, report = trained_model.fit(X_train, y_train, X_test, y_test, data_preprocessor.labels_to_idx)
     print("===========> Saving")
     if not os.path.exists(MODELS_DIR):

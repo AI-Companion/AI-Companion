@@ -2,11 +2,11 @@ import time
 from typing import List, Tuple
 import os
 import numpy as np
-from marabou.training.utils import ImdbDataset
-from marabou.commons.definitions import EMBEDDINGS_DIR, NER_CONFIG_FILE, ROOT_DIR, PLOTS_DIR, MODELS_DIR, SA_CONFIG_FILE
-from dsg.sentiment_analysis import SAConfigReader, SAPreprocessor, SARNN
+from marabou.training.datasets import ImdbDataset
+from dsg.RNN_MTO_classifier import RNNMTO, RNNMTOPreprocessor
+from marabou.commons import ROOT_DIR, PLOTS_DIR, MODELS_DIR, SA_CONFIG_FILE, SAConfigReader, EMBEDDINGS_DIR
 
-def preprocess_data(X: List, y: List, data_preprocessor: SAPreprocessor)\
+def preprocess_data(X: List, y: List, data_preprocessor: RNNMTOPreprocessor)\
         -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
     Wrapper method which yields the training and validation datasets
@@ -46,11 +46,18 @@ def train_model(config: SAConfigReader) -> None:
         y = [y[i] for i in ind]
     file_prefix = "sentiment_analysis_%s" % time.strftime("%Y%m%d_%H%M%S")
     print("===========> Data preprocessing")
-    data_preprocessor = SAPreprocessor(max_sequence_length=config.max_sequence_length,\
+    data_preprocessor = RNNMTOPreprocessor(max_sequence_length=config.max_sequence_length,\
                                        validation_split=config.validation_split, vocab_size=config.vocab_size)
     X_train, X_test, y_train, y_test = preprocess_data(X, y, data_preprocessor)
     print("===========> Model building")
-    trained_model = SARNN(config=config, data_preprocessor=data_preprocessor, save_folder=EMBEDDINGS_DIR)
+    trained_model = RNNMTO(pre_trained_embedding=config.pre_trained_embedding,
+                           vocab_size=config.vocab_size,
+                           embedding_dimension=config.embedding_dimension,
+                           embedding_algorithm=config.embedding_algorithm,
+                           n_iter=config.n_iter,
+                           embeddings_path=config.embeddings_path,
+                           max_sequence_length=config.max_sequence_length,
+                           data_preprocessor=data_preprocessor, save_folder=EMBEDDINGS_DIR)
     history = trained_model.fit(X_train, y_train, X_test, y_test)
     print("===========> saving")
     if not os.path.exists(MODELS_DIR):
