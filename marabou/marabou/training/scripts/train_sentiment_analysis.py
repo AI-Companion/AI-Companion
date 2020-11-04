@@ -45,7 +45,7 @@ def train_model(config: SAConfigReader) -> None:
         X = [X[i] for i in ind]
         y = [y[i] for i in ind]
     file_prefix = "sentiment_analysis_%s" % time.strftime("%Y%m%d_%H%M%S")
-    if not os.path(EMBEDDINGS_DIR):
+    if not os.path.exists(MODELS_DIR):
         os.mkdir(EMBEDDINGS_DIR)
     if not os.path.exists(MODELS_DIR):
         os.mkdir(MODELS_DIR)
