@@ -45,6 +45,12 @@ def train_model(config: SAConfigReader) -> None:
         X = [X[i] for i in ind]
         y = [y[i] for i in ind]
     file_prefix = "sentiment_analysis_%s" % time.strftime("%Y%m%d_%H%M%S")
+    if not os.path(EMBEDDINGS_DIR):
+        os.mkdir(EMBEDDINGS_DIR)
+    if not os.path.exists(MODELS_DIR):
+        os.mkdir(MODELS_DIR)
+    if not os.path.exists(PLOTS_DIR):
+        os.mkdir(PLOTS_DIR)
     print("===========> Data preprocessing")
     data_preprocessor = RNNMTOPreprocessor(max_sequence_length=config.max_sequence_length,\
                                        validation_split=config.validation_split, vocab_size=config.vocab_size)
@@ -60,10 +66,6 @@ def train_model(config: SAConfigReader) -> None:
                            data_preprocessor=data_preprocessor, save_folder=EMBEDDINGS_DIR)
     history = trained_model.fit(X_train, y_train, X_test, y_test)
     print("===========> saving")
-    if not os.path.exists(MODELS_DIR):
-        os.mkdir(MODELS_DIR)
-    if not os.path.exists(PLOTS_DIR):
-        os.mkdir(PLOTS_DIR)
     print("===========> saving learning curve under plots/")
     trained_model.save_learning_curve(history, file_prefix, PLOTS_DIR)
     print("===========> saving trained model and preprocessor under models/")
