@@ -7,6 +7,7 @@ Marabou is a python pipeline to perform training and evaluation for different de
 - flask (=>1.1.2)
 - flask_restful
 - pillow
+- keras-contrib: Need to be installed separately first (refer to https://github.com/keras-team/keras-contrib)
 #### Training mode
 - numpy (>=1.19.0rc2)
 - pandas (>=1.0.4)
@@ -19,11 +20,15 @@ Marabou is a python pipeline to perform training and evaluation for different de
 - opencv-python
 
 ### User installation
+#### Pre-requisites installation
+Make sure to install `keras-contrib` according to https://github.com/keras-team/keras-contrib)  
 #### Evaluation
-`pip install marabou`
+Move to the root of the repository (containing `setup.py`)  
+`pip install .`
 #### Training
 training mode will also install evaluation mode  
-`pip install marabou[train]`
+Move to the root of the repository (containing `setup.py`)  
+`pip install .[train]`
 
 ## Source code
 You can check the latest sources with the command:
