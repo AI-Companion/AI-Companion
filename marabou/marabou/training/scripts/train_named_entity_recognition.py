@@ -42,6 +42,12 @@ def train_model(config: NERConfigReader) -> None:
         X = [X[i] for i in ind]
         y = [y[i] for i in ind]
     file_prefix = "named_entity_recognition_%s" % time.strftime("%Y%m%d_%H%M%S")
+    if not os.path.exists(MODELS_DIR):
+        os.mkdir(EMBEDDINGS_DIR)
+    if not os.path.exists(MODELS_DIR):
+        os.mkdir(MODELS_DIR)
+    if not os.path.exists(PLOTS_DIR):
+        os.mkdir(PLOTS_DIR)
     print("===========> Data preprocessing")
     data_preprocessor = RNNMTMPreprocessor(max_sequence_length=config.max_sequence_length,
                                         validation_split=config.validation_split, vocab_size=config.vocab_size)
@@ -57,10 +63,6 @@ def train_model(config: NERConfigReader) -> None:
                            data_preprocessor=data_preprocessor, save_folder=EMBEDDINGS_DIR)
     history, report = trained_model.fit(X_train, y_train, X_test, y_test, data_preprocessor.labels_to_idx)
     print("===========> Saving")
-    if not os.path.exists(MODELS_DIR):
-        os.mkdir(MODELS_DIR)
-    if not os.path.exists(PLOTS_DIR):
-        os.mkdir(PLOTS_DIR)
     print("===========> saving learning curve and classification report under perf/")
     print(history)
     trained_model.save_learning_curve(history, file_prefix, PLOTS_DIR, metric="crf_viterbi_accuracy")
