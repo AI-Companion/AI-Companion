@@ -15,6 +15,8 @@ class ImdbDataset:
     """
     def __init__(self, dataset_url=None):
         self._get_set(dataset_url)
+        if not os.path.exists(DATA_DIR):
+            os.mkdir(DATA_DIR)
 
     def _get_set(self, dataset_url):
         """
@@ -76,6 +78,8 @@ class KaggleDataset:
     """
     def __init__(self, dataset_url=None):
         self._get_set(dataset_url)
+        if not os.path.exists(DATA_DIR):
+            os.mkdir(DATA_DIR)
 
     def _get_set(self, dataset_url):
         """
