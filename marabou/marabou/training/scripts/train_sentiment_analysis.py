@@ -6,7 +6,8 @@ from marabou.training.datasets import ImdbDataset
 from dsg.RNN_MTO_classifier import RNNMTO, RNNMTOPreprocessor
 from marabou.commons import ROOT_DIR, PLOTS_DIR, MODELS_DIR, SA_CONFIG_FILE, SAConfigReader, EMBEDDINGS_DIR
 
-def preprocess_data(X: List, y: List, data_preprocessor: RNNMTOPreprocessor)\
+
+def preprocess_data(X: List, y: List, data_preprocessor: RNNMTOPreprocessor) \
         -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
     Wrapper method which yields the training and validation datasets
@@ -52,8 +53,8 @@ def train_model(config: SAConfigReader) -> None:
     if not os.path.exists(PLOTS_DIR):
         os.mkdir(PLOTS_DIR)
     print("===========> Data preprocessing")
-    data_preprocessor = RNNMTOPreprocessor(max_sequence_length=config.max_sequence_length,\
-                                       validation_split=config.validation_split, vocab_size=config.vocab_size)
+    data_preprocessor = RNNMTOPreprocessor(max_sequence_length=config.max_sequence_length, \
+                                           validation_split=config.validation_split, vocab_size=config.vocab_size)
     X_train, X_test, y_train, y_test = preprocess_data(X, y, data_preprocessor)
     print("===========> Model building")
     trained_model = RNNMTO(pre_trained_embedding=config.pre_trained_embedding,
@@ -76,7 +77,8 @@ def train_model(config: SAConfigReader) -> None:
 def main():
     """main function"""
     if ROOT_DIR is None:
-        raise ValueError("please make sure to setup the environment variable MARABOU_ROOT to point for the root of the project")
+        raise ValueError(
+            "please make sure to setup the environment variable MARABOU_ROOT to point for the root of the project")
     train_config = SAConfigReader(SA_CONFIG_FILE)
     train_model(train_config)
 
