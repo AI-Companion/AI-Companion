@@ -91,7 +91,7 @@ class News20Dataset:
             None
         """
         print("===========> imdb dataset collection")
-        output_file_name = os.path.join(DATA_DIR, "imdb.tar.gz")
+        output_file_name = os.path.join(DATA_DIR, "20news-18828.tar.gz")
         if not os.path.isfile(output_file_name):
             print("---> Collecting dataset")
             output_file_name = wget.download(dataset_url, out=output_file_name)

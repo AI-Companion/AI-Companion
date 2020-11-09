@@ -2,9 +2,9 @@ import time
 from typing import List, Tuple
 import os
 import numpy as np
-from marabou.training.datasets import ImdbDataset
+from marabou.training.datasets import News20Dataset
 from dsg.RNN_MTO_classifier import RNNMTO, RNNMTOPreprocessor
-from marabou.commons import ROOT_DIR, PLOTS_DIR, MODELS_DIR, SA_CONFIG_FILE, SAConfigReader, EMBEDDINGS_DIR
+from marabou.commons import ROOT_DIR, PLOTS_DIR, MODELS_DIR, TD_CONFIG_FILE, TDConfigReader, EMBEDDINGS_DIR
 
 
 def preprocess_data(X: List, y: List, data_preprocessor: RNNMTOPreprocessor) \
@@ -26,7 +26,7 @@ def preprocess_data(X: List, y: List, data_preprocessor: RNNMTOPreprocessor) \
     return X_train, X_test, y_train, y_test
 
 
-def train_model(config: SAConfigReader) -> None:
+def train_model(config: TDConfigReader) -> None:
     """
     Training function which prints classification summary as as result
     Args:
@@ -35,8 +35,8 @@ def train_model(config: SAConfigReader) -> None:
         None
     """
     X, y = [], []
-    if config.dataset_name == "imdb":
-        dataset = ImdbDataset(config.dataset_url)
+    if config.dataset_name == "News20Dataset":
+        dataset = News20Dataset(config.dataset_url)
         X, y = dataset.get_set("train")
         X_test, y_test = dataset.get_set("test")
         X = X + X_test
@@ -79,7 +79,7 @@ def main():
     if ROOT_DIR is None:
         raise ValueError(
             "please make sure to setup the environment variable MARABOU_ROOT to point for the root of the project")
-    train_config = SAConfigReader(SA_CONFIG_FILE)
+    train_config = TDConfigReader(TD_CONFIG_FILE)
     train_model(train_config)
 
 
