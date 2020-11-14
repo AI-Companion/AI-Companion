@@ -10,6 +10,8 @@ data/*
 *models
 clothing_service_images
 saved_perf
-saved_datasets
+saved_datasets/clothing_classifier/dress
+saved_datasets/clothing_classifier/jeans
+saved_datasets/clothing_classifier/sunglasses
 saved_embeddings
 saved_models

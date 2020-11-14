@@ -5,10 +5,12 @@ from typing import List
 from flask import Flask, render_template, request
 from flask_restful import reqparse, Api, Resource
 from PIL import Image
-from dsg.RNN_MTM_classifier import RNNMTMPreprocessor, RNNMTM 
+from dsg.RNN_MTM_classifier import RNNMTMPreprocessor, RNNMTM
 from dsg.RNN_MTO_classifier import RNNMTO, RNNMTOPreprocessor
+from dsg.CNN_classifier import CNNClassifierPreprocessor, CNNClassifier
 from marabou.evaluation.utils import load_model
 from marabou.commons import SA_CONFIG_FILE, NER_CONFIG_FILE, ROOT_DIR, SAConfigReader, NERConfigReader, rnn_classification_visualize
+from marabou.commons import CC_CONFIG_FILE, CCConfigReader
 
 
 app = Flask(__name__)
@@ -99,27 +101,27 @@ def named_entity_recognition():
 
 
 # clothing classifier callers
-'''
-class ClothingClassifier(Resource):
+
+class PredictClothing(Resource):
     """
     utility class for the api_resource method
     """
-    def __init__(self, model):
+    def __init__(self, model:CNNClassifier, preprocessor: CNNClassifierPreprocessor):
         self.model = model
+        self.preprocessor = preprocessor
 
-    def get_from_service(self, image_url: str):
+    def get_from_service(self, image_url_list: str):
         """
         gets the user's query strings.
         The query could either be a single string or a list of multiple strings
         Args:
-            image_url: url containing image to be tested
+            image_url_list: url containing image to be tested
         Return:
             dictionary containing probilities prediction as value sorted by each string as key
         """
-        image = self.model.load_image(image_url)
-        image_class = self.model.predict(image)
+        images = self.preprocessor.preprocess(image_url_list)
+        image_class = self.model.predict(images)
         return image_class
-
 
 @app.route('/api/clothingClassifier', methods=['POST', 'GET'])
 def clothing_classifier():
@@ -127,16 +129,13 @@ def clothing_classifier():
     sentiment analysis service function
     """
     if request.method == 'POST':
-        image = request.files['image']
-        img = Image.open(image.stream)
-        img_loc = os.environ.get("MARABOU_HOME") + "marabou/evaluation/clothing_service_images/" + str(image.filename)
-        img.save(img_loc)
-        new_prediction = ClothingClassifier(model=global_model_config[4])
-        img_class = new_prediction.get_from_service(img_loc)
+        task_content = request.json['content']
+        new_prediction = PredictClothing(model=global_model_config[4], preprocessor=global_model_config[5])
+        img_class = new_prediction.get_from_service(task_content)
         return json.dumps(img_class)
     else:
         return None
-'''
+
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
@@ -164,7 +163,7 @@ def main():
     sa_preprocessor = RNNMTOPreprocessor(preprocessor_file=preprocessor_file)
 
     # load ner models
-    valid_config = SAConfigReader(NER_CONFIG_FILE)
+    valid_config = NERConfigReader(NER_CONFIG_FILE)
     h5_model_file, class_file, preprocessor_file = load_model(h5_file_url=valid_config.h5_model_url,
                                                               class_file_url=valid_config.class_file_url,
                                                               preprocessor_file_url=valid_config.preprocessor_file_url,
@@ -175,7 +174,20 @@ def main():
     ner_model = RNNMTM(h5_file=h5_model_file, class_file=class_file)
     ner_preprocessor = RNNMTMPreprocessor(preprocessor_file=preprocessor_file)
 
-    global_model_config.extend([sa_model, sa_preprocessor, ner_model, ner_preprocessor])
+    # load cnn models
+    valid_config = CCConfigReader(CC_CONFIG_FILE)
+    h5_model_file, _, preprocessor_file = load_model(h5_file_url=valid_config.h5_model_url,
+                                                              class_file_url=valid_config.class_file_url,
+                                                              preprocessor_file_url=valid_config.preprocessor_file_url,
+                                                              collect_from_gdrive=False,
+                                                              use_case="CNN")
+    if h5_model_file is None or preprocessor_file is None:
+        raise ValueError("there is no corresponding CNN model file")
+    cnn_preprocessor = CNNClassifierPreprocessor(preprocessor_file=preprocessor_file)
+    idx_to_labels = {v:k for k,v in cnn_preprocessor.labels_to_idx.items()}
+    cnn_model = CNNClassifier(h5_file=h5_model_file, idx_to_labels=idx_to_labels)
+
+    global_model_config.extend([sa_model, sa_preprocessor, ner_model, ner_preprocessor, cnn_model, cnn_preprocessor])
     if app_up:
         # the PredictSentiment methode will be executed in the sentimentAnalysis() method
         port = int(os.environ.get('PORT', 5000))
@@ -183,7 +195,7 @@ def main():
     else:
         print(PredictSentiment(sa_model, sa_preprocessor))
         print(PredictEntities(ner_model, ner_preprocessor))
-
+        print(PredictClothing(cnn_model, cnn_preprocessor))
 
 if __name__ == '__main__':
     main()

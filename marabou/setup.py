@@ -20,7 +20,11 @@ TRAINING_REQUIREMENTS = [
     'keras==2.3.1',
     'tensorflow==2.2.0',
     'opencv-python',
-    'wget'
+    'wget',
+    'zipfile',
+    'gdown',
+    'tarfile',
+    'requests'
 ]
 
 class InstallCommand(install):

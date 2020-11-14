@@ -128,8 +128,8 @@ class FashionImageNet:
     """
     Dataset handler for the fashion imagenet dataset
     """
-    def __init__(self, dataset_url=None):
-        self.dataset_url = dataset_url
+    def __init__(self):
+        pass
 
     def get_set(self):
         """
@@ -138,23 +138,19 @@ class FashionImageNet:
             features, targets
         """
         print("===========> extracting fashion imagenet dataset")
-        subprocess.call("%s %s" % (SCRIPT_DIR, self.dataset_url), shell=True)
-        data_folder = os.path.join(DATA_DIR, "/fashion_imagenet")
-        if not os.path.exists(data_folder):
-            X = None
-            y = None
-        else:
-            subfolders_list = os.listdir(data_folder)
-            subfolders_list.remove('classes_url')
-            X = []
-            y = []
-            for folder in subfolders_list:
-                class_folder = os.path.join(data_folder, folder)
-                files_list = [f for f in os.listdir(class_folder) if os.path.isfile(os.path.join(class_folder, f))]
-                for f in files_list:
-                    file_url = os.path.join(class_folder, f)
-                    im = cv2.imread(file_url)
-                    if im is not None:
-                        X.append(file_url)
-                        y.append(folder)
+        data_folder = os.path.join(DATA_DIR, "clothing_classifier")
+        subfolders_list = os.listdir(data_folder)
+        subfolders_list = [f for f in subfolders_list if os.path.isdir(os.path.join(data_folder, f))]
+        X = []
+        y = []
+        for folder in subfolders_list:
+            class_folder = os.path.join(data_folder, folder)
+            files_list = [f for f in os.listdir(class_folder) if os.path.isfile(os.path.join(class_folder, f))]
+            files_list.remove("status.txt")
+            for f in files_list:
+                file_url = os.path.join(class_folder, f)
+                im = cv2.imread(file_url)
+                if im is not None:
+                    X.append(file_url)
+                    y.append(folder)
         return X, y
