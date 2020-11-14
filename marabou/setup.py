@@ -12,6 +12,7 @@ EVALUATION_REQUIREMENTS = [
 
 TRAINING_REQUIREMENTS = [
     'numpy==1.19.0rc2',
+    'gdown-3.12.2',
     'pandas==1.0.4',
     'scikit-learn==0.23.1',
     'matplotlib',
@@ -22,6 +23,7 @@ TRAINING_REQUIREMENTS = [
     'opencv-python',
     'wget'
 ]
+
 
 class InstallCommand(install):
     """
