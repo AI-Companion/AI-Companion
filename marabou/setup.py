@@ -21,7 +21,6 @@ TRAINING_REQUIREMENTS = [
     'tensorflow==2.2.0',
     'opencv-python',
     'wget',
-    'zipfile',
     'gdown',
     'tarfile',
     'requests'
