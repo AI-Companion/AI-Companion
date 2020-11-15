@@ -185,7 +185,6 @@ def main():
         raise ValueError("there is no corresponding CNN model file")
     cnn_preprocessor = CNNClassifierPreprocessor(preprocessor_file=preprocessor_file)
     idx_to_labels = {v:k for k,v in cnn_preprocessor.labels_to_idx.items()}
-    print(idx_to_labels)
     cnn_model = CNNClassifier(h5_file=h5_model_file, idx_to_labels=idx_to_labels)
 
     global_model_config.extend([sa_model, sa_preprocessor, ner_model, ner_preprocessor, cnn_model, cnn_preprocessor])

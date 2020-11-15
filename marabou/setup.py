@@ -49,6 +49,7 @@ setup(name='marabou',
           'console_scripts': ['marabou-train-sentiment-analysis = marabou.training.scripts.train_sentiment_analysis:main [train]',
                               'marabou-train-named-entity-recognition = marabou.training.scripts.train_named_entity_recognition:main [train]',
                               'marabou-train-fashion-classifier = marabou.training.scripts.train_fashion_classifier:main [train]',
+                              'marabou-train-collect-data-fashion-classifier = marabou.training.scripts.cnn_classifier_dataset_collection:main [train]',
                               'marabou-eval-server = marabou.evaluation.app:main'
                               ]
       },
