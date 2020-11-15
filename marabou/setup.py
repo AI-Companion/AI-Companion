@@ -22,7 +22,6 @@ TRAINING_REQUIREMENTS = [
     'opencv-python',
     'wget',
     'gdown',
-    'tarfile',
     'requests'
 ]
 
