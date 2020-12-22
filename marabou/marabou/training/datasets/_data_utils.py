@@ -29,10 +29,10 @@ class ImdbDataset:
         """
         print("===========> imdb dataset collection")
         output_file_name = os.path.join(DATA_DIR, "imdb.tar.gz")
+        url = 'https://drive.google.com/uc?id={}'.format(dataset_url)
         if not os.path.isfile(output_file_name):
             print("---> Collecting dataset")
-            output_file_name = wget.download(dataset_url, out=output_file_name)
-            print("")
+            gdown.download(url, output_file_name, quiet=True)
         else:
             print("---> Dataset already downloaded")
         tar = tarfile.open(output_file_name)
