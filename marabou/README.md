@@ -4,19 +4,19 @@ Marabou is a python pipeline to perform training and evaluation for different de
 #### Evaluation mode (default)
 - Python (> 3.6)
 - ds-gear
-- flask (=>1.1.2)
+- flask
 - flask_restful
 - pillow
 - keras-contrib: Need to be installed separately first (refer to https://github.com/keras-team/keras-contrib)
 #### Training mode
-- numpy (>=1.19.0rc2)
-- pandas (>=1.0.4)
-- scikit-learn (>=0.23.1)
+- numpy
+- pandas
+- scikit-lear
 - matplotlib
 - jupyter
 - nltk (>=3.5)
-- keras (2.3.1)
-- tensorflow (2.2.0)
+- keras
+- tensorflow
 - opencv-python
 
 ### User installation

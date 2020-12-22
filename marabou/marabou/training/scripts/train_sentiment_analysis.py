@@ -1,5 +1,5 @@
 import time
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 import os
 import numpy as np
 from marabou.training.datasets import ImdbDataset
@@ -7,7 +7,7 @@ from dsg.RNN_MTO_classifier import RNNMTO, RNNMTOPreprocessor
 from marabou.commons import ROOT_DIR, PLOTS_DIR, MODELS_DIR, SA_CONFIG_FILE, SAConfigReader, EMBEDDINGS_DIR
 
 
-def preprocess_data(X: List, y: List, data_preprocessor: RNNMTOPreprocessor) \
+def preprocess_data(X: List, y: List, data_preprocessor: RNNMTOPreprocessor, labels_to_idx:Dict=None) \
         -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
     Wrapper method which yields the training and validation datasets
@@ -20,7 +20,7 @@ def preprocess_data(X: List, y: List, data_preprocessor: RNNMTOPreprocessor) \
     """
     X = data_preprocessor.clean(X)
     X_train, X_test, y_train, y_test = data_preprocessor.split_train_test(X, y)
-    data_preprocessor.fit(X_train, y)
+    data_preprocessor.fit(X_train, y, labels_to_idx=labels_to_idx)
     X_train = data_preprocessor.preprocess(X_train)
     X_test = data_preprocessor.preprocess(X_test)
     return X_train, X_test, y_train, y_test
@@ -45,6 +45,8 @@ def train_model(config: SAConfigReader) -> None:
         ind = np.random.randint(0, len(X), 1000)
         X = [X[i] for i in ind]
         y = [y[i] for i in ind]
+    
+    labels_to_idx = {"pos":1, "neg":0} # mapping the labels to corresponding indices
     file_prefix = "sentiment_analysis_%s" % time.strftime("%Y%m%d_%H%M%S")
     if not os.path.exists(MODELS_DIR):
         os.mkdir(EMBEDDINGS_DIR)
@@ -55,7 +57,7 @@ def train_model(config: SAConfigReader) -> None:
     print("===========> Data preprocessing")
     data_preprocessor = RNNMTOPreprocessor(max_sequence_length=config.max_sequence_length, \
                                            validation_split=config.validation_split, vocab_size=config.vocab_size)
-    X_train, X_test, y_train, y_test = preprocess_data(X, y, data_preprocessor)
+    X_train, X_test, y_train, y_test = preprocess_data(X, y, data_preprocessor, labels_to_idx)
     print("===========> Model building")
     trained_model = RNNMTO(pre_trained_embedding=config.pre_trained_embedding,
                            vocab_size=config.vocab_size,

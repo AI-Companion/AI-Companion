@@ -22,6 +22,8 @@ def load_model(h5_file_url=None, class_file_url=None, preprocessor_file_url=None
         prefix = "named_entity_recognition"
     if use_case == "sa":
         prefix = "sentiment_analysis"
+    if use_case == "td":
+        prefix = "topic_classification"
     if not collect_from_gdrive:
         model_files_list = os.listdir(MODELS_DIR)
         if len(model_files_list) > 0:

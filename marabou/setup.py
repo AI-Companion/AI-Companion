@@ -7,8 +7,9 @@ EVALUATION_REQUIREMENTS = [
     'ds-gear',
     'flask',
     'flask_restful',
-    'pillow'
-]
+    'pillow',
+    'keras-contrib @ https://github.com/keras-team/keras-contrib/tarball/master#egg=package-1.0'
+    ]
 
 TRAINING_REQUIREMENTS = [
     'numpy',

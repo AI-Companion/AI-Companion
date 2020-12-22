@@ -8,7 +8,7 @@ from PIL import Image
 from dsg.RNN_MTM_classifier import RNNMTMPreprocessor, RNNMTM 
 from dsg.RNN_MTO_classifier import RNNMTO, RNNMTOPreprocessor
 from marabou.evaluation.utils import load_model
-from marabou.commons import SA_CONFIG_FILE, NER_CONFIG_FILE, ROOT_DIR, SAConfigReader, NERConfigReader, rnn_classification_visualize
+from marabou.commons import SA_CONFIG_FILE, NER_CONFIG_FILE, ROOT_DIR, SAConfigReader, NERConfigReader, TD_CONFIG_FILE, TDConfigReader, rnn_classification_visualize
 
 
 app = Flask(__name__)
@@ -56,6 +56,43 @@ def sentiment_analysis():
     else:
         return None
 
+# topic detection callers
+class PredictTopic(Resource):
+    """
+    utility class for the api_resource method
+    """
+    def __init__(self, model: RNNMTO, pre_processor: RNNMTOPreprocessor):
+        self.model = model
+        self.pre_processor = pre_processor
+
+    def get_from_service(self, input_list: List[str]):
+        """
+        gets the user's query strings.
+        The query could either be a single string or a list of multiple strings
+        Args:
+            input_list: textual input
+        Return:
+            dictionary containing probilities prediction as value sorted by each string as key
+        """
+        query = self.pre_processor.clean(input_list)
+        query = self.pre_processor.preprocess(query)
+        probs = self.model.predict(query)
+        return probs
+
+
+@app.route('/api/topicDetection', methods=['POST', 'GET'])
+def topic_detection():
+    """
+    sentiment analysis service function
+    """
+    if request.method == 'POST':
+        task_content = request.json['content']
+        new_prediction = PredictTopic(model=global_model_config[4], pre_processor=global_model_config[5])
+        output = new_prediction.get_from_service(task_content)
+        return json.dumps(output)
+    else:
+        return None
+
 
 # Named entity recognition callers
 class PredictEntities(Resource):
@@ -76,8 +113,6 @@ class PredictEntities(Resource):
             dictionary containing probilities prediction as value sorted by each string as key
         """
         questions_list_encoded, questions_list_tokenized, n_tokens, _ = self.pre_processor.preprocess(input_list)
-        print(questions_list_encoded)
-        print(questions_list_tokenized)
         preds = self.model.predict(questions_list_encoded, self.pre_processor.labels_to_idx, n_tokens)
         display_result = rnn_classification_visualize(questions_list_tokenized, preds)
         return display_result
@@ -175,7 +210,19 @@ def main():
     ner_model = RNNMTM(h5_file=h5_model_file, class_file=class_file)
     ner_preprocessor = RNNMTMPreprocessor(preprocessor_file=preprocessor_file)
 
-    global_model_config.extend([sa_model, sa_preprocessor, ner_model, ner_preprocessor])
+    # load topic detection models
+    valid_config = TDConfigReader(TD_CONFIG_FILE)
+    h5_model_file, class_file, preprocessor_file = load_model(h5_file_url=valid_config.h5_model_url,
+                                                              class_file_url=valid_config.class_file_url,
+                                                              preprocessor_file_url=valid_config.preprocessor_file_url,
+                                                              collect_from_gdrive=False,
+                                                              use_case="td")
+    if h5_model_file is None or preprocessor_file is None:
+        raise ValueError("there is no corresponding TD model file")
+    td_model = RNNMTO(h5_file=h5_model_file, class_file=class_file)
+    td_preprocessor = RNNMTOPreprocessor(preprocessor_file=preprocessor_file)
+
+    global_model_config.extend([sa_model, sa_preprocessor, ner_model, ner_preprocessor, td_model, td_preprocessor])
     if app_up:
         # the PredictSentiment methode will be executed in the sentimentAnalysis() method
         port = int(os.environ.get('PORT', 5000))
@@ -183,6 +230,7 @@ def main():
     else:
         print(PredictSentiment(sa_model, sa_preprocessor))
         print(PredictEntities(ner_model, ner_preprocessor))
+        print(PredictTopic(td_model, td_preprocessor))
 
 
 if __name__ == '__main__':
