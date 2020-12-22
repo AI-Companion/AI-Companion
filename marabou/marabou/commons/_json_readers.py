@@ -102,6 +102,13 @@ class BaseConfigReader():
         """
         return self.config["n_iter"]
 
+    @property
+    def batch_size(self):
+        """
+        batch size for backprop
+        """
+        return self.config["batch_size"]
+
 
 class RNNConfigReader(BaseConfigReader):
     """
@@ -133,7 +140,7 @@ class RNNConfigReader(BaseConfigReader):
     @property
     def embedding_algorithm(self):
         """
-        Not in use currently, relates to the embedding algorithm to use
+        embedding algorithm to use
         """
         return self.config["embedding_algorithm"]
 
@@ -189,3 +196,63 @@ class TDConfigReader(RNNConfigReader):
     Sentiment analysis json configuration file reader
     """
     pass
+
+class CCConfigReader(BaseConfigReader):
+    @property
+    def pretrained_network_name(self):
+        """
+        name of the pretrained network to use
+        """
+        return self.config["pretrained_network_name"]
+
+    @property
+    def pretrained_network_lenet(self):
+        """
+        url for lenet network
+        """
+        return self.config["pretrained_network_lenet"]
+
+    @property
+    def pretrained_network_vgg16(self):
+        """
+        url for vgg16 network
+        """
+        return self.config["pretrained_network_vgg16"]
+
+    @property
+    def image_height(self):
+        """
+        image height as input to the CNN
+        """
+        return self.config["image_height"]
+
+    @property
+    def image_width(self):
+        """
+        image width as input to the CNN
+        """
+        return self.config["image_width"]
+
+    @property
+    def data_augmentation(self):
+        """
+        whether to augment training data
+        """
+        return self.config["data_augmentation"]
+
+    @property
+    def use_pre_trained_cnn(self):
+        """
+        whether to use a pretrained cnn 
+        """
+        return self.config["use_pre_trained_cnn"]
+
+    @property
+    def pretrained_network_path(self):
+        """
+        sets the path to the selected embedding algorithm
+        """
+        pretrained_network_path = self.pretrained_network_vgg16
+        if self.pretrained_network_name == "lenet":
+            pretrained_network_path = self.pretrained_network_lenet
+        return pretrained_network_path

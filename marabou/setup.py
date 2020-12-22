@@ -22,7 +22,9 @@ TRAINING_REQUIREMENTS = [
     'keras',
     'tensorflow',
     'opencv-python',
-    'wget'
+    'wget',
+    'gdown',
+    'requests'
 ]
 
 
@@ -51,6 +53,7 @@ setup(name='marabou',
                               'marabou-train-topic-detection = marabou.training.scripts.train_topic_classifier:main [train]',
                               'marabou-train-named-entity-recognition = marabou.training.scripts.train_named_entity_recognition:main [train]',
                               'marabou-train-fashion-classifier = marabou.training.scripts.train_fashion_classifier:main [train]',
+                              'marabou-train-collect-data-fashion-classifier = marabou.training.scripts.cnn_classifier_dataset_collection:main [train]',
                               'marabou-eval-server = marabou.evaluation.app:main'
                               ]
       },

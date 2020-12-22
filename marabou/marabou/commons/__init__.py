@@ -14,9 +14,11 @@ __all__ = ['DATA_DIR',
            'TDConfigReader',
            'ROOT_DIR',
            'SCRIPTS_DIR',
+           'NETWORK_DIR',
            'rnn_classification_visualize',
            'SA_CONFIG_FILE',
            'NER_CONFIG_FILE',
+           'CC_CONFIG_FILE',
            'NERConfigReader',
            'SAConfigReader'
            ]

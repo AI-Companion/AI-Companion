@@ -6,7 +6,9 @@
     "__help_experimental_mode":"set to true if you just looking for a 'quick and dirty model'",
     "batch_size":64,
     "__help_batch_size":"used to train the model, must be power of 2",
-    "validation_split":0.1,
+    "n_iter":100,
+    "__help_n_iter":"used to train the model, must be power of 2",
+    "validation_split":0.3,
     "__help_validation_split":"train test split ratio",
     "pretrained_network_name":"vgg16",
     "__help_pretrained_network_name":"possible values: vgg16, vgg32, resnet50, inceptionv3",
@@ -26,6 +28,8 @@
     "_help_h5_model_url":"gdrive url for the trained h5 model",
     "class_file_url":"1Li2VvQ0rY2DpOcSUWnwCRatDlM9fmRfA",
     "_help_class_file_url":"gdrive url for the trained class file",
+    "preprocessor_file_url":"1Cy2NtJbbHptgcEubTnxxKJs64LVbEoRb",
+    "_help_preprocessor_file_url":"gdrive url for the trained preprocessor file",
     "repo_root":"/home/marouen/mongit/marabou",
     "_help_repo_root":"url to the root of the repo"
 }

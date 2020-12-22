@@ -1,12 +1,12 @@
 import time
 import os
 import numpy as np
-from src.utils.data_utils import FashionImageNet
-from src.utils.config_loader import FashionClassifierConfigReader
-from src.models.cnn_classifier import DataPreprocessor, CNNClothing
+from marabou.training.datasets import FashionImageNet
+from marabou.commons import CCConfigReader, MODELS_DIR, NETWORK_DIR, PLOTS_DIR, ROOT_DIR, CC_CONFIG_FILE
+from dsg.CNN_classifier import CNNClassifier, CNNClassifierPreprocessor
 
 
-def train_model(config: FashionClassifierConfigReader) -> None:
+def train_model(config: CCConfigReader) -> None:
     """
     training function which prints classification summary as as result
     Args:
@@ -16,37 +16,51 @@ def train_model(config: FashionClassifierConfigReader) -> None:
     """
     X, y = [], []
     if config.dataset_name == "fashion_mnist":
-        dataset = FashionImageNet(config.dataset_url)
+        dataset = FashionImageNet()
         X, y = dataset.get_set()
-    if X is None or y is None:
-        raise ValueError("please make sure you have the correct dataset link in the config file")
     if config.experimental_mode:
-        ind = np.random.randint(0, len(X), 500)
+        ind = np.random.randint(0, len(X), 50)
         X = [X[i] for i in ind]
         y = [y[i] for i in ind]
-    preprocessor = DataPreprocessor(config)
-    X = preprocessor.load_images(X)
-    X_train, X_test, y_train, y_test, idx_to_labels = preprocessor.split_train_test(X, y)
-    file_prefix = "fashion_imagenet_%s" % time.strftime("%Y%m%d_%H%M%S")
-    trained_model = CNNClothing(idx_to_labels, config=config)
-    history, report = trained_model.fit(X_train, y_train, X_test, y_test)
-    print("===========> saving learning curve and classification report under perf/")
-    trained_model.save_learning_curve(history, file_prefix)
-    trained_model.save_classification_report(report, file_prefix)
-    print("===========> saving trained model and preprocessor under models/")
-    trained_model.save_model(file_prefix)
+    file_prefix = "clothing_classifier_%s" % time.strftime("%Y%m%d_%H%M%S")
+    if not os.path.exists(MODELS_DIR):
+        os.mkdir(MODELS_DIR)
+    if not os.path.exists(NETWORK_DIR):
+        os.mkdir(NETWORK_DIR)
+    if not os.path.exists(PLOTS_DIR):
+        os.mkdir(PLOTS_DIR)
 
+    preprocessor = CNNClassifierPreprocessor(image_height=config.image_height, image_width=config.image_width, validation_split=config.validation_split)
+    X_train, X_test, y_train, y_test = preprocessor.split_train_test(X, y)
+    preprocessor.fit(X_train, y_train)
+    X_train, y_train = preprocessor.preprocess(X_train, y_train)
+    X_test, y_test = preprocessor.preprocess(X_test, y_test)
+    file_prefix = "fashion_classifier_%s" % time.strftime("%Y%m%d_%H%M%S")
+    idx_to_labels = {v:k for k,v in preprocessor.labels_to_idx.items()}
+    trained_model = CNNClassifier(idx_to_labels=idx_to_labels,
+                                  pre_trained_cnn=config.use_pre_trained_cnn,
+                                  pretrained_network_name=config.pretrained_network_name,
+                                  n_iter=config.n_iter,
+                                  image_height=config.image_height,
+                                  image_width=config.image_width,
+                                  batch_size=config.batch_size,
+                                  pretrained_network_path=config.pretrained_network_path)
+    history, report = trained_model.fit(X_train, y_train, X_test, y_test)
+    print("===========> Saving")
+    print("===========> saving learning curve and classification report under perf/")
+    trained_model.save_learning_curve(history, file_prefix, PLOTS_DIR)
+    trained_model.save_classification_report(report, file_prefix, PLOTS_DIR)
+    print("===========> saving trained model and preprocessor under models/")
+    trained_model.save(file_prefix, MODELS_DIR)
+    preprocessor.save(file_prefix, MODELS_DIR)
 
 def main():
     """main function"""
-    root_dir = os.environ.get("MARABOU_HOME")
-    if root_dir is None:
-        raise ValueError("please make sure to setup the environment variable MARABOU_ROOT to\
-                         point for the root of the project")
-    config_file_path = os.path.join(root_dir, "marabou/train/config/config_fashion_classifier.json")
-    train_config = FashionClassifierConfigReader(config_file_path)
+    if ROOT_DIR is None:
+        raise ValueError("please make sure to setup the environment variable MARABOU_ROOT to point\
+                         for the root of the project")
+    train_config = CCConfigReader(CC_CONFIG_FILE)
     train_model(train_config)
-
 
 if __name__ == '__main__':
     main()
