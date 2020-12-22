@@ -5,7 +5,7 @@ from setuptools.command.install import install
 
 EVALUATION_REQUIREMENTS = [
     'ds-gear',
-    'flask==1.1.2',
+    'flask',
     'flask_restful',
     'pillow'
 ]

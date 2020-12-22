@@ -63,12 +63,12 @@ class ImdbDataset:
             file1 = open(os.path.join(directory, 'pos', f), "r")
             x.append(file1.readline())
             file1.close()
-            y.append(1)
+            y.append("pos")
         for f in os.listdir(os.path.join(directory, 'neg')):
             file1 = open(os.path.join(directory, 'neg', f), "r")
             x.append(file1.readline())
             file1.close()
-            y.append(0)
+            y.append("neg")
         return x, y
 
 

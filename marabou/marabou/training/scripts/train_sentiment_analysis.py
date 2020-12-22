@@ -20,7 +20,7 @@ def preprocess_data(X: List, y: List, data_preprocessor: RNNMTOPreprocessor) \
     """
     X = data_preprocessor.clean(X)
     X_train, X_test, y_train, y_test = data_preprocessor.split_train_test(X, y)
-    data_preprocessor.fit(X_train)
+    data_preprocessor.fit(X_train, y)
     X_train = data_preprocessor.preprocess(X_train)
     X_test = data_preprocessor.preprocess(X_test)
     return X_train, X_test, y_train, y_test
