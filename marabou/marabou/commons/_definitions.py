@@ -10,5 +10,5 @@ DATA_DIR = os.path.join(ROOT_DIR, "saved_datasets")
 SCRIPTS_DIR = os.path.join(ROOT_DIR, "scripts")
 
 SA_CONFIG_FILE = os.path.join(ROOT_DIR, "config/config_sentiment_analysis.json")
-TD_CONFIG_FILE = os.path.join(ROOT_DIR, "config/config_topic_detection.json")
+TD_CONFIG_FILE = os.path.join(ROOT_DIR, "config/config_topic_classification.json")
 NER_CONFIG_FILE = os.path.join(ROOT_DIR, "config/config_named_entity_recognition.json")
