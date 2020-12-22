@@ -11,15 +11,15 @@ EVALUATION_REQUIREMENTS = [
 ]
 
 TRAINING_REQUIREMENTS = [
-    'numpy==1.19.0rc2',
-    'gdown==3.12.2',
-    'pandas==1.0.4',
-    'scikit-learn==0.23.1',
+    'numpy',
+    'gdown',
+    'pandas',
+    'scikit-learn',
     'matplotlib',
     'jupyter',
     'nltk==3.5',
-    'keras==2.3.1',
-    'tensorflow==2.2.0',
+    'keras',
+    'tensorflow',
     'opencv-python',
     'wget'
 ]

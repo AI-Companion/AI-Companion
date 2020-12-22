@@ -119,7 +119,7 @@ def train_model(config: TDConfigReader) -> None:
 def main():
     """main function"""
     if ROOT_DIR is None:
-        raise ValueError("please make sure to setup the environment variable MARABOU_ROOT to point for the root of the project")
+        raise ValueError("please make sure to setup the environment variable MARABOU_HOME to point for the root of the project")
     train_config = TDConfigReader(TD_CONFIG_FILE)
     train_model(train_config)
 
