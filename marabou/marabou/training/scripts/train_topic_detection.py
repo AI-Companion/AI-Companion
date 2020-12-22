@@ -1,13 +1,13 @@
 import time
-from typing import List, Tuple, Dict
+from typing import List, Tuple
 import os
 import numpy as np
-from marabou.training.datasets import ImdbDataset
+from marabou.training.datasets import News20Dataset
 from dsg.RNN_MTO_classifier import RNNMTO, RNNMTOPreprocessor
-from marabou.commons import ROOT_DIR, PLOTS_DIR, MODELS_DIR, SA_CONFIG_FILE, SAConfigReader, EMBEDDINGS_DIR
+from marabou.commons import ROOT_DIR, PLOTS_DIR, MODELS_DIR, TD_CONFIG_FILE, TDConfigReader, EMBEDDINGS_DIR
 
 
-def preprocess_data(X: List, y: List, data_preprocessor: RNNMTOPreprocessor, labels_to_idx:Dict=None) \
+def preprocess_data(X: List, y: List, data_preprocessor: RNNMTOPreprocessor) \
         -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
     Wrapper method which yields the training and validation datasets
@@ -20,13 +20,13 @@ def preprocess_data(X: List, y: List, data_preprocessor: RNNMTOPreprocessor, lab
     """
     X = data_preprocessor.clean(X)
     X_train, X_test, y_train, y_test = data_preprocessor.split_train_test(X, y)
-    data_preprocessor.fit(X_train, y, labels_to_idx=labels_to_idx)
+    data_preprocessor.fit(X_train)
     X_train = data_preprocessor.preprocess(X_train)
     X_test = data_preprocessor.preprocess(X_test)
     return X_train, X_test, y_train, y_test
 
 
-def train_model(config: SAConfigReader) -> None:
+def train_model(config: TDConfigReader) -> None:
     """
     Training function which prints classification summary as as result
     Args:
@@ -35,8 +35,8 @@ def train_model(config: SAConfigReader) -> None:
         None
     """
     X, y = [], []
-    if config.dataset_name == "imdb":
-        dataset = ImdbDataset(config.dataset_url)
+    if config.dataset_name == "News20Dataset":
+        dataset = News20Dataset(config.dataset_url)
         X, y = dataset.get_set("train")
         X_test, y_test = dataset.get_set("test")
         X = X + X_test
@@ -45,8 +45,6 @@ def train_model(config: SAConfigReader) -> None:
         ind = np.random.randint(0, len(X), 1000)
         X = [X[i] for i in ind]
         y = [y[i] for i in ind]
-    
-    labels_to_idx = {"pos":1, "neg":0} # mapping the labels to corresponding indices
     file_prefix = "sentiment_analysis_%s" % time.strftime("%Y%m%d_%H%M%S")
     if not os.path.exists(MODELS_DIR):
         os.mkdir(EMBEDDINGS_DIR)
@@ -57,7 +55,7 @@ def train_model(config: SAConfigReader) -> None:
     print("===========> Data preprocessing")
     data_preprocessor = RNNMTOPreprocessor(max_sequence_length=config.max_sequence_length, \
                                            validation_split=config.validation_split, vocab_size=config.vocab_size)
-    X_train, X_test, y_train, y_test = preprocess_data(X, y, data_preprocessor, labels_to_idx)
+    X_train, X_test, y_train, y_test = preprocess_data(X, y, data_preprocessor)
     print("===========> Model building")
     trained_model = RNNMTO(pre_trained_embedding=config.pre_trained_embedding,
                            vocab_size=config.vocab_size,
@@ -81,7 +79,7 @@ def main():
     if ROOT_DIR is None:
         raise ValueError(
             "please make sure to setup the environment variable MARABOU_ROOT to point for the root of the project")
-    train_config = SAConfigReader(SA_CONFIG_FILE)
+    train_config = TDConfigReader(TD_CONFIG_FILE)
     train_model(train_config)
 
 
