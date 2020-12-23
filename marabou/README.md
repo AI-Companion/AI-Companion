@@ -38,6 +38,10 @@ Move to the root of the repository (containing `setup.py`)
 simply upload and run to google colab the files `sentiment_analysis.ipynb` or `named_entity_recognition.ipynb`  
 The script will generate model files and performance plots which can be downloaded to the models respository  
 
+## Usage
+- evaluation server `marabou-eval-server`
+- training `marabou-train-topic-detection`
+
 ## Source code
 You can check the latest sources with the command:
-git clone https://github.com/AI-Companion/ds-gear.git
+`git clone https://github.com/AI-Companion/marabou.git`

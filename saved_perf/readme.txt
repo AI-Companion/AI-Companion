@@ -1,0 +1,1 @@
+this folder contains the saved performances for each trained algorithm
