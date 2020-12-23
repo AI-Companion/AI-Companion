@@ -40,6 +40,9 @@ The script will generate model files and performance plots which can be download
 
 ## Usage
 - evaluation server `marabou-eval-server`
+- To use the evaluation with the command line, you can curl the server.  
+Below is an example to curl the `topics classifier` use case  
+`curl http://localhost:5000/api/topicDetection -d '{"content":["example sentence 1", "example sentence 2"] }' -H 'Content-Type: application/json'`
 - training `marabou-train-topic-detection`
 
 ## Source code

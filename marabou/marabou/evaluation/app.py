@@ -39,8 +39,9 @@ class PredictSentiment(Resource):
         Return:
             dictionary containing probilities prediction as value sorted by each string as key
         """
-        query_list = self.pre_processor.preprocess(input_list)
-        probs = self.model.predict_proba(query_list)
+        query = self.pre_processor.clean(input_list)
+        query = self.pre_processor.preprocess(query)
+        probs = self.model.predict_proba(query)
         return probs
 
 
@@ -52,7 +53,7 @@ def sentiment_analysis():
     if request.method == 'POST':
         task_content = request.json['content']
         new_prediction = PredictSentiment(model=global_model_config[0], pre_processor=global_model_config[1])
-        output = new_prediction.get_from_service([task_content])
+        output = new_prediction.get_from_service(task_content)
         return json.dumps(output[0] * 100)
     else:
         return None
