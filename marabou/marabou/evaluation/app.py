@@ -54,7 +54,7 @@ def sentiment_analysis():
         task_content = request.json['content']
         new_prediction = PredictSentiment(model=global_model_config[0], pre_processor=global_model_config[1])
         output = new_prediction.get_from_service(task_content)
-        return json.dumps(output[0] * 100)
+        return json.dumps([round(o * 100, 2) for o in output])
     else:
         return None
 
