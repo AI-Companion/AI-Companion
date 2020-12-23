@@ -36,12 +36,18 @@ class InstallCommand(install):
         subprocess.call("git config core.hooksPath .githooks/", shell=True)
         install.run(self)
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
 
 setup(name='marabou',
       packages=find_packages(include=['commons', 'marabou.*']),
       author='Marouen Azzouz, Youssef Azzouz',
       author_email='azzouz.marouen@gmail.com, youssef.azzouz1512@gmail.com',
-      version='0.1.0',
+      description="Marabou is a python pipeline to perform training and evaluation for different deep learning scenarios. \
+      It is distributed under the Mit license.",
+      long_description=long_description,
+      version='0.1.10',
       install_requires=EVALUATION_REQUIREMENTS,
       include_package_data=True,
       zip_safe=False,

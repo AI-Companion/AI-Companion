@@ -20,8 +20,12 @@ Marabou is a python pipeline to perform training and evaluation for different de
 - opencv-python
 
 ### User installation
-#### Pre-requisites installation
-Make sure to install `keras-contrib` according to https://github.com/keras-team/keras-contrib)  
+#### Pre-requisites
+1. Update pip `pip install --upgrade pip`
+2. Setup the environment variable `MARABOU_HOME` to point to the root of this repo `export MARABOU_HOME=/path/to/root`
+3. Create a python3 venv and source it (better than mixing with your existing packages):
+`python3 -m venv /path/to/your/venv`
+`source /path/to/your/venv/bin/activate`
 #### Evaluation
 Move to the root of the repository (containing `setup.py`)  
 `pip install .`

@@ -108,8 +108,6 @@ def train_model(config: TDConfigReader) -> None:
     print("===========> saving confusion matrix under plots/")
     y_pred = trained_model.predict(X_train)
     labels_list = list(data_preprocessor.labels_to_idx.keys())
-    print(y_pred[0:10])
-    print(y_train[0:10])
     trained_model.save_confusion_matrix(y_pred, y_train, file_prefix, PLOTS_DIR, labels_list)
     print("===========> saving trained model and preprocessor under models/")
     trained_model.save(file_prefix, MODELS_DIR)
