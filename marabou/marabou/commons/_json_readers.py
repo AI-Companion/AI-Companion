@@ -12,6 +12,7 @@ class BaseConfigReader():
     """
     Parent class to load use case parameters from a .json file
     """
+
     def __init__(self, file_name):
         self.config = self.read_file(file_name)
 
@@ -37,7 +38,6 @@ class BaseConfigReader():
         Web url for the training data
         """
         return self.config["dataset_url"]
-
 
     @property
     def model_optimizer(self):
@@ -114,6 +114,7 @@ class RNNConfigReader(BaseConfigReader):
     """
     Parent class for RNN use cases
     """
+
     @property
     def embeddings_path_glove(self):
         """
@@ -182,7 +183,15 @@ class NERConfigReader(RNNConfigReader):
     """
     pass
 
+
 class SAConfigReader(RNNConfigReader):
+    """
+    Sentiment analysis json configuration file reader
+    """
+    pass
+
+
+class TDConfigReader(RNNConfigReader):
     """
     Sentiment analysis json configuration file reader
     """

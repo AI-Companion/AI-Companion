@@ -5,25 +5,28 @@ from setuptools.command.install import install
 
 EVALUATION_REQUIREMENTS = [
     'ds-gear',
-    'flask==1.1.2',
+    'flask',
     'flask_restful',
-    'pillow'
-]
+    'pillow',
+    'keras-contrib @ https://github.com/keras-team/keras-contrib/tarball/master#egg=package-1.0'
+    ]
 
 TRAINING_REQUIREMENTS = [
-    'numpy==1.19.0rc2',
-    'pandas==1.0.4',
-    'scikit-learn==0.23.1',
+    'numpy',
+    'gdown',
+    'pandas',
+    'scikit-learn',
     'matplotlib',
     'jupyter',
     'nltk==3.5',
-    'keras==2.3.1',
-    'tensorflow==2.2.0',
+    'keras',
+    'tensorflow',
     'opencv-python',
     'wget',
     'gdown',
     'requests'
 ]
+
 
 class InstallCommand(install):
     """
@@ -47,6 +50,7 @@ setup(name='marabou',
       },
       entry_points={
           'console_scripts': ['marabou-train-sentiment-analysis = marabou.training.scripts.train_sentiment_analysis:main [train]',
+                              'marabou-train-topic-detection = marabou.training.scripts.train_topic_classifier:main [train]',
                               'marabou-train-named-entity-recognition = marabou.training.scripts.train_named_entity_recognition:main [train]',
                               'marabou-train-fashion-classifier = marabou.training.scripts.train_fashion_classifier:main [train]',
                               'marabou-train-collect-data-fashion-classifier = marabou.training.scripts.cnn_classifier_dataset_collection:main [train]',

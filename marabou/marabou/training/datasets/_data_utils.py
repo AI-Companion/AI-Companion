@@ -13,6 +13,7 @@ class ImdbDataset:
     """
     Dataset handler for the imdb dataset
     """
+
     def __init__(self, dataset_url=None):
         if not os.path.exists(DATA_DIR):
             os.mkdir(DATA_DIR)
@@ -28,6 +29,69 @@ class ImdbDataset:
         """
         print("===========> imdb dataset collection")
         output_file_name = os.path.join(DATA_DIR, "imdb.tar.gz")
+        url = 'https://drive.google.com/uc?id={}'.format(dataset_url)
+        if not os.path.isfile(output_file_name):
+            print("---> Collecting dataset")
+            gdown.download(url, output_file_name, quiet=True)
+        else:
+            print("---> Dataset already downloaded")
+        tar = tarfile.open(output_file_name)
+        tar.extractall(path=DATA_DIR)
+        tar.close()
+
+    def get_set(self, mode="train"):
+        """
+        Returns training data with the given number of rows
+        Args:
+            limit: max number of rows
+        Return:
+            training features and targets
+        """
+        x = []
+        y = []
+        directory = os.path.join(DATA_DIR, "aclImdb")
+        if mode == "train":
+            directory = os.path.join(directory, "train")
+        else:
+            directory = os.path.join(directory, "test")
+
+        n_obs = 2 * len(os.listdir(os.path.join(directory, 'pos')))
+        n_obs_per_class = round(n_obs / 2)
+        for f in os.listdir(os.path.join(directory, 'pos')):
+            if len(x) >= n_obs_per_class:
+                break
+            file1 = open(os.path.join(directory, 'pos', f), "r")
+            x.append(file1.readline())
+            file1.close()
+            y.append("pos")
+        for f in os.listdir(os.path.join(directory, 'neg')):
+            file1 = open(os.path.join(directory, 'neg', f), "r")
+            x.append(file1.readline())
+            file1.close()
+            y.append("neg")
+        return x, y
+
+
+class News20Dataset:
+    """
+    Dataset handler for the imdb dataset
+    """
+
+    def __init__(self, dataset_url=None):
+        if not os.path.exists(DATA_DIR):
+            os.mkdir(DATA_DIR)
+        self._get_set(dataset_url)
+
+    def _get_set(self, dataset_url):
+        """
+        Checks if imdb dataset is downloaded or not, if not it'll collect it
+        Args:
+            dataset_url: web address of the imdb dataset
+        Return:
+            None
+        """
+        print("===========> imdb dataset collection")
+        output_file_name = os.path.join(DATA_DIR, "20news-18828.tar.gz")
         if not os.path.isfile(output_file_name):
             print("---> Collecting dataset")
             output_file_name = wget.download(dataset_url, out=output_file_name)
@@ -37,7 +101,6 @@ class ImdbDataset:
         tar = tarfile.open(output_file_name)
         tar.extractall(path=DATA_DIR)
         tar.close()
-
 
     def get_set(self, mode="train"):
         """
@@ -76,6 +139,7 @@ class KaggleDataset:
     """
     Dataset handler for the ner dataset
     """
+
     def __init__(self, dataset_url=None):
         if not os.path.exists(DATA_DIR):
             os.mkdir(DATA_DIR)
@@ -128,8 +192,9 @@ class FashionImageNet:
     """
     Dataset handler for the fashion imagenet dataset
     """
-    def __init__(self):
-        pass
+
+    def __init__(self, dataset_url=None):
+        self.dataset_url = dataset_url
 
     def get_set(self):
         """
