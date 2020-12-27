@@ -16,7 +16,7 @@
     "__help_pre_trained_embedding":"set to true if you want to use a pre-trained embedding, otherwise the model will learn the embedding",
     "embedding_algorithm":"fasttext",
     "__help_embedding_algorithm":"can be glove or fasttext",
-    "vocab_size":2000,
+    "vocab_size":450,
     "__help_vocab_size":"count of unique tokens",
     "validation_split":0.3,
     "__help_validation_split":"train test split ratio",
