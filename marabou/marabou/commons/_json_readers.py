@@ -109,6 +109,13 @@ class BaseConfigReader():
         """
         return self.config["batch_size"]
 
+    @property
+    def train_size(self):
+        """
+        fraction of the dataset to use for training
+        """
+        return self.config["train_size"]
+
 
 class RNNConfigReader(BaseConfigReader):
     """

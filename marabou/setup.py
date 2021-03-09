@@ -19,7 +19,6 @@ TRAINING_REQUIREMENTS = [
     'matplotlib',
     'jupyter',
     'nltk==3.5',
-    'keras',
     'tensorflow',
     'opencv-python',
     'wget',
