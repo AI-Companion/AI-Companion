@@ -5,11 +5,12 @@ from typing import List
 from flask import Flask, render_template, request
 from flask_restful import reqparse, Api, Resource
 from PIL import Image
+import tensorflow as tf
 from dsg.RNN_MTM_classifier import RNNMTMPreprocessor, RNNMTM
 from dsg.RNN_MTO_classifier import RNNMTO, RNNMTOPreprocessor
 from dsg.CNN_classifier import CNNClassifierPreprocessor, CNNClassifier
 from marabou.evaluation.utils import load_model
-from marabou.commons import SA_CONFIG_FILE, NER_CONFIG_FILE, ROOT_DIR, SAConfigReader, NERConfigReader, TD_CONFIG_FILE, TDConfigReader, rnn_classification_visualize
+from marabou.commons import SA_CONFIG_FILE, MODELS_DIR, NER_CONFIG_FILE, ROOT_DIR, SAConfigReader, NERConfigReader, TD_CONFIG_FILE, TDConfigReader, rnn_classification_visualize
 
 
 app = Flask(__name__)
@@ -26,24 +27,8 @@ class PredictSentiment(Resource):
     """
     utility class for the api_resource method
     """
-    def __init__(self, model: RNNMTO, pre_processor: RNNMTOPreprocessor):
+    def __init__(self, model):
         self.model = model
-        self.pre_processor = pre_processor
-
-    def get_from_service(self, input_list: List[str]):
-        """
-        gets the user's query strings.
-        The query could either be a single string or a list of multiple strings
-        Args:
-            input_list: textual input
-        Return:
-            dictionary containing probilities prediction as value sorted by each string as key
-        """
-        query = self.pre_processor.clean(input_list)
-        query = self.pre_processor.preprocess(query)
-        probs = self.model.predict_proba(query)
-        return probs
-
 
 @app.route('/api/sentimentAnalysis', methods=['POST', 'GET'])
 def sentiment_analysis():
@@ -52,8 +37,8 @@ def sentiment_analysis():
     """
     if request.method == 'POST':
         task_content = request.json['content']
-        new_prediction = PredictSentiment(model=global_model_config[0], pre_processor=global_model_config[1])
-        output = new_prediction.get_from_service(task_content)
+        new_prediction = PredictSentiment(model=global_model_config[0])
+        output = new_prediction.model.predict(task_content)
         return json.dumps([round(o * 100, 2) for o in output])
     else:
         return None
@@ -183,20 +168,12 @@ def index():
 def main():
     """ if boolean is true bring the application up"""
     app_up = len(sys.argv) < 2
-    if ROOT_DIR is None:
-        raise ValueError("Please make sure to set the environment variable MARABOU_HOME to the root of the directory")
     # load SA models
     valid_config = SAConfigReader(SA_CONFIG_FILE)
-    h5_model_file, class_file, preprocessor_file = load_model(h5_file_url=valid_config.h5_model_url,
-                                                              class_file_url=valid_config.class_file_url,
-                                                              preprocessor_file_url=valid_config.preprocessor_file_url,
-                                                              collect_from_gdrive=False,
-                                                              use_case="sa")
-    if h5_model_file is None or preprocessor_file is None:
-        raise ValueError("there is no corresponding SA model file")
-    sa_model = RNNMTO(h5_file=h5_model_file, class_file=class_file)
-    sa_preprocessor = RNNMTOPreprocessor(preprocessor_file=preprocessor_file)
+    model_name = valid_config.model_name
+    sa_model = tf.keras.load_model(os.path.join(MODELS_DIR, "sentiment_analysis_" + model_name))
 
+    """
     # load ner models
     valid_config = NERConfigReader(NER_CONFIG_FILE)
     h5_model_file, class_file, preprocessor_file = load_model(h5_file_url=valid_config.h5_model_url,
@@ -220,16 +197,16 @@ def main():
         raise ValueError("there is no corresponding TD model file")
     td_model = RNNMTO(h5_file=h5_model_file, class_file=class_file)
     td_preprocessor = RNNMTOPreprocessor(preprocessor_file=preprocessor_file)
-
-    global_model_config.extend([sa_model, sa_preprocessor, ner_model, ner_preprocessor, td_model, td_preprocessor])
+    """
+    global_model_config.extend([sa_model])
     if app_up:
         # the PredictSentiment methode will be executed in the sentimentAnalysis() method
         port = int(os.environ.get('PORT', 5000))
         app.run(host='0.0.0.0', port=port, threaded=False)
     else:
-        print(PredictSentiment(sa_model, sa_preprocessor))
-        print(PredictEntities(ner_model, ner_preprocessor))
-        print(PredictTopic(td_model, td_preprocessor))
+        print(PredictSentiment(sa_model))
+        #print(PredictEntities(ner_model, ner_preprocessor))
+        #print(PredictTopic(td_model, td_preprocessor))
 
 
 if __name__ == '__main__':
