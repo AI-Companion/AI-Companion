@@ -76,12 +76,13 @@ def train_model(config: SAConfigReader) -> None:
     # build and compile model
     tokenizer_bow = tf.keras.layers.experimental.preprocessing.TextVectorization(
                         standardize=custom_standardization,
+                        ngrams=3,
                         max_tokens=vocab_size,
                         output_mode='binary')
     tokenizer_bow.adapt(train_ds.map(lambda text, label: text))
     inputs = tf.keras.Input(shape=(1,), dtype=tf.string)
     x = tokenizer_bow(inputs)
-    x = tf.keras.layers.Dense(1)(x)
+    x = tf.keras.layers.Dense(1, kernel_regularizer=tf.keras.regularizers.L1L2(l1=0.0, l2=0.01))(x)
     model = tf.keras.Model(inputs, x)
     print(model.summary())
     model.compile(loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
