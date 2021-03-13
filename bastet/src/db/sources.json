@@ -1,0 +1,63 @@
+{
+  "urls": {
+    "currencies": [
+      {
+        "url": "https://finance.yahoo.com/quote/{0}{1}%3DX?p={0}{1}%3DX",
+        "pattern": {
+          "tagTarget": "span",
+          "attributes": {
+            "class": "Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)"
+          }
+        }
+      },
+      {
+        "url": "https://www.investing.com/currencies/{0}-{1}",
+        "pattern": {
+          "tagTarget": "span",
+          "attributes": {
+            "id": "last_last"
+          }
+        }
+      }
+    ],
+    "crypto": {
+      "bitcoin": [
+        {
+          "url": "https://www.investing.com/crypto/bitcoin",
+          "pattern": {
+            "tagTarget": "span",
+            "attributes": {
+              "id": "last_last"
+            }
+          }
+        }
+      ],
+      "ethereum":[
+        {
+          "url": "https://www.investing.com/crypto/ethereum",
+          "pattern": {
+            "tagTarget": "span",
+            "attributes": {
+              "id": "last_last"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "currencies":[
+    "usd",
+    "eur",
+    "gbp",
+    "cad",
+    "jpy",
+    "nzd",
+    "chf",
+    "aud",
+    "sar",
+    "kyd",
+    "czk",
+    "isk",
+    "rub"
+  ]
+}
