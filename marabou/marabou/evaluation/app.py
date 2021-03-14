@@ -43,6 +43,7 @@ def sentiment_analysis():
     else:
         return None
 
+'''
 # topic detection callers
 class PredictTopic(Resource):
     """
@@ -155,7 +156,7 @@ def clothing_classifier():
         return json.dumps(img_class)
     else:
         return None
-
+'''
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
@@ -171,7 +172,7 @@ def main():
     # load SA models
     valid_config = SAConfigReader(SA_CONFIG_FILE)
     model_name = valid_config.model_name
-    sa_model = tf.keras.load_model(os.path.join(MODELS_DIR, "sentiment_analysis_" + model_name))
+    sa_model = tf.keras.models.load_model(os.path.join(MODELS_DIR, "sentiment_analysis_" + model_name))
 
     """
     # load ner models

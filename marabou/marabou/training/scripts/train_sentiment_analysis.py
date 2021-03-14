@@ -9,7 +9,7 @@ import tensorflow_datasets as tfds
 import matplotlib.pyplot as plt
 from marabou.commons import ROOT_DIR, MODELS_DIR, SA_CONFIG_FILE, SAConfigReader, EMBEDDINGS_DIR
 
-
+@tf.keras.utils.register_keras_serializable()
 def custom_standardization(input_data):
   lowercase = tf.strings.lower(input_data)
   stripped_html = tf.strings.regex_replace(lowercase, '<br />', ' ')
