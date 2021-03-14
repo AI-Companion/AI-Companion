@@ -1,28 +1,38 @@
 from typing import List, Tuple
-import time
-import os
+import time, os
+import matplotlib.pyplot as plt
 import numpy as np
-from dsg.RNN_MTM_classifier import RNNMTMPreprocessor, RNNMTM 
+import tensorflow as tf
+import tensorflow_addons as tfa
 from marabou.training.datasets import KaggleDataset
-from marabou.commons import EMBEDDINGS_DIR, NER_CONFIG_FILE, ROOT_DIR, PLOTS_DIR, MODELS_DIR, NERConfigReader
+from marabou.commons import EMBEDDINGS_DIR, NER_CONFIG_FILE, MODELS_DIR, NERConfigReader
+from marabou.commons import custom_standardization
 
-def preprocess_data(X: List, y: List, data_processor: RNNMTMPreprocessor)\
-    -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-    """
-    wrapper method which yields the training and validation datasets
-    Args:
-        X: list of texts (features)
-        y: list of ratings
-        data_processor: a data handler object
-    Return:
-        tuple containing the training data, validation data
-    """
-    X = data_processor.clean(X)
-    X_train, X_test, y_train, y_test = data_processor.split_train_test(X, y)
-    data_processor.fit(X_train, y_train)
-    X_train, _, _, y_train = data_processor.preprocess(X_train, y_train)
-    X_test, _, _, y_test = data_processor.preprocess(X_test, y_test)
-    return X_train, X_test, y_train, y_test
+def save_perf(model_name, history):
+    fig, axs = plt.subplots(1,2)
+    fig.tight_layout()
+    acc = history['binary_accuracy']
+    val_acc = history['val_binary_accuracy']
+    loss = history['loss']
+    val_loss = history['val_loss']
+    epochs = range(1, len(acc) + 1)
+
+    axs[0].plot(epochs, loss, 'bo', label='Training loss')
+    axs[0].plot(epochs, val_loss, 'b', label='Validation loss')
+    axs[0].set_title('Training and validation loss')
+    axs[0].set_xlabel('Epochs')
+    axs[0].set_ylabel('Loss')
+    axs[0].legend()
+
+    axs[1].plot(epochs, acc, 'bo', label='Training accuracy')
+    axs[1].plot(epochs, val_acc, 'b', label='Validation accuracy')
+    axs[1].set_title('Training and validation accuracy')
+    axs[1].set_xlabel('Epochs')
+    axs[1].set_ylabel('Accuracy')
+    axs[1].legend(loc='lower right')
+
+    output_file_name = os.path.join(MODELS_DIR, model_name)
+    plt.savefig(output_file_name)
 
 
 def train_model(config: NERConfigReader) -> None:
@@ -37,46 +47,62 @@ def train_model(config: NERConfigReader) -> None:
     if config.dataset_name == "kaggle_ner":
         dataset = KaggleDataset(config.dataset_url)
         X, y = dataset.get_set()
+    flat_list = [item for sublist in y for item in sublist]
+    unique_labels = list(set(flat_list))
+    print(unique_labels)
     if config.experimental_mode:
         ind = np.random.randint(0, len(X), 500)
         X = [X[i] for i in ind]
         y = [y[i] for i in ind]
-    file_prefix = "named_entity_recognition_%s" % time.strftime("%Y%m%d_%H%M%S")
-    if not os.path.exists(MODELS_DIR):
-        os.mkdir(EMBEDDINGS_DIR)
-    if not os.path.exists(MODELS_DIR):
-        os.mkdir(MODELS_DIR)
-    if not os.path.exists(PLOTS_DIR):
-        os.mkdir(PLOTS_DIR)
-    print("===========> Data preprocessing")
-    data_preprocessor = RNNMTMPreprocessor(max_sequence_length=config.max_sequence_length,
-                                        validation_split=config.validation_split, vocab_size=config.vocab_size)
-    X_train, X_test, y_train, y_test = preprocess_data(X, y, data_preprocessor)
-    print("===========> Model building")
-    trained_model = RNNMTM(pre_trained_embedding=config.pre_trained_embedding,
-                           vocab_size=config.vocab_size,
-                           embedding_dimension=config.embedding_dimension,
-                           embedding_algorithm=config.embedding_algorithm,
-                           n_iter=config.n_iter,
-                           embeddings_path=config.embeddings_path,
-                           max_sequence_length=config.max_sequence_length,
-                           data_preprocessor=data_preprocessor, save_folder=EMBEDDINGS_DIR)
-    history, report = trained_model.fit(X_train, y_train, X_test, y_test, data_preprocessor.labels_to_idx)
-    print("===========> Saving")
-    print("===========> saving learning curve and classification report under perf/")
-    print(history)
-    trained_model.save_learning_curve(history, file_prefix, PLOTS_DIR, metric="crf_viterbi_accuracy")
-    trained_model.save_classification_report(report, file_prefix, PLOTS_DIR)
-    print("===========> saving trained model and preprocessor under models/")
-    trained_model.save(file_prefix, MODELS_DIR)
-    data_preprocessor.save(file_prefix, MODELS_DIR)
+    inputs = tf.ragged.constant(X, dtype=tf.string)
+    labels = tf.ragged.constant(y, dtype=tf.string)
+    d_size = len(X)
+    valid_size = (int) (d_size * config.validation_split)
+    dataset = tf.data.Dataset.from_tensor_slices((inputs, labels))
+    valid_ds = dataset.take(valid_size) 
+    train_ds = dataset.skip(valid_size)
+
+    # build and compile model
+    tokenizer = tf.keras.layers.experimental.preprocessing.TextVectorization(
+                standardize=custom_standardization,
+                ngrams=3,
+                max_tokens=config.vocab_size,
+                output_sequence_length=config.max_sequence_length,
+                output_mode='int')
+    tokenizer.adapt(train_ds.map(lambda text, label: text))
+    input_layer = tf.keras.Input(shape=(1,), dtype=tf.string, name='input')
+    x = tokenizer(input_layer)
+    x = tf.keras.layers.Embedding(input_dim=config.vocab_size, output_dim=50,
+                                    input_length=config.max_sequence_length, trainable=True)(x)
+    # # archi 3: crf layer
+    x = tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(units=50, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
+    x_rnn = tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(units=50, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
+    x = tf.keras.layers.add([x, x_rnn])  # residual connection to the first biLSTM
+    x = tf.keras.layers.TimeDistributed(tf.keras.layers.Dense(len(unique_labels), activation='softmax'))(x)
+    #x = tfa.layers.CRF(len(unique_labels))(x)
+    model = tf.keras.Model(inputs=input_layer, outputs=x)
+    print(model.summary())
+    model.compile(loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+                    optimizer='adam',
+                    metrics=["accuracy"])
+
+    history = model.fit(train_ds, validation_data=valid_ds, epochs=n_iter)
+    save_perf(config.model_name, history.history)
+
+
+    export_model = tf.keras.Sequential([
+        model,
+        tf.keras.layers.Activation('sigmoid', name="probabilities")
+    ])
+    export_model.compile(
+        loss=tf.keras.losses.BinaryCrossentropy(from_logits=False), optimizer="adam", metrics=['accuracy']
+    )
+    # save
+    tf.keras.models.save_model(export_model, os.path.join(MODELS_DIR, config.model_name))
 
 
 def main():
     """main function"""
-    if ROOT_DIR is None:
-        raise ValueError("please make sure to setup the environment variable MARABOU_ROOT to point\
-                         for the root of the project")
     train_config = NERConfigReader(NER_CONFIG_FILE)
     train_model(train_config)
 

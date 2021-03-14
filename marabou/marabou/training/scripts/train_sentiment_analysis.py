@@ -1,13 +1,10 @@
-import time
+import time, os, re, string
 from typing import List, Tuple, Dict
-import os
-import re
-import string
 import numpy as np
 import tensorflow as tf
 import tensorflow_datasets as tfds
 import matplotlib.pyplot as plt
-from marabou.commons import ROOT_DIR, MODELS_DIR, SA_CONFIG_FILE, SAConfigReader, EMBEDDINGS_DIR, custom_standardization
+from marabou.commons import MODELS_DIR, SA_CONFIG_FILE, SAConfigReader, custom_standardization
 
 
 def save_perf(model_name, history):
@@ -35,6 +32,16 @@ def save_perf(model_name, history):
 
     output_file_name = os.path.join(MODELS_DIR, model_name)
     plt.savefig(output_file_name)
+
+'''
+@tf.keras.utils.register_keras_serializable(package='Custom', name='custom_standardization')
+def custom_standardization(input_data):
+    lowercase = tf.strings.lower(input_data)
+    stripped_html = tf.strings.regex_replace(lowercase, '<br />', ' ')
+    return tf.strings.regex_replace(stripped_html,
+                                    '[%s]' % re.escape(string.punctuation),
+                                    '')
+'''
 
 def train_model(config: SAConfigReader) -> None:
     """
@@ -67,6 +74,7 @@ def train_model(config: SAConfigReader) -> None:
     test_ds = test_ds.cache().shuffle(buffer_size).batch(batch_size).prefetch(tf.data.AUTOTUNE)
 
     # build and compile model
+
     tokenizer_bow = tf.keras.layers.experimental.preprocessing.TextVectorization(
                         standardize=custom_standardization,
                         ngrams=3,
