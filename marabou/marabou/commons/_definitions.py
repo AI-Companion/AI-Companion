@@ -1,5 +1,5 @@
-import os
-import marabou
+import os, re, marabou, string
+import tensorflow as tf
 
 ROOT_DIR = os.path.dirname(
             os.path.dirname(os.path.abspath(marabou.__file__)))
@@ -15,3 +15,10 @@ SA_CONFIG_FILE = os.path.join(ROOT_DIR, "config/config_sentiment_analysis.json")
 TD_CONFIG_FILE = os.path.join(ROOT_DIR, "config/config_topic_classification.json")
 NER_CONFIG_FILE = os.path.join(ROOT_DIR, "config/config_named_entity_recognition.json")
 CC_CONFIG_FILE = os.path.join(ROOT_DIR, "config/config_fashion_classifier.json")
+
+def custom_standardization(input_data):
+    lowercase = tf.strings.lower(input_data)
+    stripped_html = tf.strings.regex_replace(lowercase, '<br />', ' ')
+    return tf.strings.regex_replace(stripped_html,
+                                    '[%s]' % re.escape(string.punctuation),
+                                    '')

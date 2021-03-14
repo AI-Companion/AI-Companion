@@ -10,7 +10,9 @@ from dsg.RNN_MTM_classifier import RNNMTMPreprocessor, RNNMTM
 from dsg.RNN_MTO_classifier import RNNMTO, RNNMTOPreprocessor
 from dsg.CNN_classifier import CNNClassifierPreprocessor, CNNClassifier
 from marabou.evaluation.utils import load_model
-from marabou.commons import SA_CONFIG_FILE, MODELS_DIR, NER_CONFIG_FILE, ROOT_DIR, SAConfigReader, NERConfigReader, TD_CONFIG_FILE, TDConfigReader, rnn_classification_visualize
+from marabou.commons import SA_CONFIG_FILE, MODELS_DIR, NER_CONFIG_FILE, ROOT_DIR,\
+                            SAConfigReader, NERConfigReader, TD_CONFIG_FILE, TDConfigReader,\
+                            rnn_classification_visualize, custom_standardization
 
 
 app = Flask(__name__)
@@ -39,6 +41,7 @@ def sentiment_analysis():
         task_content = request.json['content']
         new_prediction = PredictSentiment(model=global_model_config[0])
         output = new_prediction.model.predict(task_content)
+        output = [o[0] for o in output]
         return json.dumps([round(o * 100, 2) for o in output])
     else:
         return None
@@ -172,7 +175,8 @@ def main():
     # load SA models
     valid_config = SAConfigReader(SA_CONFIG_FILE)
     model_name = valid_config.model_name
-    sa_model = tf.keras.models.load_model(os.path.join(MODELS_DIR, "sentiment_analysis_" + model_name))
+    sa_model = tf.keras.models.load_model(os.path.join(MODELS_DIR, valid_config.model_name),
+                                        custom_objects={'custom_standardization': custom_standardization})
 
     """
     # load ner models

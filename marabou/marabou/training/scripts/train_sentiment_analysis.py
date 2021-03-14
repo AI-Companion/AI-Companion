@@ -7,15 +7,8 @@ import numpy as np
 import tensorflow as tf
 import tensorflow_datasets as tfds
 import matplotlib.pyplot as plt
-from marabou.commons import ROOT_DIR, MODELS_DIR, SA_CONFIG_FILE, SAConfigReader, EMBEDDINGS_DIR
+from marabou.commons import ROOT_DIR, MODELS_DIR, SA_CONFIG_FILE, SAConfigReader, EMBEDDINGS_DIR, custom_standardization
 
-@tf.keras.utils.register_keras_serializable()
-def custom_standardization(input_data):
-  lowercase = tf.strings.lower(input_data)
-  stripped_html = tf.strings.regex_replace(lowercase, '<br />', ' ')
-  return tf.strings.regex_replace(stripped_html,
-                                  '[%s]' % re.escape(string.punctuation),
-                                  '')
 
 def save_perf(model_name, history):
     fig, axs = plt.subplots(1,2)
@@ -80,7 +73,7 @@ def train_model(config: SAConfigReader) -> None:
                         max_tokens=vocab_size,
                         output_mode='count')
     tokenizer_bow.adapt(train_ds.map(lambda text, label: text))
-    inputs = tf.keras.Input(shape=(1,), dtype=tf.string)
+    inputs = tf.keras.Input(shape=(1,), dtype=tf.string, name="textual_input")
     x = tokenizer_bow(inputs)
     x = tf.keras.layers.Dense(1, kernel_regularizer=tf.keras.regularizers.L1L2(l1=0.0005, l2=0.0))(x)
     model = tf.keras.Model(inputs, x)
@@ -95,14 +88,13 @@ def train_model(config: SAConfigReader) -> None:
 
     export_model = tf.keras.Sequential([
         model,
-        tf.keras.layers.Activation('sigmoid')
+        tf.keras.layers.Activation('sigmoid', name="probabilities")
     ])
     export_model.compile(
         loss=tf.keras.losses.BinaryCrossentropy(from_logits=False), optimizer="adam", metrics=['accuracy']
     )
     # save
-    export_model.save(os.path.join(MODELS_DIR, config.model_name))
-
+    tf.keras.models.save_model(export_model, os.path.join(MODELS_DIR, config.model_name))
 
 def main():
     """main function"""
