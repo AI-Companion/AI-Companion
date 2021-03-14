@@ -46,10 +46,12 @@ def train_model(config: NERConfigReader) -> None:
     X, y = [], []
     if config.dataset_name == "kaggle_ner":
         dataset = KaggleDataset(config.dataset_url)
-        X, y = dataset.get_set()
-    flat_list = [item for sublist in y for item in sublist]
-    unique_labels = list(set(flat_list))
-    print(unique_labels)
+        X, y_tagged = dataset.get_set()
+    tags = [item for sublist in y_tagged for item in sublist]
+    unique_labels = list(set(tags))
+    tags2index = {t:i for i,t in enumerate(unique_labels)}
+    y = [[tags2index[w[1]] for w in s] for s in y_tagged]
+    y = tf.keras.preprocessing.sequence.pad_sequences(maxlen=config.max_sequence_length, sequences=y, padding="post", value=tags2index["O"])
     if config.experimental_mode:
         ind = np.random.randint(0, len(X), 500)
         X = [X[i] for i in ind]
@@ -86,7 +88,7 @@ def train_model(config: NERConfigReader) -> None:
                     optimizer='adam',
                     metrics=["accuracy"])
 
-    history = model.fit(train_ds, validation_data=valid_ds, epochs=n_iter)
+    history = model.fit(train_ds, validation_data=valid_ds, epochs=config.n_iter)
     save_perf(config.model_name, history.history)
 
 
