@@ -1,7 +1,7 @@
 import logging as lg
 from src.db.dbManager import DbManager
-from src.model.source import Source
-from src.model.worker import Worker
+from src.scrap.source import Source
+from src.scrap.worker import Worker
 
 _logger = lg.getLogger(__name__)
 

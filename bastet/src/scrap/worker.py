@@ -2,8 +2,8 @@ import threading
 import re
 import logging as lg
 
-from src.utils.proxyTor import ProxyTor
-from src.utils.proxyObservers import Observer
+from src.proxy.proxyTor import ProxyTor
+from src.proxy.proxyObservers import Observer
 from bs4 import BeautifulSoup
 
 _logger = lg.getLogger(__name__)

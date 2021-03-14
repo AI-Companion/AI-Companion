@@ -1,6 +1,6 @@
 import logging as lg
-from src.utils.proxyTor import ProxyTor
-from src.model.masterScrapper import ScrapperMaster
+from src.proxy.proxyTor import ProxyTor
+from src.scrap.masterScrapper import ScrapperMaster
 
 _logger = lg.getLogger(__name__)
 
