@@ -52,15 +52,23 @@ class DbManager(object):
             _logger.error("error occured while connecting to DB, {0}".format(str(e)))
     
     @classmethod
-    def getSimpleCurencies(cls):
-        return cls.__data['urls']['currencies']
+    def getAllSources(cls, type='simple'):
+        return cls.__data[type]['sources']
     
     @classmethod
-    def getCryptoCurencies(cls, crpto="bitcoin"):
-        return cls.__data['urls'][crpto]
+    def getSource(cls, type='simple', source='yahoo'):
+        return cls.__data[type]['sources'][source]
+    
+    @classmethod
+    def getTickersList(cls, type='simple'):
+        return cls.__data[type]["tickers"]
+    
+    @classmethod
+    def getAllTickers_specs(cls, type='simple'):
+        return cls.__data[type]["tickers_specs"]
 
     @classmethod
-    def getCurenciesList(cls):
-        return cls.__data['currencies']
+    def getTickers_spec(cls, type='simple', ticker='usd'):
+        return cls.__data[type]["tickers_specs"][ticker]
     
     

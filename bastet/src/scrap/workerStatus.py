@@ -1,0 +1,2 @@
+class WorkerStatus:
+    pass

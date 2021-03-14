@@ -16,7 +16,7 @@ class ProxyTor(object):
     __observers = []
     __ua       = UserAgent() # random user agent
     
-    def __new__(cls, freq=10):
+    def __new__(cls, freq=5):
         if not ProxyTor.__instance:
             ProxyTor.__instance = object.__new__(cls)
             cls.__freq = freq
@@ -79,17 +79,24 @@ class ProxyTor(object):
         
 # from bs4 import BeautifulSoup
 
+# def parseValues(target):
+#     elem = {}
+#     tds = target.findAll("td") 
+    
+
 # while True:
-#     prox = ProxyTor()
+#     prox = ProxyTor(freq = 50)
 #     sess = prox.get_tor_session()
-#     url = "https://www.investing.com/currencies/usd-cad"
+#     # url = "https://www.investing.com/currencies/usd-cad"
 #     # url = "https://cryptowat.ch/assets"
 #     # url = "https://finance.yahoo.com/quote/{0}{1}%3DX?p={0}{1}%3DX".format("usd", "eur")
+#     # url = "https://coinalyze.net/bitcoin/usd/coinbase/price-chart-live/"
+#     url = "https://www.tradingview.com/markets/cryptocurrencies/prices-all/"
+#     crypto_ticker = []
 #     page = sess.get(url).text
 #     # page = sess.get("http://icanhazip.com/")
-#     print(page)
-#     soup = BeautifulSoup(page)
-#     target = soup.find('span', {
-#             "id": "last_last"
-#           })
-#     # print(target.text)
+#     # print(page)
+#     soup = BeautifulSoup(page, features="html.parser")
+#     target = soup.findAll("tr")[1:]
+#     parseValues(target)
+#     print(target[0])

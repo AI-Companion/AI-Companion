@@ -6,7 +6,7 @@ _logger = lg.getLogger(__name__)
 
 class ScrapperManager:
     
-    def __init__(self, config):
+    def __init__(self, config=None):
         self.__config = config
     
     def start(self):

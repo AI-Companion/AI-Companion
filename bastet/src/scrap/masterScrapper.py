@@ -44,28 +44,31 @@ class ScrapperMaster(object):
             _logger.error("An error occured while Firing up the workers, {0}".format(e))
         
     @classmethod
-    def setupSessions(cls): # only simple sources for now
+    def setupSources(cls): # only crypto sources for now
         try:
-            _logger.info("Setting up Sessions")
-            for inst in cls.__db.getSimpleCurencies():
-                _source = Source(inst['url'], 'simple', inst['pattern'])
-                cls.__sources_to_workers_map["simple"][_source] = []
-                cls.__sources_to_workers_map["simple"]["val"].append(_source)
-            _logger.info("Successfully setup Sessions")
+            _logger.info("Setting up Sources")
+            sources = cls.__db.getAllSources(type='crypto')
+            for key in sources:
+                _source = Source(sources[key]['url'], 'crypto', sources[key]['pattern'])
+                cls.__sources_to_workers_map["crypto"][_source] = []
+                cls.__sources_to_workers_map["crypto"]["val"].append(_source)
+            _logger.info("Successfully setup Sources")
         except Exception as e:
-            _logger.error("error occured while setting up sessions, {0}".format(str(e)))
+            _logger.error("error occured while setting up Sources, {0}".format(str(e)))
             raise
     
     @classmethod    
     def setupWorkers(cls):
         try:
             _logger.info("Setting up Workers")
-            for curr in cls.__config["simpleCurr"]:
-                _source = cls.__sources_to_workers_map["simple"]["val"][1] # for every worker lets take investing.com as source for now
-                _worker = Worker(source=_source, fromCurr="usd", toCurr=curr) # for now the value of every currency is regarding usd
+            config = cls.__config["crypto"] if cls.__config else cls.__db.getTickersList(type="crypto")
+            print("aaaaaa")
+            for curr in config:
+                _source = cls.__sources_to_workers_map["crypto"]["val"][-1] # for every worker lets take a single source for now
+                _worker = Worker(source=_source, fromCurr=cls.__db.getTickers_spec(type="crypto", ticker=curr)["currency"], toCurr=curr) # for now the value of every currency is regarding usd
                 cls.__workers.append(_worker)
                 cls.__workers_to_source_map[_worker] = _source
-                cls.__sources_to_workers_map["simple"][_source].append(_worker)
+                cls.__sources_to_workers_map["crypto"][_source].append(_worker)
             _logger.info("Successfully setup {0} Workers".format(len(cls.__workers)))
 
         except Exception as e:
@@ -74,6 +77,6 @@ class ScrapperMaster(object):
             
     @classmethod
     def bootStrapConfig(cls):
-        cls.setupSessions()
+        cls.setupSources()
         cls.setupWorkers()
         

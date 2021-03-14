@@ -1,4 +1,5 @@
 import threading
+import re
 import logging as lg
 
 from src.utils.proxyTor import ProxyTor
@@ -44,7 +45,7 @@ class Worker(Observer, threading.Thread):
         self.join()
     
     def send_value(self, val):
-        _logger.info("value of trade of {0} to {1} is {2}".format(self.__from_curr, self.__to_curr, val)) # temporarely until api setup
+        _logger.info("value of trade of {0} to USD is {1}".format(self.__from_curr, val)) # temporarely until api setup
     
     def scrapp(self):
         try:
@@ -53,7 +54,7 @@ class Worker(Observer, threading.Thread):
                 page = self.__sess.get(self.filled_url).text
                 soup = BeautifulSoup(page, features="html.parser")
                 target = soup.find(self.__source.pattern["tagTarget"], self.__source.pattern["attributes"]).text
-                self.send_value(target)
+                self.send_value(re.sub('[^0-9\.]', '', target.strip()))
         except Exception as e:
              _logger.error("An error Occured while scrapping {0} to {1} , {2}".format(self.__from_curr, self.__to_curr, e))
     

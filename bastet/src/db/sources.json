@@ -1,7 +1,9 @@
 {
-  "urls": {
-    "currencies": [
-      {
+  "simple": {
+    "tickers": [],
+    "tickers_specs": {},
+    "sources": {
+      "yahoo": {
         "url": "https://finance.yahoo.com/quote/{0}{1}%3DX?p={0}{1}%3DX",
         "pattern": {
           "tagTarget": "span",
@@ -10,7 +12,7 @@
           }
         }
       },
-      {
+      "investing": {
         "url": "https://www.investing.com/currencies/{0}-{1}",
         "pattern": {
           "tagTarget": "span",
@@ -19,45 +21,3415 @@
           }
         }
       }
-    ],
-    "crypto": {
-      "bitcoin": [
-        {
-          "url": "https://www.investing.com/crypto/bitcoin",
-          "pattern": {
-            "tagTarget": "span",
-            "attributes": {
-              "id": "last_last"
-            }
-          }
-        }
-      ],
-      "ethereum":[
-        {
-          "url": "https://www.investing.com/crypto/ethereum",
-          "pattern": {
-            "tagTarget": "span",
-            "attributes": {
-              "id": "last_last"
-            }
-          }
-        }
-      ]
     }
   },
-  "currencies":[
-    "usd",
-    "eur",
-    "gbp",
-    "cad",
-    "jpy",
-    "nzd",
-    "chf",
-    "aud",
-    "sar",
-    "kyd",
-    "czk",
-    "isk",
-    "rub"
-  ]
+  "crypto": {
+    "tickers": [
+      "BTC",
+      "ETH",
+      "BNB",
+      "T",
+      "ADA",
+      "DOT",
+      "XRP",
+      "UNI",
+      "LTC",
+      "LINK",
+      "BCH",
+      "XLM",
+      "C",
+      "WBTC",
+      "DOGE",
+      "THETA",
+      "AAVE",
+      "LUNA",
+      "CTC",
+      "CRO",
+      "VET",
+      "XMR",
+      "ATO",
+      "BSV",
+      "SOL",
+      "AVAX",
+      "EOS",
+      "IOTA",
+      "FTT",
+      "CHZ",
+      "TRX",
+      "SLV",
+      "XTZ",
+      "FIL",
+      "NEO",
+      "ALGO",
+      "HT",
+      "SUSHI",
+      "DAI",
+      "KSM",
+      "EGLD",
+      "DASH",
+      "SNX",
+      "NEAR",
+      "GRT",
+      "DCR",
+      "MKR",
+      "COMP",
+      "BRG",
+      "MATIC",
+      "LEO",
+      "ZIL",
+      "HBAR",
+      "TFUEL",
+      "ZEC",
+      "HEX",
+      "ENJ",
+      "ETC",
+      "MANA",
+      "BTT",
+      "RVN",
+      "DFI",
+      "BTCB",
+      "RUNE",
+      "CAKE",
+      "XWC",
+      "YFI",
+      "NEXO",
+      "UMA",
+      "CHSB",
+      "CEL",
+      "BNT",
+      "BAT",
+      "REN",
+      "FLOW",
+      "ICX",
+      "FTM",
+      "REV",
+      "ZRX",
+      "WAVES",
+      "RSR",
+      "STX",
+      "OKB",
+      "ONT",
+      "DGB",
+      "UST",
+      "HOT",
+      "RENBTC",
+      "PAX",
+      "IOST",
+      "OMG",
+      "CELO",
+      "NANO",
+      "NPXS",
+      "LRC",
+      "BTG",
+      "SC",
+      "QTUM",
+      "REEF",
+      "1INCH",
+      "OCEAN",
+      "ZEN",
+      "CRV",
+      "SAND",
+      "HNT",
+      "WAXP",
+      "ONE",
+      "SKL",
+      "AR",
+      "XDC",
+      "GLM",
+      "ZKS",
+      "KNC",
+      "ANKR",
+      "FET",
+      "QNT",
+      "XVS",
+      "IOTX",
+      "XVG",
+      "TEL",
+      "LSK",
+      "HEDG",
+      "CKB",
+      "BEST",
+      "DODO",
+      "SNT",
+      "KLV",
+      "ORN",
+      "REP",
+      "BADGER",
+      "KAVA",
+      "BAL",
+      "MAID",
+      "SRM",
+      "CVC",
+      "DENT",
+      "T",
+      "TRAC",
+      "BAND",
+      "CELR",
+      "POLY",
+      "ALPHA",
+      "BCHA",
+      "SXP",
+      "ROSE",
+      "NU",
+      "ETN",
+      "POLS",
+      "KEEP",
+      "UTK",
+      "SWAP",
+      "COTI",
+      "VITAE",
+      "ARDR",
+      "AMP",
+      "RIF",
+      "SOLO",
+      "BTS",
+      "IQ",
+      "OXT",
+      "ANT",
+      "AXS",
+      "FUN",
+      "OGN",
+      "BCD",
+      "BORA",
+      "GNO",
+      "SCRT",
+      "NMR",
+      "SFP",
+      "ORBS",
+      "XHV",
+      "STORJ",
+      "RLC",
+      "BTCST",
+      "QKC",
+      "ELF",
+      "STRAX",
+      "ARK",
+      "TOMO",
+      "WAN",
+      "UOS",
+      "AVA",
+      "KMD",
+      "PHA",
+      "DAT",
+      "INJ",
+      "STEEM",
+      "MFT",
+      "LIT",
+      "LOOM",
+      "VITE",
+      "UBT",
+      "SYS",
+      "IRIS",
+      "POWR",
+      "CVT",
+      "DEGO",
+      "PPT",
+      "HIVE",
+      "LTO",
+      "AUDIO",
+      "KIN",
+      "TROY",
+      "JST",
+      "AKRO",
+      "PAXG",
+      "S",
+      "META",
+      "UQC",
+      "BTM",
+      "N",
+      "ABBC",
+      "TWT",
+      "VLX",
+      "GAS",
+      "STMX",
+      "MONA",
+      "AION",
+      "RDD",
+      "OM",
+      "DNA",
+      "GT",
+      "HNS",
+      "UNFI",
+      "EXRD",
+      "LPT",
+      "REQ",
+      "FXS",
+      "ADX",
+      "BLZ",
+      "WRX",
+      "CENNZ",
+      "MED",
+      "ATRI",
+      "DUSK",
+      "LBC",
+      "HARD",
+      "ONG",
+      "FARM",
+      "KAI",
+      "NKN",
+      "SOLVE",
+      "ARPA",
+      "MTL",
+      "MRPH",
+      "NRG",
+      "CTK",
+      "WTC",
+      "WICC",
+      "NULS",
+      "FIRO",
+      "IGNIS",
+      "YFII",
+      "TVK",
+      "ZAP",
+      "SUN",
+      "SHR",
+      "NXS",
+      "WNXM",
+      "COS",
+      "CTSI",
+      "SWINGBY",
+      "BZRX",
+      "PERL",
+      "TRB",
+      "MLN",
+      "BCN",
+      "DIA",
+      "BEAM",
+      "PXL",
+      "FLM",
+      "MTC",
+      "LAMB",
+      "EMC2",
+      "PROM",
+      "HXRO",
+      "PIVX",
+      "GRIN",
+      "TSHP",
+      "DEXE",
+      "CTXC",
+      "FRONT",
+      "DOCK",
+      "STPT",
+      "BOA",
+      "BEL",
+      "AE",
+      "POND",
+      "BBC",
+      "FIO",
+      "CND",
+      "ELA",
+      "QSP",
+      "DAG",
+      "RCN",
+      "ARRR",
+      "PNK",
+      "KEY",
+      "TRU",
+      "VSY",
+      "BTU",
+      "NIM",
+      "KAN",
+      "CHR",
+      "OXEN",
+      "AERGO",
+      "SUTER",
+      "DREP",
+      "GRS",
+      "SENT",
+      "GO",
+      "DRGN",
+      "IDEX",
+      "AUCTION",
+      "VID",
+      "GXC",
+      "UPP",
+      "MDT",
+      "TNC",
+      "SKY",
+      "FX",
+      "PHB",
+      "AMB",
+      "AST",
+      "SUKU",
+      "VIDT",
+      "NAS",
+      "MARO",
+      "NEBL",
+      "XSN",
+      "SRN",
+      "FIS",
+      "SBD",
+      "BNK",
+      "C",
+      "VRA",
+      "KDA",
+      "VTC",
+      "CVP",
+      "DGD",
+      "LYM",
+      "BLOCK",
+      "ZCN",
+      "EDR",
+      "NXT",
+      "EASY",
+      "DMT",
+      "ADK",
+      "WING",
+      "MITH",
+      "LCX",
+      "PMA",
+      "RBTC",
+      "MET",
+      "SOC",
+      "LOC",
+      "WABI",
+      "NAV",
+      "PRE",
+      "PSG",
+      "FOR",
+      "PLA",
+      "RFR",
+      "ACM",
+      "KRT",
+      "GTO",
+      "RDN",
+      "XPR",
+      "GVT",
+      "GBYTE",
+      "TEMCO",
+      "ELAMA",
+      "QSH",
+      "GLEEC",
+      "CDT",
+      "PAY",
+      "WPR",
+      "HEZ",
+      "FOAM",
+      "TCT",
+      "EDG",
+      "MDA",
+      "CRPT",
+      "MOC",
+      "MOF",
+      "QRL",
+      "OAX",
+      "OST",
+      "MAN",
+      "APPC",
+      "TSD",
+      "BFT",
+      "PI",
+      "BRD",
+      "JUV",
+      "MITX",
+      "BOS",
+      "FCT",
+      "UBQ",
+      "DUCATO",
+      "SALT",
+      "QLC",
+      "EMRX",
+      "TRUE",
+      "AYA",
+      "NWC",
+      "ETP",
+      "POA",
+      "VIA",
+      "DTA",
+      "DLT",
+      "VEE",
+      "EVX",
+      "NCA",
+      "NVT",
+      "SPC",
+      "DOV",
+      "GAME",
+      "YOYO",
+      "PPC",
+      "IPX",
+      "MTH",
+      "HGET",
+      "ASR",
+      "VIB",
+      "ROOK",
+      "ATM",
+      "ACT",
+      "IQN",
+      "OG",
+      "BWF",
+      "SMT",
+      "PART",
+      "HYDRO",
+      "MHC",
+      "DAPP",
+      "ABYSS",
+      "SNM",
+      "EMC",
+      "SAN",
+      "NCT",
+      "XMC",
+      "KDAG",
+      "SWRV",
+      "XDN",
+      "SENSO",
+      "DAWN",
+      "PLTC",
+      "TKN",
+      "SNGLS",
+      "ROOBEE",
+      "GEO",
+      "RINGX",
+      "XMY",
+      "YFL",
+      "SNG",
+      "FLO",
+      "APM",
+      "GNX",
+      "FTC",
+      "MTLX",
+      "CLO",
+      "SIX",
+      "KRL",
+      "XTP",
+      "UUU",
+      "BURST",
+      "SEELE",
+      "FNB",
+      "FLETA",
+      "NLG",
+      "PLU",
+      "BNTX",
+      "LEVL",
+      "SWFTC",
+      "GEN",
+      "DMG",
+      "SMART",
+      "PTON",
+      "AEON",
+      "OCN",
+      "VAL",
+      "TAU",
+      "VIBE",
+      "AUC",
+      "WINGS",
+      "SKM",
+      "POT",
+      "XST",
+      "CRW",
+      "LCC",
+      "PLR",
+      "TIME",
+      "BTSE",
+      "DEP",
+      "COV",
+      "TKY",
+      "CHAT",
+      "CPC",
+      "SNC",
+      "YOU",
+      "BLK",
+      "XRA",
+      "REM",
+      "INSTAR",
+      "RVC",
+      "BIZZ",
+      "SWM",
+      "LNC",
+      "DGTX",
+      "OK",
+      "HTML",
+      "BOX",
+      "DGX",
+      "PAN",
+      "IDRT",
+      "AXPR",
+      "ESS",
+      "XRC",
+      "OMN",
+      "PINK",
+      "HDAO",
+      "MYST",
+      "VRC",
+      "PHNX",
+      "IHT",
+      "BMC",
+      "ORS",
+      "CURE",
+      "ENG",
+      "EXP",
+      "CGT",
+      "EOSDT",
+      "THC",
+      "TNT",
+      "MTN",
+      "BWX",
+      "MGO",
+      "PTOY",
+      "RPZX",
+      "AVT",
+      "MUE",
+      "IOC",
+      "KICK",
+      "ERK",
+      "HMQ",
+      "FUND",
+      "CNTM",
+      "BMH",
+      "BANCA",
+      "INX",
+      "ACAT",
+      "DCT",
+      "DRG",
+      "MTX",
+      "CPT",
+      "ZRC",
+      "CNS",
+      "TON",
+      "MER",
+      "BET",
+      "EKO",
+      "XAUR",
+      "EXE",
+      "BTB",
+      "COSM",
+      "SIB",
+      "EXM",
+      "DBIX",
+      "ONL",
+      "SUB",
+      "SDT",
+      "NTK",
+      "PASS",
+      "TRST",
+      "DATX",
+      "CUR",
+      "DAV",
+      "GOT",
+      "FDZ",
+      "ORMEUS",
+      "FTX",
+      "HVN",
+      "EXCL",
+      "AID",
+      "DIT",
+      "BCPT",
+      "INK",
+      "FYP",
+      "LUN",
+      "SHIP",
+      "S",
+      "BERRY",
+      "BRDG",
+      "STR",
+      "FXT",
+      "BDG",
+      "PKT",
+      "POE",
+      "IPL",
+      "ZSC",
+      "ELEC",
+      "ADT",
+      "SCL",
+      "FACE",
+      "HGT",
+      "XBP",
+      "PBT",
+      "TDP",
+      "FLP",
+      "SWT",
+      "GBX",
+      "BID",
+      "REX",
+      "ART",
+      "ARNX",
+      "AMM",
+      "CRDT",
+      "DAY",
+      "MORE",
+      "CMCT",
+      "FOTA",
+      "WGP",
+      "NPLC",
+      "SYBC",
+      "SCC",
+      "RAISE",
+      "KIND",
+      "GET",
+      "SUR",
+      "XCON",
+      "BDP",
+      "OPT",
+      "PNT",
+      "MEME",
+      "SIG",
+      "AUTO",
+      "DDRT",
+      "NEC",
+      "STC",
+      "BB",
+      "MIN",
+      "KOK",
+      "WIKI",
+      "DDR",
+      "SLS",
+      "AIM",
+      "NLC2",
+      "VEO",
+      "GNC",
+      "BTX",
+      "LUCY",
+      "G999",
+      "BTCV",
+      "KLAY",
+      "PLBT",
+      "LAVA",
+      "NEU",
+      "CAMP",
+      "TRI",
+      "AAPL",
+      "TRYB",
+      "UOP",
+      "TSLA",
+      "BABA",
+      "TUDA",
+      "BTNYX",
+      "GOLDR",
+      "ALG",
+      "UCT",
+      "URAC",
+      "BST",
+      "VANY",
+      "SPIN",
+      "SPHR",
+      "BRZ",
+      "PEARL",
+      "SBTC",
+      "XUC",
+      "VBK",
+      "4ART",
+      "AKN",
+      "HBD",
+      "MSTR",
+      "PFE",
+      "SPY",
+      "UPT",
+      "NBS",
+      "LOON",
+      "SMBSWAP",
+      "NGC",
+      "HDAC",
+      "ECOC",
+      "GTX",
+      "ODE",
+      "KIM",
+      "1ST",
+      "GME",
+      "VDX",
+      "USE",
+      "TUBE",
+      "LMCH",
+      "ECELL",
+      "NUT",
+      "UTT",
+      "SPICE",
+      "AMC",
+      "IDH",
+      "ASP",
+      "AMZN",
+      "BILI",
+      "UNO",
+      "C20",
+      "GOOGL",
+      "YCC",
+      "XAUT",
+      "BYND",
+      "FB",
+      "NFLX",
+      "DICE",
+      "SQ",
+      "HUB",
+      "VALUE",
+      "TV",
+      "GST",
+      "GASP",
+      "CCE",
+      "CLT",
+      "FME",
+      "ME",
+      "GOF",
+      "FIT"
+    ],
+    "tickers_specs": {
+      "BTC": {
+        "currency": "Bitcoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBTC.svg"
+      },
+      "ETH": {
+        "currency": "Ethereum",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCETH.svg"
+      },
+      "BNB": {
+        "currency": "Binance Coin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBNB.svg"
+      },
+      "T": {
+        "currency": "TrueUSD",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTUSD.svg"
+      },
+      "ADA": {
+        "currency": "Cardano",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCADA.svg"
+      },
+      "DOT": {
+        "currency": "Polkadot",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDOT.svg"
+      },
+      "XRP": {
+        "currency": "XRP",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCXRP.svg"
+      },
+      "UNI": {
+        "currency": "Uniswap",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCUNI.svg"
+      },
+      "LTC": {
+        "currency": "Litecoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCLTC.svg"
+      },
+      "LINK": {
+        "currency": "ChainLink",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCLINK.svg"
+      },
+      "BCH": {
+        "currency": "Bitcoin Cash",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBCH.svg"
+      },
+      "XLM": {
+        "currency": "Stellar",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCXLM.svg"
+      },
+      "C": {
+        "currency": "Celo Dollar",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCUSD.svg"
+      },
+      "WBTC": {
+        "currency": "Wrapped Bitcoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCWBTC.svg"
+      },
+      "DOGE": {
+        "currency": "Dogecoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDOGE.svg"
+      },
+      "THETA": {
+        "currency": "Theta Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTHETA.svg"
+      },
+      "AAVE": {
+        "currency": "Aave",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCAAVE.svg"
+      },
+      "LUNA": {
+        "currency": "LUNA",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCLUNA.svg"
+      },
+      "CTC": {
+        "currency": "Creditcoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCTC.svg"
+      },
+      "CRO": {
+        "currency": "Crypto.com Coin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCRO.svg"
+      },
+      "VET": {
+        "currency": "VeChain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCVET.svg"
+      },
+      "XMR": {
+        "currency": "Monero",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCXMR.svg"
+      },
+      "ATO": {
+        "currency": "Cosmos",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCATOM.svg"
+      },
+      "BSV": {
+        "currency": "Bitcoin SV",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBSV.svg"
+      },
+      "SOL": {
+        "currency": "Sola Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSOL.svg"
+      },
+      "AVAX": {
+        "currency": "Avalanche",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCAVAX.svg"
+      },
+      "EOS": {
+        "currency": "EOS",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCEOS.svg"
+      },
+      "IOTA": {
+        "currency": "IOTA",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCIOTA.svg"
+      },
+      "FTT": {
+        "currency": "FTX Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFTT.svg"
+      },
+      "CHZ": {
+        "currency": "Chiliz",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCHZ.svg"
+      },
+      "TRX": {
+        "currency": "TRON",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTRX.svg"
+      },
+      "SLV": { 
+        "currency": "Silverway",
+        "image": "https://lcw.nyc3.cdn.digitaloceanspaces.com/production/currencies/64/slv.png"
+      },
+      "XTZ": {
+        "currency": "Tezos",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCXTZ.svg"
+      },
+      "FIL": {
+        "currency": "Filecoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFIL.svg"
+      },
+      "NEO": {
+        "currency": "NEO",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNEO.svg"
+      },
+      "ALGO": {
+        "currency": "Algorand",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCALGO.svg"
+      },
+      "HT": {
+        "currency": "Huobi Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCHT.svg"
+      },
+      "SUSHI": {
+        "currency": "SushiSwap",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSUSHI.svg"
+      },
+      "DAI": {
+        "currency": "Dai",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDAI.svg"
+      },
+      "KSM": {
+        "currency": "Kusama",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCKSM.svg"
+      },
+      "EGLD": {
+        "currency": "Elrond",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCEGLD.svg"
+      },
+      "DASH": {
+        "currency": "Dash",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDASH.svg"
+      },
+      "SNX": {
+        "currency": "Synthetix Network Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSNX.svg"
+      },
+      "NEAR": {
+        "currency": "NEAR Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNEAR.svg"
+      },
+      "GRT": { "currency": "Global Rental Token", "image": "" },
+      "DCR": {
+        "currency": "Decred",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDCR.svg"
+      },
+      "MKR": {
+        "currency": "Maker",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMKR.svg"
+      },
+      "COMP": {
+        "currency": "Compound",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCOMP.svg"
+      },
+      "BRG": { "currency": "Bridge Oracle", "image": "" },
+      "MATIC": {
+        "currency": "Matic Network",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMATIC.svg"
+      },
+      "LEO": {
+        "currency": "UNUS SED LEO",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCLEO.svg"
+      },
+      "ZIL": {
+        "currency": "Zilliqa",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCZIL.svg"
+      },
+      "HBAR": {
+        "currency": "Hedera Hashgraph",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCHBAR.svg"
+      },
+      "TFUEL": {
+        "currency": "Theta Fuel",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTFUEL.svg"
+      },
+      "ZEC": {
+        "currency": "Zcash",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCZEC.svg"
+      },
+      "HEX": {
+        "currency": "HEX",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCHEX.svg"
+      },
+      "ENJ": {
+        "currency": "Enjin Coin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCENJ.svg"
+      },
+      "ETC": {
+        "currency": "Ethereum Classic",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCETC.svg"
+      },
+      "MANA": {
+        "currency": "Decentraland",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMANA.svg"
+      },
+      "BTT": {
+        "currency": "BitTorrent",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBTT.svg"
+      },
+      "RVN": {
+        "currency": "Ravencoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCRVN.svg"
+      },
+      "DFI": {
+        "currency": "DeFiChain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDFI.svg"
+      },
+      "BTCB": {
+        "currency": "Bitcoin BEP2",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBTC.svg"
+      },
+      "RUNE": {
+        "currency": "THORChain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCRUNE.svg"
+      },
+      "CAKE": { "currency": "PancakeSwap", "image": "" },
+      "XWC": {
+        "currency": "WhiteCoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCXWC.svg"
+      },
+      "YFI": {
+        "currency": "yearn.finance",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCYFI.svg"
+      },
+      "NEXO": {
+        "currency": "Nexo",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNEXO.svg"
+      },
+      "UMA": {
+        "currency": "UMA",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCUMA.svg"
+      },
+      "CHSB": {
+        "currency": "SwissBorg",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCHSB.svg"
+      },
+      "CEL": {
+        "currency": "Celsius",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCEL.svg"
+      },
+      "BNT": {
+        "currency": "Bancor",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBNT.svg"
+      },
+      "BAT": {
+        "currency": "Basic Attention Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBAT.svg"
+      },
+      "REN": {
+        "currency": "Ren",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCREN.svg"
+      },
+      "FLOW": { "currency": "Flow (Dapper Labs)", "image": "" },
+      "ICX": {
+        "currency": "ICON",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCICX.svg"
+      },
+      "FTM": {
+        "currency": "Fantom",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFTM.svg"
+      },
+      "REV": {
+        "currency": "Revain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCREV.svg"
+      },
+      "ZRX": {
+        "currency": "0x",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCZRX.svg"
+      },
+      "WAVES": {
+        "currency": "Waves",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCWAVES.svg"
+      },
+      "RSR": {
+        "currency": "Reserve Rights",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCRSR.svg"
+      },
+      "STX": {
+        "currency": "Blockstack",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSTX.svg"
+      },
+      "OKB": {
+        "currency": "OKB",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCOKB.svg"
+      },
+      "ONT": {
+        "currency": "Ontology",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCONT.svg"
+      },
+      "DGB": {
+        "currency": "DigiByte",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDGB.svg"
+      },
+      "UST": {
+        "currency": "TerraUSD",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCUSDT.svg"
+      },
+      "HOT": {
+        "currency": "Holo",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCHOT.svg"
+      },
+      "RENBTC": { "currency": "renBTC", "image": "" },
+      "PAX": {
+        "currency": "Paxos Standard Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPAX.svg"
+      },
+      "IOST": {
+        "currency": "IOStoken",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCIOST.svg"
+      },
+      "OMG": {
+        "currency": "OmiseGO",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCOMG.svg"
+      },
+      "CELO": {
+        "currency": "Celo",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCELO.svg"
+      },
+      "NANO": {
+        "currency": "Nano",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNANO.svg"
+      },
+      "NPXS": {
+        "currency": "Pundi X",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNPXS.svg"
+      },
+      "LRC": {
+        "currency": "Loopring",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCLRC.svg"
+      },
+      "BTG": {
+        "currency": "Bitcoin Gold",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBTG.svg"
+      },
+      "SC": {
+        "currency": "Siacoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSC.svg"
+      },
+      "QTUM": {
+        "currency": "Qtum",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCQTUM.svg"
+      },
+      "REEF": { "currency": "Reef", "image": "" },
+      "1INCH": { "currency": "1inch", "image": "" },
+      "OCEAN": {
+        "currency": "Ocean Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCOCEAN.svg"
+      },
+      "ZEN": {
+        "currency": "Horizen",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCZEN.svg"
+      },
+      "CRV": {
+        "currency": "Curve DAO Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCRV.svg"
+      },
+      "SAND": {
+        "currency": "The Sandbox",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSAND.svg"
+      },
+      "HNT": {
+        "currency": "Helium",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCHNT.svg"
+      },
+      "WAXP": {
+        "currency": "WAX",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCWAXP.svg"
+      },
+      "ONE": {
+        "currency": "Harmony",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCONE.svg"
+      },
+      "SKL": { "currency": "SKALE Network", "image": "" },
+      "AR": {
+        "currency": "Arweave",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCAR.svg"
+      },
+      "XDC": { "currency": "XinFin Network", "image": "" },
+      "GLM": {
+        "currency": "Golem",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCGLM.svg"
+      },
+      "ZKS": { "currency": "ZKSwap", "image": "" },
+      "KNC": {
+        "currency": "Kyber Network",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCKNC.svg"
+      },
+      "ANKR": {
+        "currency": "Ankr",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCANKR.svg"
+      },
+      "FET": {
+        "currency": "Fetch.ai",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFET.svg"
+      },
+      "QNT": {
+        "currency": "Quant",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCQNT.svg"
+      },
+      "XVS": {
+        "currency": "Venus",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCXVS.svg"
+      },
+      "IOTX": {
+        "currency": "IoTeX",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCIOTX.svg"
+      },
+      "XVG": {
+        "currency": "Verge",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCXVG.svg"
+      },
+      "TEL": {
+        "currency": "Telcoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTEL.svg"
+      },
+      "LSK": {
+        "currency": "Lisk",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCLSK.svg"
+      },
+      "HEDG": {
+        "currency": "HedgeTrade",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCHEDG.svg"
+      },
+      "CKB": {
+        "currency": "Nervos Network",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCKB.svg"
+      },
+      "BEST": {
+        "currency": "Bitpanda Ecosystem Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBEST.svg"
+      },
+      "DODO": { "currency": "DODO", "image": "" },
+      "SNT": {
+        "currency": "Status",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSNT.svg"
+      },
+      "KLV": {
+        "currency": "Klever",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCKLV.svg"
+      },
+      "ORN": {
+        "currency": "Orion Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCORN.svg"
+      },
+      "REP": {
+        "currency": "Augur",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCREP.svg"
+      },
+      "BADGER": { "currency": "Badger DAO", "image": "" },
+      "KAVA": {
+        "currency": "Kava",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCKAVA.svg"
+      },
+      "BAL": {
+        "currency": "Balancer",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBAL.svg"
+      },
+      "MAID": {
+        "currency": "MaidSafeCoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMAID.svg"
+      },
+      "SRM": {
+        "currency": "Serum",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSRM.svg"
+      },
+      "CVC": {
+        "currency": "Civic",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCVC.svg"
+      },
+      "DENT": {
+        "currency": "Dent",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDENT.svg"
+      },
+      "TRAC": {
+        "currency": "OriginTrail",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTRAC.svg"
+      },
+      "BAND": {
+        "currency": "Band Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBAND.svg"
+      },
+      "CELR": {
+        "currency": "Celer Network",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCELR.svg"
+      },
+      "POLY": {
+        "currency": "Polymath",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPOLY.svg"
+      },
+      "ALPHA": {
+        "currency": "Alpha Finance Lab",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCALPHA.svg"
+      },
+      "BCHA": { "currency": "Bitcoin Cash ABC", "image": "" },
+      "SXP": {
+        "currency": "Swipe",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSXP.svg"
+      },
+      "ROSE": { "currency": "Oasis Network", "image": "" },
+      "NU": { "currency": "NuCypher", "image": "" },
+      "ETN": {
+        "currency": "Electroneum",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCETN.svg"
+      },
+      "POLS": { "currency": "Polkastarter", "image": "" },
+      "KEEP": { "currency": "Keep Network", "image": "" },
+      "UTK": {
+        "currency": "UTRUST",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCUTK.svg"
+      },
+      "SWAP": {
+        "currency": "TrustSwap",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSWAP.svg"
+      },
+      "COTI": {
+        "currency": "COTI",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCOTI.svg"
+      },
+      "VITAE": {
+        "currency": "Vitae",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCVITAE.svg"
+      },
+      "ARDR": {
+        "currency": "Ardor",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCARDR.svg"
+      },
+      "AMP": {
+        "currency": "Amp",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCAMP.svg"
+      },
+      "RIF": {
+        "currency": "RIF Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCRIF.svg"
+      },
+      "SOLO": {
+        "currency": "Sologenic",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSOLO.svg"
+      },
+      "BTS": {
+        "currency": "BitShares",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBTS.svg"
+      },
+      "IQ": {
+        "currency": "Everipedia",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCIQ.svg"
+      },
+      "OXT": {
+        "currency": "Orchid",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCOXT.svg"
+      },
+      "ANT": {
+        "currency": "Aragon",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCANT.svg"
+      },
+      "AXS": { "currency": "Axie Infinity", "image": "" },
+      "FUN": {
+        "currency": "FunFair",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFUN.svg"
+      },
+      "OGN": {
+        "currency": "Origin Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCOGN.svg"
+      },
+      "BCD": {
+        "currency": "Bitcoin Diamond",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBCD.svg"
+      },
+      "BORA": {
+        "currency": "BORA",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBORA.svg"
+      },
+      "GNO": {
+        "currency": "Gnosis",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCGNO.svg"
+      },
+      "SCRT": {
+        "currency": "Secret",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSCRT.svg"
+      },
+      "NMR": {
+        "currency": "Numeraire",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNMR.svg"
+      },
+      "SFP": { "currency": "SafePal", "image": "" },
+      "ORBS": {
+        "currency": "Orbs",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCORBS.svg"
+      },
+      "XHV": {
+        "currency": "Haven Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCXHV.svg"
+      },
+      "STORJ": {
+        "currency": "Storj",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSTORJ.svg"
+      },
+      "RLC": {
+        "currency": "iExec RLC",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCRLC.svg"
+      },
+      "BTCST": { "currency": "Bitcoin Standard Hashrate Token", "image": "" },
+      "QKC": {
+        "currency": "QuarkChain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCQKC.svg"
+      },
+      "ELF": {
+        "currency": "aelf",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCELF.svg"
+      },
+      "STRAX": { "currency": "Stratis", "image": "" },
+      "ARK": {
+        "currency": "Ark",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCARK.svg"
+      },
+      "TOMO": {
+        "currency": "TomoChain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTOMO.svg"
+      },
+      "WAN": {
+        "currency": "Wanchain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCWAN.svg"
+      },
+      "UOS": {
+        "currency": "Ultra",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCUOS.svg"
+      },
+      "AVA": {
+        "currency": "Travala.com",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCAVA.svg"
+      },
+      "KMD": {
+        "currency": "Komodo",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCKMD.svg"
+      },
+      "PHA": { "currency": "Phala.Network", "image": "" },
+      "DAT": {
+        "currency": "Datum",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDATA.svg"
+      },
+      "INJ": {
+        "currency": "Injective Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCINJ.svg"
+      },
+      "STEEM": {
+        "currency": "Steem",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSTEEM.svg"
+      },
+      "MFT": {
+        "currency": "Mainframe",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMFT.svg"
+      },
+      "LIT": { "currency": "Litentry", "image": "" },
+      "LOOM": {
+        "currency": "Loom Network",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCLOOM.svg"
+      },
+      "VITE": {
+        "currency": "VITE",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCVITE.svg"
+      },
+      "UBT": {
+        "currency": "Unibright",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCUBT.svg"
+      },
+      "SYS": {
+        "currency": "Syscoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSYS.svg"
+      },
+      "IRIS": {
+        "currency": "IRISnet",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCIRIS.svg"
+      },
+      "POWR": {
+        "currency": "Power Ledger",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPOWR.svg"
+      },
+      "CVT": {
+        "currency": "CyberVein",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCVT.svg"
+      },
+      "DEGO": { "currency": "Dego Finance", "image": "" },
+      "PPT": {
+        "currency": "Populous",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPPT.svg"
+      },
+      "HIVE": {
+        "currency": "Hive Blockchain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCHIVE.svg"
+      },
+      "LTO": {
+        "currency": "LTO Network",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCLTO.svg"
+      },
+      "AUDIO": { "currency": "Audius", "image": "" },
+      "KIN": {
+        "currency": "Kin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCKIN.svg"
+      },
+      "TROY": {
+        "currency": "TROY",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTROY.svg"
+      },
+      "JST": {
+        "currency": "JUST",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCJST.svg"
+      },
+      "AKRO": {
+        "currency": "Akropolis",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCAKRO.svg"
+      },
+      "PAXG": {
+        "currency": "PAX Gold",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPAXG.svg"
+      },
+      "S": {
+        "currency": "StableUSD",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCUSDS.svg"
+      },
+      "META": {
+        "currency": "Metadium",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMETA.svg"
+      },
+      "UQC": {
+        "currency": "Uquid Coin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCUQC.svg"
+      },
+      "BTM": {
+        "currency": "Bitmark",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBTM.svg"
+      },
+      "N": {
+        "currency": "Neutrino USD",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCUSDN.svg"
+      },
+      "ABBC": {
+        "currency": "ABBC Coin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCABBC.svg"
+      },
+      "TWT": { "currency": "Trust Wallet Token", "image": "" },
+      "VLX": {
+        "currency": "Velas",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCVLX.svg"
+      },
+      "GAS": {
+        "currency": "Gas",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCGAS.svg"
+      },
+      "STMX": {
+        "currency": "StormX",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSTMX.svg"
+      },
+      "MONA": {
+        "currency": "MonaCoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMONA.svg"
+      },
+      "AION": {
+        "currency": "Aion",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCAION.svg"
+      },
+      "RDD": {
+        "currency": "ReddCoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCRDD.svg"
+      },
+      "OM": { "currency": "MANTRA DAO", "image": "" },
+      "DNA": {
+        "currency": "EncrypGen",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDNA.svg"
+      },
+      "GT": {
+        "currency": "Gatechain Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCGT.svg"
+      },
+      "HNS": {
+        "currency": "Handshake",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCHNS.svg"
+      },
+      "UNFI": { "currency": "Unifi Protocol DAO", "image": "" },
+      "EXRD": { "currency": "Radix", "image": "" },
+      "LPT": {
+        "currency": "Livepeer",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCLPT.svg"
+      },
+      "REQ": {
+        "currency": "Request Network",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCREQ.svg"
+      },
+      "FXS": { "currency": "Frax Share", "image": "" },
+      "ADX": {
+        "currency": "AdEx",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCADX.svg"
+      },
+      "BLZ": {
+        "currency": "Bluzelle",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBLZ.svg"
+      },
+      "WRX": {
+        "currency": "WazirX",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCWRX.svg"
+      },
+      "CENNZ": {
+        "currency": "Centrality",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCENNZ.svg"
+      },
+      "MED": {
+        "currency": "MediBloc",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMED.svg"
+      },
+      "ATRI": { "currency": "Atari Token", "image": "" },
+      "DUSK": {
+        "currency": "Dusk Network",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDUSK.svg"
+      },
+      "LBC": {
+        "currency": "LBRY Credits",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCLBC.svg"
+      },
+      "HARD": { "currency": "Hard Protocol", "image": "" },
+      "ONG": {
+        "currency": "Ontology Gas",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCONG.svg"
+      },
+      "FARM": { "currency": "Harvest Finance", "image": "" },
+      "KAI": {
+        "currency": "KardiaChain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCKAI.svg"
+      },
+      "NKN": {
+        "currency": "NKN",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNKN.svg"
+      },
+      "SOLVE": {
+        "currency": "SOLVE",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSOLVE.svg"
+      },
+      "ARPA": {
+        "currency": "ARPA Chain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCARPA.svg"
+      },
+      "MTL": {
+        "currency": "Metal",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMTL.svg"
+      },
+      "MRPH": {
+        "currency": "Morpheus.Network",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMRPH.svg"
+      },
+      "NRG": {
+        "currency": "Energi",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNRG.svg"
+      },
+      "CTK": { "currency": "CertiK", "image": "" },
+      "WTC": {
+        "currency": "Waltonchain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCWTC.svg"
+      },
+      "WICC": {
+        "currency": "WaykiChain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCWICC.svg"
+      },
+      "NULS": {
+        "currency": "Nuls",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNULS.svg"
+      },
+      "FIRO": { "currency": "Firo", "image": "" },
+      "IGNIS": {
+        "currency": "Ignis",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCIGNIS.svg"
+      },
+      "YFII": {
+        "currency": "DFI.Money",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCYFII.svg"
+      },
+      "TVK": { "currency": "Terra Virtua Kolect", "image": "" },
+      "ZAP": {
+        "currency": "Zap",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCZAP.svg"
+      },
+      "SUN": {
+        "currency": "SUN",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSUN.svg"
+      },
+      "SHR": { "currency": "ShareToken", "image": "" },
+      "NXS": {
+        "currency": "Nexus",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNXS.svg"
+      },
+      "WNXM": {
+        "currency": "Wrapped NXM",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCWNXM.svg"
+      },
+      "COS": {
+        "currency": "Contentos",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCOS.svg"
+      },
+      "CTSI": {
+        "currency": "Cartesi",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCTSI.svg"
+      },
+      "SWINGBY": {
+        "currency": "Swingby",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSWINGBY.svg"
+      },
+      "BZRX": {
+        "currency": "bZx Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBZRX.svg"
+      },
+      "PERL": {
+        "currency": "Perlin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPERL.svg"
+      },
+      "TRB": {
+        "currency": "Tellor",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTRB.svg"
+      },
+      "MLN": {
+        "currency": "Melon",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMLN.svg"
+      },
+      "BCN": {
+        "currency": "Bytecoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBCN.svg"
+      },
+      "DIA": {
+        "currency": "DIA",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDIA.svg"
+      },
+      "BEAM": {
+        "currency": "Beam",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBEAM.svg"
+      },
+      "PXL": {
+        "currency": "PIXEL",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPXL.svg"
+      },
+      "FLM": {
+        "currency": "Flamingo",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFLM.svg"
+      },
+      "MTC": {
+        "currency": "Metacoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMTC.svg"
+      },
+      "LAMB": {
+        "currency": "Lambda",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCLAMB.svg"
+      },
+      "EMC2": {
+        "currency": "Einsteinium",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCEMC2.svg"
+      },
+      "PROM": {
+        "currency": "Prometeus",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPROM.svg"
+      },
+      "HXRO": {
+        "currency": "Hxro",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCHXRO.svg"
+      },
+      "PIVX": {
+        "currency": "PIVX",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPIVX.svg"
+      },
+      "GRIN": {
+        "currency": "Grin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCGRIN.svg"
+      },
+      "TSHP": {
+        "currency": "12Ships",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTSHP.svg"
+      },
+      "DEXE": { "currency": "DeXe", "image": "" },
+      "CTXC": {
+        "currency": "Cortex",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCTXC.svg"
+      },
+      "FRONT": { "currency": "Frontier", "image": "" },
+      "DOCK": {
+        "currency": "Dock",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDOCK.svg"
+      },
+      "STPT": {
+        "currency": "STPT",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSTPT.svg"
+      },
+      "BOA": {
+        "currency": "BOSAGORA",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBOA.svg"
+      },
+      "BEL": {
+        "currency": "Bella Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBEL.svg"
+      },
+      "AE": {
+        "currency": "Aeternity",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCAE.svg"
+      },
+      "POND": { "currency": "Marlin", "image": "" },
+      "BBC": { "currency": "BigBang Core", "image": "" },
+      "FIO": {
+        "currency": "FIO Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFIO.svg"
+      },
+      "CND": {
+        "currency": "Cindicator",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCND.svg"
+      },
+      "ELA": {
+        "currency": "Elastos",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCELA.svg"
+      },
+      "QSP": {
+        "currency": "Quantstamp",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCQSP.svg"
+      },
+      "DAG": {
+        "currency": "Constellation",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDAG.svg"
+      },
+      "RCN": {
+        "currency": "Ripio Credit Network",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCRCN.svg"
+      },
+      "ARRR": { "currency": "Pirate Chain", "image": "" },
+      "PNK": {
+        "currency": "Kleros",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPNK.svg"
+      },
+      "KEY": {
+        "currency": "Selfkey",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCKEY.svg"
+      },
+      "TRU": {
+        "currency": "TrueFi",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTRU.svg"
+      },
+      "VSY": {
+        "currency": "V Systems",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCVSYS.svg"
+      },
+      "BTU": {
+        "currency": "BTU Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBTU.svg"
+      },
+      "NIM": {
+        "currency": "Nimiq",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNIM.svg"
+      },
+      "KAN": {
+        "currency": "BitKan",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCKAN.svg"
+      },
+      "CHR": {
+        "currency": "Chromia",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCHR.svg"
+      },
+      "OXEN": { "currency": "Oxen", "image": "" },
+      "AERGO": {
+        "currency": "Aergo",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCAERGO.svg"
+      },
+      "SUTER": {
+        "currency": "suterusu",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSUTER.svg"
+      },
+      "DREP": {
+        "currency": "DREP",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDREP.svg"
+      },
+      "GRS": {
+        "currency": "Groestlcoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCGRS.svg"
+      },
+      "SENT": {
+        "currency": "Sentinel",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSENT.svg"
+      },
+      "GO": {
+        "currency": "GoChain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCGO.svg"
+      },
+      "DRGN": {
+        "currency": "Dragonchain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDRGN.svg"
+      },
+      "IDEX": {
+        "currency": "IDEX",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCIDEX.svg"
+      },
+      "AUCTION": { "currency": "Bounce Token", "image": "" },
+      "VID": {
+        "currency": "VideoCoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCVID.svg"
+      },
+      "GXC": {
+        "currency": "GXChain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCGXC.svg"
+      },
+      "UPP": {
+        "currency": "Sentinel Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCUPP.svg"
+      },
+      "MDT": {
+        "currency": "Measurable Data Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMDT.svg"
+      },
+      "TNC": {
+        "currency": "TNC Coin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTNC.svg"
+      },
+      "SKY": {
+        "currency": "Skycoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSKY.svg"
+      },
+      "FX": {
+        "currency": "Function X",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFX.svg"
+      },
+      "PHB": {
+        "currency": "Phoenix Global",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPHB.svg"
+      },
+      "AMB": {
+        "currency": "Ambrosus",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCAMB.svg"
+      },
+      "AST": {
+        "currency": "AirSwap",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCAST.svg"
+      },
+      "SUKU": {
+        "currency": "SUKU",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSUKU.svg"
+      },
+      "VIDT": {
+        "currency": "VIDT Datalink",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCVIDT.svg"
+      },
+      "NAS": {
+        "currency": "Nebulas",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNAS.svg"
+      },
+      "MARO": {
+        "currency": "Maro",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMARO.svg"
+      },
+      "NEBL": {
+        "currency": "Neblio",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNEBL.svg"
+      },
+      "XSN": { "currency": "Stakenet", "image": "" },
+      "SRN": {
+        "currency": "SIRIN LABS Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSRN.svg"
+      },
+      "FIS": { "currency": "Stafi", "image": "" },
+      "SBD": {
+        "currency": "Steem Dollars",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSBD.svg"
+      },
+      "BNK": {
+        "currency": "Bankera",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBNK.svg"
+      },
+      "VRA": {
+        "currency": "Verasity",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCVRA.svg"
+      },
+      "KDA": {
+        "currency": "Kadena",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCKDA.svg"
+      },
+      "VTC": {
+        "currency": "Vertcoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCVTC.svg"
+      },
+      "CVP": { "currency": "PowerPool", "image": "" },
+      "DGD": {
+        "currency": "DigixDAO",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDGD.svg"
+      },
+      "LYM": {
+        "currency": "Lympo",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCLYM.svg"
+      },
+      "BLOCK": {
+        "currency": "Blocknet",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBLOCK.svg"
+      },
+      "ZCN": {
+        "currency": "0Chain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCZCN.svg"
+      },
+      "EDR": {
+        "currency": "Endor Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCEDR.svg"
+      },
+      "NXT": {
+        "currency": "Nxt",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNXT.svg"
+      },
+      "EASY": { "currency": "EasyFi", "image": "" },
+      "DMT": {
+        "currency": "DMarket",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDMT.svg"
+      },
+      "ADK": {
+        "currency": "Aidos Kuneen",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCADK.svg"
+      },
+      "WING": {
+        "currency": "Wing",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCWING.svg"
+      },
+      "MITH": {
+        "currency": "Mithril",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMITH.svg"
+      },
+      "LCX": {
+        "currency": "LCX",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCLCX.svg"
+      },
+      "PMA": {
+        "currency": "PumaPay",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPMA.svg"
+      },
+      "RBTC": {
+        "currency": "RSK Smart Bitcoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCRBTC.svg"
+      },
+      "MET": {
+        "currency": "Metronome",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMET.svg"
+      },
+      "SOC": {
+        "currency": "All Sports",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSOC.svg"
+      },
+      "LOC": {
+        "currency": "LockTrip",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCLOC.svg"
+      },
+      "WABI": {
+        "currency": "WaBi",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCWABI.svg"
+      },
+      "NAV": {
+        "currency": "NAV Coin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNAV.svg"
+      },
+      "PRE": {
+        "currency": "Presearch",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPRE.svg"
+      },
+      "PSG": { "currency": "Paris Saint-Germain Fan Token", "image": "" },
+      "FOR": {
+        "currency": "The Force Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFOR.svg"
+      },
+      "PLA": {
+        "currency": "Plair",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPLA.svg"
+      },
+      "RFR": {
+        "currency": "Refereum",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCRFR.svg"
+      },
+      "ACM": { "currency": "AC Milan Fan Token", "image": "" },
+      "KRT": {
+        "currency": "TerraKRW",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCKRT.svg"
+      },
+      "GTO": {
+        "currency": "Gifto",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCGTO.svg"
+      },
+      "RDN": {
+        "currency": "Raiden Network Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCRDN.svg"
+      },
+      "XPR": {
+        "currency": "Proton",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCXPR.svg"
+      },
+      "GVT": {
+        "currency": "Genesis Vision",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCGVT.svg"
+      },
+      "GBYTE": {
+        "currency": "Byteball Bytes",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCGBYTE.svg"
+      },
+      "TEMCO": {
+        "currency": "TEMCO",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTEMCO.svg"
+      },
+      "ELAMA": {
+        "currency": "Elamachain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCELAMA.svg"
+      },
+      "QSH": {
+        "currency": "QASH",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCQASH.svg"
+      },
+      "GLEEC": {
+        "currency": "Gleec",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCGLEEC.svg"
+      },
+      "CDT": {
+        "currency": "Blox",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCDT.svg"
+      },
+      "PAY": {
+        "currency": "TenX",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPAY.svg"
+      },
+      "WPR": {
+        "currency": "WePower",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCWPR.svg"
+      },
+      "HEZ": { "currency": "Hermez Network", "image": "" },
+      "FOAM": {
+        "currency": "FOAM",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFOAM.svg"
+      },
+      "TCT": {
+        "currency": "TokenClub",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTCT.svg"
+      },
+      "EDG": {
+        "currency": "Edgeless",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCEDG.svg"
+      },
+      "MDA": {
+        "currency": "Moeda Loyalty Points",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMDA.svg"
+      },
+      "CRPT": {
+        "currency": "Crypterium",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCRPT.svg"
+      },
+      "MOC": {
+        "currency": "Moss Coin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMOC.svg"
+      },
+      "MOF": {
+        "currency": "Molecular Future",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMOF.svg"
+      },
+      "QRL": {
+        "currency": "Quantum Resistant Ledger",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCQRL.svg"
+      },
+      "OAX": {
+        "currency": "OAX",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCOAX.svg"
+      },
+      "OST": {
+        "currency": "OST",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCOST.svg"
+      },
+      "MAN": {
+        "currency": "Matrix AI Network",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMAN.svg"
+      },
+      "APPC": {
+        "currency": "AppCoins",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCAPPC.svg"
+      },
+      "TSD": {
+        "currency": "True Seigniorage Dollar",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTUSD.svg"
+      },
+      "BFT": {
+        "currency": "BnkToTheFuture",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBFT.svg"
+      },
+      "PI": {
+        "currency": "PCHAIN",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPI.svg"
+      },
+      "BRD": {
+        "currency": "Bread",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBRD.svg"
+      },
+      "JUV": { "currency": "Juventus Fan Token", "image": "" },
+      "MITX": {
+        "currency": "Morpheus Labs",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMITX.svg"
+      },
+      "BOS": {
+        "currency": "BOScoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBOS.svg"
+      },
+      "FCT": {
+        "currency": "Factom",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFCT.svg"
+      },
+      "UBQ": {
+        "currency": "Ubiq",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCUBQ.svg"
+      },
+      "DUCATO": {
+        "currency": "Ducato Protocol Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDUCATO.svg"
+      },
+      "SALT": {
+        "currency": "SALT",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSALT.svg"
+      },
+      "QLC": {
+        "currency": "QLINK",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCQLC.svg"
+      },
+      "EMRX": {
+        "currency": "Emirex Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCEMRX.svg"
+      },
+      "TRUE": {
+        "currency": "TrueChain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTRUE.svg"
+      },
+      "AYA": {
+        "currency": "Aryacoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCAYA.svg"
+      },
+      "NWC": {
+        "currency": "Newscrypto",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNWC.svg"
+      },
+      "ETP": {
+        "currency": "Metaverse ETP",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCETP.svg"
+      },
+      "POA": {
+        "currency": "POA Network",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPOA.svg"
+      },
+      "VIA": {
+        "currency": "Viacoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCVIA.svg"
+      },
+      "DTA": {
+        "currency": "DATA",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDTA.svg"
+      },
+      "DLT": {
+        "currency": "Agrello",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDLT.svg"
+      },
+      "VEE": {
+        "currency": "BLOCKv",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCVEE.svg"
+      },
+      "EVX": {
+        "currency": "Everex",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCEVX.svg"
+      },
+      "NCA": {
+        "currency": "Nucleus Vision",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNCASH.svg"
+      },
+      "NVT": { "currency": "NerveNetwork", "image": "" },
+      "SPC": {
+        "currency": "SpaceChain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSPC.svg"
+      },
+      "DOV": {
+        "currency": "Dovu",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDOV.svg"
+      },
+      "GAME": {
+        "currency": "GameCredits",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCGAME.svg"
+      },
+      "YOYO": {
+        "currency": "YOYOW",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCYOYOW.svg"
+      },
+      "PPC": {
+        "currency": "Peercoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPPC.svg"
+      },
+      "IPX": {
+        "currency": "Tachyon Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCIPX.svg"
+      },
+      "MTH": {
+        "currency": "Monetha",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMTH.svg"
+      },
+      "HGET": {
+        "currency": "Hedget",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCHGET.svg"
+      },
+      "ASR": { "currency": "AS Roma Fan Token", "image": "" },
+      "VIB": {
+        "currency": "Viberate",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCVIB.svg"
+      },
+      "ROOK": { "currency": "KeeperDAO", "image": "" },
+      "ATM": { "currency": "Atletico De Madrid Fan Token", "image": "" },
+      "ACT": {
+        "currency": "Achain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCACT.svg"
+      },
+      "IQN": { "currency": "IQeon", "image": "" },
+      "OG": { "currency": "OG Fan Token", "image": "" },
+      "BWF": {
+        "currency": "Beowulf",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBWF.svg"
+      },
+      "SMT": {
+        "currency": "SmartMesh",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSMT.svg"
+      },
+      "PART": {
+        "currency": "Particl",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPART.svg"
+      },
+      "HYDRO": {
+        "currency": "Hydro",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCHYDRO.svg"
+      },
+      "MHC": {
+        "currency": "#MetaHash",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMHC.svg"
+      },
+      "DAPP": {
+        "currency": "LiquidApps",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDAPP.svg"
+      },
+      "ABYSS": {
+        "currency": "Abyss Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCABYSS.svg"
+      },
+      "SNM": {
+        "currency": "SONM",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSNM.svg"
+      },
+      "EMC": {
+        "currency": "Emercoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCEMC.svg"
+      },
+      "SAN": {
+        "currency": "Santiment Network Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSAN.svg"
+      },
+      "NCT": {
+        "currency": "PolySwarm",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNCT.svg"
+      },
+      "XMC": {
+        "currency": "Monero Classic",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCXMC.svg"
+      },
+      "KDAG": {
+        "currency": "King DAG",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCKDAG.svg"
+      },
+      "SWRV": { "currency": "Swerve", "image": "" },
+      "XDN": {
+        "currency": "DigitalNote",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCXDN.svg"
+      },
+      "SENSO": {
+        "currency": "SENSO",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSENSO.svg"
+      },
+      "DAWN": {
+        "currency": "Dawn Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDAWN.svg"
+      },
+      "PLTC": {
+        "currency": "PlatonCoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPLTC.svg"
+      },
+      "TKN": {
+        "currency": "TokenCard",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTKN.svg"
+      },
+      "SNGLS": {
+        "currency": "SingularDTV",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSNGLS.svg"
+      },
+      "ROOBEE": {
+        "currency": "ROOBEE",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCROOBEE.svg"
+      },
+      "GEO": {
+        "currency": "GeoCoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCGEO.svg"
+      },
+      "RINGX": {
+        "currency": "RING X PLATFORM",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCRINGX.svg"
+      },
+      "XMY": {
+        "currency": "Myriad",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCXMY.svg"
+      },
+      "YFL": { "currency": "YF Link", "image": "" },
+      "SNG": {
+        "currency": "SINERGIA",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSNGLS.svg"
+      },
+      "FLO": {
+        "currency": "FlorinCoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFLO.svg"
+      },
+      "APM": {
+        "currency": "apM Coin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCAPM.svg"
+      },
+      "GNX": {
+        "currency": "Genaro Network",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCGNX.svg"
+      },
+      "FTC": {
+        "currency": "Feathercoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFTC.svg"
+      },
+      "MTLX": { "currency": "Mettalex", "image": "" },
+      "CLO": {
+        "currency": "Callisto Network",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCLO.svg"
+      },
+      "SIX": {
+        "currency": "SIX",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSIX.svg"
+      },
+      "KRL": {
+        "currency": "Kryll",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCKRL.svg"
+      },
+      "XTP": {
+        "currency": "Tap",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCXTP.svg"
+      },
+      "UUU": {
+        "currency": "U Network",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCUUU.svg"
+      },
+      "BURST": {
+        "currency": "Burst",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBURST.svg"
+      },
+      "SEELE": {
+        "currency": "Seele-N",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSEELE.svg"
+      },
+      "FNB": {
+        "currency": "FNB Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFNB.svg"
+      },
+      "FLETA": {
+        "currency": "FLETA",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFLETA.svg"
+      },
+      "NLG": {
+        "currency": "Gulden",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNLG.svg"
+      },
+      "PLU": {
+        "currency": "Pluton",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPLU.svg"
+      },
+      "BNTX": { "currency": "Bintex Futures", "image": "" },
+      "LEVL": {
+        "currency": "Levolution",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCLEVL.svg"
+      },
+      "SWFTC": {
+        "currency": "SwftCoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSWFTC.svg"
+      },
+      "GEN": {
+        "currency": "DAOstack",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCGEN.svg"
+      },
+      "DMG": {
+        "currency": "DMM: Governance",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDMG.svg"
+      },
+      "SMART": {
+        "currency": "SmartCash",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSMART.svg"
+      },
+      "PTON": {
+        "currency": "PTON",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPTON.svg"
+      },
+      "AEON": {
+        "currency": "Aeon",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCAEON.svg"
+      },
+      "OCN": {
+        "currency": "Odyssey",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCOCN.svg"
+      },
+      "VAL": { "currency": "Sora Validator Token", "image": "" },
+      "TAU": {
+        "currency": "Lamden",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTAU.svg"
+      },
+      "VIBE": {
+        "currency": "VIBE",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCVIBE.svg"
+      },
+      "AUC": {
+        "currency": "Auctus",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCAUC.svg"
+      },
+      "WINGS": {
+        "currency": "Wings",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCWINGS.svg"
+      },
+      "SKM": {
+        "currency": "Skrumble Network",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSKM.svg"
+      },
+      "POT": {
+        "currency": "PotCoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPOT.svg"
+      },
+      "XST": {
+        "currency": "Stealthcoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCXST.svg"
+      },
+      "CRW": {
+        "currency": "Crown",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCRW.svg"
+      },
+      "LCC": {
+        "currency": "Litecoin Cash",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCLCC.svg"
+      },
+      "PLR": {
+        "currency": "Pillar",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPLR.svg"
+      },
+      "TIME": {
+        "currency": "Chronobank",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTIME.svg"
+      },
+      "BTSE": {
+        "currency": "BTSE",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBTSE.svg"
+      },
+      "DEP": {
+        "currency": "DEAPcoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDEP.svg"
+      },
+      "COV": {
+        "currency": "Covesting",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCOV.svg"
+      },
+      "TKY": {
+        "currency": "THEKEY",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTKY.svg"
+      },
+      "CHAT": {
+        "currency": "ChatCoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCHAT.svg"
+      },
+      "CPC": {
+        "currency": "Capricoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCPC.svg"
+      },
+      "SNC": {
+        "currency": "SunContract",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSNC.svg"
+      },
+      "YOU": {
+        "currency": "YOU COIN",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCYOU.svg"
+      },
+      "BLK": {
+        "currency": "BlackCoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBLK.svg"
+      },
+      "XRA": {
+        "currency": "Ratecoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCXRA.svg"
+      },
+      "REM": {
+        "currency": "Remme",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCREM.svg"
+      },
+      "INSTAR": {
+        "currency": "Insights Network",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCINSTAR.svg"
+      },
+      "RVC": {
+        "currency": "Ravencoin Classic",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCRVC.svg"
+      },
+      "BIZZ": {
+        "currency": "BIZZCOIN",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBIZZ.svg"
+      },
+      "SWM": {
+        "currency": "Swarm",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSWM.svg"
+      },
+      "LNC": {
+        "currency": "Blocklancer",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCLNC.svg"
+      },
+      "DGTX": {
+        "currency": "Digitex Futures",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDGTX.svg"
+      },
+      "OK": {
+        "currency": "OKCash",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCOK.svg"
+      },
+      "HTML": {
+        "currency": "HTMLCOIN",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCHTML.svg"
+      },
+      "BOX": {
+        "currency": "BOX Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBOX.svg"
+      },
+      "DGX": {
+        "currency": "Digix Gold Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDGX.svg"
+      },
+      "PAN": {
+        "currency": "Pantos",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPAN.svg"
+      },
+      "IDRT": {
+        "currency": "Rupiah Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCIDRT.svg"
+      },
+      "AXPR": {
+        "currency": "aXpire",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCAXPR.svg"
+      },
+      "ESS": {
+        "currency": "Essentia",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCESS.svg"
+      },
+      "XRC": {
+        "currency": "Bitcoin Rhodium",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCXRC.svg"
+      },
+      "OMN": {
+        "currency": "Omni",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCOMNI.svg"
+      },
+      "PINK": {
+        "currency": "PinkCoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPINK.svg"
+      },
+      "HDAO": {
+        "currency": "HyperDAO",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCHDAO.svg"
+      },
+      "MYST": {
+        "currency": "Mysterium",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMYST.svg"
+      },
+      "VRC": {
+        "currency": "VeriCoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCVRC.svg"
+      },
+      "PHNX": {
+        "currency": "PhoenixDAO",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPHNX.svg"
+      },
+      "IHT": {
+        "currency": "IHT Real Estate Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCIHT.svg"
+      },
+      "BMC": {
+        "currency": "Blackmoon",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBMC.svg"
+      },
+      "ORS": {
+        "currency": "Origin Sport",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCORS.svg"
+      },
+      "CURE": {
+        "currency": "Curecoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCURE.svg"
+      },
+      "ENG": {
+        "currency": "Enigma",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCENG.svg"
+      },
+      "EXP": {
+        "currency": "Expanse",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCEXP.svg"
+      },
+      "CGT": {
+        "currency": "CACHE Gold",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCGT.svg"
+      },
+      "EOSDT": {
+        "currency": "EOSDT",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCEOSDT.svg"
+      },
+      "THC": {
+        "currency": "HempCoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTHC.svg"
+      },
+      "TNT": {
+        "currency": "Tierion",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTNT.svg"
+      },
+      "MTN": {
+        "currency": "Medicalchain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMTN.svg"
+      },
+      "BWX": {
+        "currency": "Blue Whale EXchange",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBWX.svg"
+      },
+      "MGO": {
+        "currency": "MobileGo",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMGO.svg"
+      },
+      "PTOY": {
+        "currency": "Patientory",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPTOY.svg"
+      },
+      "RPZX": { "currency": "Rapidz", "image": "" },
+      "AVT": {
+        "currency": "Aventus",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCAVT.svg"
+      },
+      "MUE": {
+        "currency": "MonetaryUnit",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMUE.svg"
+      },
+      "IOC": {
+        "currency": "I/O Coin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCIOC.svg"
+      },
+      "KICK": {
+        "currency": "KickToken",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCKICK.svg"
+      },
+      "ERK": {
+        "currency": "Eureka Coin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCERK.svg"
+      },
+      "HMQ": {
+        "currency": "Humaniq",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCHMQ.svg"
+      },
+      "FUND": {
+        "currency": "Unification",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFUND.svg"
+      },
+      "CNTM": {
+        "currency": "Connectome",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCNTM.svg"
+      },
+      "BMH": {
+        "currency": "BlockMesh",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBMH.svg"
+      },
+      "BANCA": {
+        "currency": "Banca",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBANCA.svg"
+      },
+      "INX": {
+        "currency": "INMAX",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCINX.svg"
+      },
+      "ACAT": {
+        "currency": "Alphacat",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCACAT.svg"
+      },
+      "DCT": {
+        "currency": "DECENT",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDCT.svg"
+      },
+      "DRG": {
+        "currency": "Dragon Coins",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDRG.svg"
+      },
+      "MTX": {
+        "currency": "Matryx",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMTX.svg"
+      },
+      "CPT": {
+        "currency": "Contents Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCPT.svg"
+      },
+      "ZRC": {
+        "currency": "ZrCoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCZRC.svg"
+      },
+      "CNS": {
+        "currency": "Centric Cash",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCNS.svg"
+      },
+      "TON": { "currency": "TON Crystal", "image": "" },
+      "MER": {
+        "currency": "Mercury",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMER.svg"
+      },
+      "BET": {
+        "currency": "DAO.Casino",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBET.svg"
+      },
+      "EKO": {
+        "currency": "EchoLink",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCEKO.svg"
+      },
+      "XAUR": {
+        "currency": "Xaurum",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCXAUR.svg"
+      },
+      "EXE": {
+        "currency": "8X8 PROTOCOL",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCEXE.svg"
+      },
+      "BTB": {
+        "currency": "BitBall",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBTB.svg"
+      },
+      "COSM": {
+        "currency": "Cosmo Coin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCOSM.svg"
+      },
+      "SIB": {
+        "currency": "SIBCoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSIB.svg"
+      },
+      "EXM": {
+        "currency": "EXMO Coin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCEXM.svg"
+      },
+      "DBIX": {
+        "currency": "DubaiCoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDBIX.svg"
+      },
+      "ONL": {
+        "currency": "On.Live",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCONL.svg"
+      },
+      "SUB": {
+        "currency": "Substratum",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSUB.svg"
+      },
+      "SDT": {
+        "currency": "Terra SDT",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSDT.svg"
+      },
+      "NTK": {
+        "currency": "NetKoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNTK.svg"
+      },
+      "PASS": {
+        "currency": "Blockpass",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPASS.svg"
+      },
+      "TRST": {
+        "currency": "WeTrust",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTRST.svg"
+      },
+      "DATX": {
+        "currency": "DATx",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDATX.svg"
+      },
+      "CUR": {
+        "currency": "Curio",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCUR.svg"
+      },
+      "DAV": {
+        "currency": "DAV Coin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDAV.svg"
+      },
+      "GOT": {
+        "currency": "GoNetwork",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCGOT.svg"
+      },
+      "FDZ": {
+        "currency": "Friendz",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFDZ.svg"
+      },
+      "ORMEUS": {
+        "currency": "Ormeus Coin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCORMEUS.svg"
+      },
+      "FTX": {
+        "currency": "FintruX Network",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFTX.svg"
+      },
+      "HVN": {
+        "currency": "Hiveterminal Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCHVN.svg"
+      },
+      "EXCL": {
+        "currency": "ExclusiveCoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCEXCL.svg"
+      },
+      "AID": {
+        "currency": "AidCoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCAID.svg"
+      },
+      "DIT": {
+        "currency": "Digital Insurance Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDIT.svg"
+      },
+      "BCPT": {
+        "currency": "Blockmason Credit Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBCPT.svg"
+      },
+      "INK": {
+        "currency": "Ink",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCINK.svg"
+      },
+      "FYP": {
+        "currency": "FlypMe",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFYP.svg"
+      },
+      "LUN": {
+        "currency": "Lunyr",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCLUN.svg"
+      },
+      "SHIP": {
+        "currency": "ShipChain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSHIP.svg"
+      },
+      "BERRY": {
+        "currency": "Rentberry",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBERRY.svg"
+      },
+      "BRDG": {
+        "currency": "Bridge Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBRDG.svg"
+      },
+      "STR": {
+        "currency": "Staker",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSTR.svg"
+      },
+      "FXT": {
+        "currency": "FuzeX",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFXT.svg"
+      },
+      "BDG": {
+        "currency": "BitDegree",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBDG.svg"
+      },
+      "PKT": {
+        "currency": "Playkey",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPKT.svg"
+      },
+      "POE": {
+        "currency": "Po.et",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPOE.svg"
+      },
+      "IPL": {
+        "currency": "VouchForMe",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCIPL.svg"
+      },
+      "ZSC": {
+        "currency": "Zeusshield",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCZSC.svg"
+      },
+      "ELEC": {
+        "currency": "Electrify.Asia",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCELEC.svg"
+      },
+      "ADT": {
+        "currency": "adToken",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCADT.svg"
+      },
+      "SCL": {
+        "currency": "Sociall",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSCL.svg"
+      },
+      "FACE": {
+        "currency": "Faceter",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFACE.svg"
+      },
+      "HGT": {
+        "currency": "HelloGold",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCHGT.svg"
+      },
+      "XBP": {
+        "currency": "BlitzPredict",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCXBP.svg"
+      },
+      "PBT": {
+        "currency": "Primalbase Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPBT.svg"
+      },
+      "TDP": {
+        "currency": "TrueDeck",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTDP.svg"
+      },
+      "FLP": {
+        "currency": "FLIP",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFLP.svg"
+      },
+      "SWT": {
+        "currency": "Swarm City",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSWT.svg"
+      },
+      "GBX": {
+        "currency": "GoByte",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCGBX.svg"
+      },
+      "BID": {
+        "currency": "BLOCKIDCOIN",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBID.svg"
+      },
+      "REX": {
+        "currency": "imbrex",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCREX.svg"
+      },
+      "ART": {
+        "currency": "Maecenas",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCART.svg"
+      },
+      "ARNX": { "currency": "Aeron", "image": "" },
+      "AMM": {
+        "currency": "MicroMoney",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCAMM.svg"
+      },
+      "CRDT": { "currency": "CRDT", "image": "" },
+      "DAY": {
+        "currency": "Chronologic",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDAY.svg"
+      },
+      "MORE": {
+        "currency": "More Coin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMORE.svg"
+      },
+      "CMCT": {
+        "currency": "Crowd Machine",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCCMCT.svg"
+      },
+      "FOTA": {
+        "currency": "Fortuna",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFOTA.svg"
+      },
+      "WGP": {
+        "currency": "W Green Pay",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCWGP.svg"
+      },
+      "NPLC": {
+        "currency": "Plus-Coin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNPLC.svg"
+      },
+      "SYBC": {
+        "currency": "SYB Coin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSYBC.svg"
+      },
+      "SCC": {
+        "currency": "SiaCashCoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSCC.svg"
+      },
+      "RAISE": {
+        "currency": "Raise",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCRAISE.svg"
+      },
+      "KIND": {
+        "currency": "Kind Ads Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCKIND.svg"
+      },
+      "GET": {
+        "currency": "GET Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCGET.svg"
+      },
+      "SUR": {
+        "currency": "Suretly",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSUR.svg"
+      },
+      "XCON": {
+        "currency": "Connect Coin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCXCON.svg"
+      },
+      "BDP": {
+        "currency": "BidiPass",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBDP.svg"
+      },
+      "OPT": {
+        "currency": "Opus",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCOPT.svg"
+      },
+      "PNT": {
+        "currency": "Penta",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPNT.svg"
+      },
+      "MEME": {
+        "currency": "Memetic / PepeCoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMEME.svg"
+      },
+      "SIG": {
+        "currency": "Spectiv",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSGN.svg"
+      },
+      "AUTO": {
+        "currency": "Cube",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCAUTO.svg"
+      },
+      "DDRT": {
+        "currency": "DigiDinar Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDDRT.svg"
+      },
+      "NEC": {
+        "currency": "Nectar",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNEC.svg"
+      },
+      "STC": {
+        "currency": "StarChain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSTC.svg"
+      },
+      "BB": { "currency": "BlackBerry tokenized stock FTX", "image": "" },
+      "MIN": {
+        "currency": "MINDOL",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCMIN.svg"
+      },
+      "KOK": { "currency": "Keystone of Opportunity & Knowledge", "image": "" },
+      "WIKI": {
+        "currency": "Wiki Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCWIKI.svg"
+      },
+      "DDR": {
+        "currency": "DigiDinar",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDDR.svg"
+      },
+      "SLS": {
+        "currency": "SaluS",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSLS.svg"
+      },
+      "AIM": {
+        "currency": "ModiHost",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCAIM.svg"
+      },
+      "NLC2": {
+        "currency": "NoLimitCoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNLC2.svg"
+      },
+      "VEO": {
+        "currency": "Amoveo",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCVEO.svg"
+      },
+      "GNC": { "currency": "GALAXY NETWORK", "image": "" },
+      "BTX": {
+        "currency": "Bitcoin X",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBTX.svg"
+      },
+      "LUCY": {
+        "currency": "LUCY",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCLUCY.svg"
+      },
+      "G999": { "currency": "G999", "image": "" },
+      "BTCV": { "currency": "Bitcoin Vault", "image": "" },
+      "KLAY": {
+        "currency": "Klaytn",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCKLAY.svg"
+      },
+      "PLBT": {
+        "currency": "Polybius",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCPLBT.svg"
+      },
+      "LAVA": {
+        "currency": "Lavatech",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCLAVA.svg"
+      },
+      "NEU": {
+        "currency": "Neumark",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNEU.svg"
+      },
+      "CAMP": { "currency": "Camp", "image": "" },
+      "TRI": {
+        "currency": "Trinity Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTRIO.svg"
+      },
+      "AAPL": {
+        "currency": "Apple tokenized stock FTX",
+        "image": "https://s3-symbol-logo.tradingview.com/apple.svg"
+      },
+      "TRYB": {
+        "currency": "BiLira",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTRYB.svg"
+      },
+      "UOP": { "currency": "Utopia Genesis Foundation", "image": "" },
+      "TSLA": {
+        "currency": "Tesla tokenized stock FTX",
+        "image": "https://s3-symbol-logo.tradingview.com/tesla.svg"
+      },
+      "BABA": {
+        "currency": "Alibaba tokenized stock Bittrex",
+        "image": "https://s3-symbol-logo.tradingview.com/alibaba.svg"
+      },
+      "TUDA": {
+        "currency": "Tutor's Diary",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTUDA.svg"
+      },
+      "BTNYX": { "currency": "BitOnyx", "image": "" },
+      "GOLDR": { "currency": "Golden Ratio Coin", "image": "" },
+      "ALG": {
+        "currency": "Bitalgo",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCALGO.svg"
+      },
+      "UCT": {
+        "currency": "Ubique Chain Of Things",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCUCT.svg"
+      },
+      "URAC": {
+        "currency": "Uranus",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCURAC.svg"
+      },
+      "BST": {
+        "currency": "BlockStamp",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBST.svg"
+      },
+      "VANY": {
+        "currency": "Vanywhere",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCVANY.svg"
+      },
+      "SPIN": {
+        "currency": "SPIN Protocol",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSPIN.svg"
+      },
+      "SPHR": {
+        "currency": "Sphere",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSPHR.svg"
+      },
+      "BRZ": {
+        "currency": "Brazilian Digital Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCBRZ.svg"
+      },
+      "PEARL": { "currency": "Pearl", "image": "" },
+      "SBTC": {
+        "currency": "Super Bitcoin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCSBTC.svg"
+      },
+      "XUC": {
+        "currency": "Exchange Union",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCXUC.svg"
+      },
+      "VBK": {
+        "currency": "VeriBlock",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCVBK.svg"
+      },
+      "4ART": {
+        "currency": "4ART Coin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVC4ART.svg"
+      },
+      "AKN": { "currency": "Akoin", "image": "" },
+      "HBD": {
+        "currency": "Hive Dollar",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCHBD.svg"
+      },
+      "MSTR": { "currency": "MicroStrategy tokenized stock FTX", "image": "" },
+      "PFE": {
+        "currency": "Pfizer tokenized stock FTX",
+        "image": "https://s3-symbol-logo.tradingview.com/pfizer.svg"
+      },
+      "SPY": {
+        "currency": "SPDR S&P 500 ETF tokenized stock Bittrex",
+        "image": "https://s3-symbol-logo.tradingview.com/s-and-p-global.svg"
+      },
+      "UPT": {
+        "currency": "Universal Protocol Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCUPT.svg"
+      },
+      "NBS": {
+        "currency": "New BitShares",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNBS.svg"
+      },
+      "LOON": {
+        "currency": "Loon Network",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCLOON.svg"
+      },
+      "SMBSWAP": { "currency": "Simbcoin Swap", "image": "" },
+      "NGC": {
+        "currency": "NAGA",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNGC.svg"
+      },
+      "HDAC": {
+        "currency": "Hdac",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCHDAC.svg"
+      },
+      "ECOC": {
+        "currency": "ECOChain",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCECOC.svg"
+      },
+      "GTX": {
+        "currency": "GoalTime N",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCGTX.svg"
+      },
+      "ODE": {
+        "currency": "ODEM",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCODE.svg"
+      },
+      "KIM": {
+        "currency": "KingMoney",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCKIM.svg"
+      },
+      "1ST": {
+        "currency": "FirstBlood",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVC1ST.svg"
+      },
+      "GME": { "currency": "GameStop tokenized stock FTX", "image": "" },
+      "VDX": {
+        "currency": "Vodi X",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCVDX.svg"
+      },
+      "USE": {
+        "currency": "Usechain Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCUSE.svg"
+      },
+      "TUBE": {
+        "currency": "BitTube",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTUBE.svg"
+      },
+      "LMCH": {
+        "currency": "Latamcash",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCLMCH.svg"
+      },
+      "ECELL": {
+        "currency": "Consensus Cell Network",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCECELL.svg"
+      },
+      "NUT": {
+        "currency": "Native Utility Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCNUT.svg"
+      },
+      "UTT": {
+        "currency": "United Traders Token",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCUTT.svg"
+      },
+      "SPICE": { "currency": "Spice", "image": "" },
+      "AMC": {
+        "currency": "AMC Entertainment Holdings tokenized stock FTX",
+        "image": ""
+      },
+      "IDH": {
+        "currency": "indaHash",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCIDH.svg"
+      },
+      "ASP": { "currency": "Aspire", "image": "" },
+      "AMZN": {
+        "currency": "Amazon tokenized stock FTX",
+        "image": "https://s3-symbol-logo.tradingview.com/amazon.svg"
+      },
+      "BILI": { "currency": "Billibilli Inc tokenized stock FTX", "image": "" },
+      "UNO": { "currency": "Unobtanium", "image": "" },
+      "C20": {
+        "currency": "CRYPTO20",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCC20.svg"
+      },
+      "GOOGL": {
+        "currency": "Google tokenized stock Bittrex",
+        "image": "https://s3-symbol-logo.tradingview.com/alphabet.svg"
+      },
+      "YCC": {
+        "currency": "Yuan Chain Coin",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCYCC.svg"
+      },
+      "XAUT": {
+        "currency": "Tether Gold",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCXAUT.svg"
+      },
+      "BYND": {
+        "currency": "Beyond Meat tokenized stock FTX",
+        "image": "https://s3-symbol-logo.tradingview.com/beyond-meat.svg"
+      },
+      "FB": {
+        "currency": "Facebook tokenized stock Bittrex",
+        "image": "https://s3-symbol-logo.tradingview.com/facebook.svg"
+      },
+      "NFLX": {
+        "currency": "Netflix tokenized stock FTX",
+        "image": "https://s3-symbol-logo.tradingview.com/netflix.svg"
+      },
+      "DICE": {
+        "currency": "Etheroll",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCDICE.svg"
+      },
+      "SQ": { "currency": "Square tokenized stock FTX", "image": "" },
+      "HUB": { "currency": "Hub - Human Trust Protocol", "image": "" },
+      "VALUE": { "currency": "Value Liquidity", "image": "" },
+      "TV": {
+        "currency": "Ti-Value",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCTV.svg"
+      },
+      "GST": {
+        "currency": "Game Stars",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCGST.svg"
+      },
+      "GASP": { "currency": "gAsp", "image": "" },
+      "CCE": { "currency": "CloudCoin", "image": "" },
+      "CLT": { "currency": "CoinLoan", "image": "" },
+      "FME": {
+        "currency": "FME",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCFME.svg"
+      },
+      "ME": {
+        "currency": "All.me",
+        "image": "https://s3-symbol-logo.tradingview.com/crypto/XTVCME.svg"
+      },
+      "GOF": { "currency": "Golff", "image": "" },
+      "FIT": { "currency": "FINANCIAL INVESTMENT TOKEN", "image": "" }
+    },
+    "sources": {
+      "investing": {
+        "url": "https://www.investing.com/crypto/bitcoin",
+        "pattern": {
+          "tagTarget": "span",
+          "attributes": {
+            "id": "last_last"
+          }
+        }
+      },
+      "tradingview": {
+        "url": "https://www.tradingview.com/symbols/{0}{1}/",
+        "pattern": {
+          "tagTarget": "span",
+          "attributes": {
+            "id": "last_last"
+          }
+        }
+      },
+      "livecoinwatch":{
+        "url": "https://www.livecoinwatch.com/price/{0}-{1}",
+        "pattern": {
+          "tagTarget": "span",
+          "attributes": {
+            "class": "price"
+          }
+        }
+      }
+    }
+  }
 }

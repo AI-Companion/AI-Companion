@@ -21,12 +21,12 @@ def setup_logging():
 
 
 def main():
-    config = {
-        "simpleCurr": ["eur","gbp","cad","jpy","nzd","chf","aud","sar","kyd","czk","isk","rub"]
-    }
+    # config = {
+    #     "simpleCurr": ["eur","gbp","cad","jpy","nzd","chf","aud","sar","kyd","czk","isk","rub"]
+    # }
     try:
         setup_logging()
-        manager = ScrapperManager(config)
+        manager = ScrapperManager()
         manager.start()
     except:
         manager.stop()
