@@ -10,10 +10,7 @@ class Source:
         return self.url.format(from_curr, to_curr)
         
     def __eq__(self, other):
-        return (self.url == other.url and 
-                self.curr_type == other.curr_type and
-                self.pattern == other.pattern
-        )
+        return self.__key() == other.__key()
     
     def __key(self):
         return (self.url, self.curr_type, json.dumps(self.pattern))

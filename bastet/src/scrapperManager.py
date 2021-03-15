@@ -1,6 +1,6 @@
 import logging as lg
 from src.proxy.proxyTor import ProxyTor
-from src.scrap.masterScrapper import ScrapperMaster
+from src.scrap.masterScrapper import MasterScrapper
 
 _logger = lg.getLogger(__name__)
 
@@ -17,7 +17,7 @@ class ScrapperManager:
         
         #start scrapper master with the config
         _logger.info("firing up master scrapper")
-        self.__master = ScrapperMaster(self.__config)
+        self.__master = MasterScrapper(self.__config)
         self.__master.start()
         _logger.info("firing up master started")
         

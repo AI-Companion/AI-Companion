@@ -31,10 +31,13 @@ class ProxyTor(object):
     @classmethod
     def start(cls):
         session = requests.session()
+        adapter = requests.adapters.HTTPAdapter(pool_connections=800, pool_maxsize=800)
         # Tor uses the 9050 port as the default socks port
         session.proxies = {'http':  'socks5://127.0.0.1:9050',
                         'https': 'socks5://127.0.0.1:9050'}
-        print(ProxyTor.__ua.random)
+        session.mount('http://', adapter)
+        session.mount('https://', adapter)
+        session.mount('socks5://', adapter)
         session.headers = {'User-Agent': ProxyTor.__ua.random}
         ProxyTor.__session = session
     
@@ -58,7 +61,6 @@ class ProxyTor(object):
             _logger.info("switching to a new ip")
             ProxyTor.notify()
             _logger.info("updating ip for suscribers")
-            
             time.sleep(cls.__freq)
     
     @classmethod
