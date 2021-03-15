@@ -19,9 +19,9 @@ class MasterScrapper(object):
             cls._resolver = None
             cls._statusKeeper = None
             MasterScrapper.__workers = []
-            MasterScrapper.__sources = []
             MasterScrapper.__workers_to_source_map = {}
             MasterScrapper.__sources_to_workers_map = {
+                        "values":[],
                         "simple":{
                             "val":[] # contains list of simple currency sources           
                             },
@@ -54,12 +54,13 @@ class MasterScrapper(object):
     def setupSources(cls): # only crypto sources for now
         try:
             _logger.info("Setting up Sources")
-            cls.__sources = cls.__db.getAllSources(type='crypto')
-            for key in cls.__sources:
-                _source = Source(cls.__sources[key]['url'], 'crypto', cls.__sources[key]['pattern'])
+            sources = cls.__db.getAllSources(type='crypto')
+            for key in sources:
+                _source = Source(sources[key]['url'], 'crypto', sources[key]['pattern'])
                 cls.__sources_to_workers_map["crypto"][_source] = []
                 cls.__sources_to_workers_map["crypto"]["val"].append(_source)
-            _logger.info("Successfully setup {0} Sources".format(len(cls.__sources)))
+                cls.__sources_to_workers_map["values"].append(_source)
+            _logger.info("Successfully setup {0} Sources".format(len(sources)))
         except Exception as e:
             _logger.error("error occured while setting up Sources, {0}".format(str(e)))
             raise
@@ -86,7 +87,7 @@ class MasterScrapper(object):
         cls.setupWorkers()
         cls._statusKeeper = WorkerStatus(worker_to_source_map=cls.__workers_to_source_map)
         _logger.info("Status keeper started ...")
-        cls._resolver = ErrorResolver(sources=cls.__sources, worker_to_source_map=cls.__workers_to_source_map)
+        cls._resolver = ErrorResolver(sources=cls.__sources_to_workers_map["values"], worker_to_source_map=cls.__workers_to_source_map)
         _logger.info("Resolver started ...")
         
     @classmethod
