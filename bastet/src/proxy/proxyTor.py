@@ -31,7 +31,7 @@ class ProxyTor(object):
     @classmethod
     def start(cls):
         session = requests.session()
-        adapter = requests.adapters.HTTPAdapter(pool_connections=800, pool_maxsize=800)
+        adapter = requests.adapters.HTTPAdapter(pool_connections=800, pool_maxsize=800, max_retries=20)
         # Tor uses the 9050 port as the default socks port
         session.proxies = {'http':  'socks5://127.0.0.1:9050',
                         'https': 'socks5://127.0.0.1:9050'}

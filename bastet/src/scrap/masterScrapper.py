@@ -1,6 +1,6 @@
 import logging as lg
 from src.db.dbManager import DbManager
-from src.scrap.errorResolver import ErrorResolver
+from src.resolvers.resolver import Resolver
 from src.scrap.source import Source
 from src.scrap.worker import Worker
 from src.scrap.workerStatus import WorkerStatus
@@ -21,7 +21,7 @@ class MasterScrapper(object):
             MasterScrapper.__workers = []
             MasterScrapper.__workers_to_source_map = {}
             MasterScrapper.__sources_to_workers_map = {
-                        "values":[],
+                        "values":[], # contains list of sources
                         "simple":{
                             "val":[] # contains list of simple currency sources           
                             },
@@ -80,18 +80,24 @@ class MasterScrapper(object):
         except Exception as e:
             _logger.error("error occured while setting up workers, {0}".format(str(e)))
             raise
+        
+    @classmethod
+    def setWorkerSource(cls, worker: Worker, source: Source):
+        worker.set_source(source)
+        worker.set_state(StateWorker.running)
+        _logger.info("worker of {0} is restarted with a new source".format(worker.get_curr()))
             
     @classmethod
     def bootStrapConfig(cls):
         cls.setupSources()
         cls.setupWorkers()
-        cls._statusKeeper = WorkerStatus(worker_to_source_map=cls.__workers_to_source_map)
+        cls._statusKeeper = WorkerStatus(worker_to_source_map=cls.__workers_to_source_map, master=cls.__instance, freq=21)
         _logger.info("Status keeper started ...")
-        cls._resolver = ErrorResolver(sources=cls.__sources_to_workers_map["values"], worker_to_source_map=cls.__workers_to_source_map)
+        cls._resolver = Resolver(sources=cls.__sources_to_workers_map["values"], worker_to_source_map=cls.__workers_to_source_map, master=cls.__instance)
         _logger.info("Resolver started ...")
         
     @classmethod
-    def workerFail(cls, worker, failure):
+    def workerFail(cls, worker: Worker, failure: Exception):
         cls._statusKeeper.update(worker, StateWorker.pending)
         new_state = cls._resolver.resolve(worker, failure)
         cls._statusKeeper.update(worker, new_state)
