@@ -38,8 +38,12 @@ class MasterScrapper(object):
         cls.startWorkers()
         
     @classmethod
-    def stop(cls):
+    def stopWorkers(cls):
         map(lambda x: x.kill(), cls.__workers)
+        
+    @classmethod
+    def killWorker(cls, worker):
+        worker.kill()
     
     @classmethod
     def startWorkers(cls):
@@ -70,7 +74,7 @@ class MasterScrapper(object):
         try:
             _logger.info("Setting up Workers")
             config = cls.__config["crypto"] if cls.__config else cls.__db.getTickersList(type="crypto")
-            for curr in config:
+            for curr in [config[3]]:
                 _source = cls.__sources_to_workers_map["crypto"]["val"][-1] # for every worker lets take a single source for now
                 _worker = Worker(master=cls.__instance, source=_source, fromCurr=cls.__db.getTickers_spec(type="crypto", ticker=curr)["currency"], toCurr=curr) # for now the value of every currency is regarding usd
                 cls.__workers.append(_worker)
@@ -91,13 +95,12 @@ class MasterScrapper(object):
     def bootStrapConfig(cls):
         cls.setupSources()
         cls.setupWorkers()
-        cls._statusKeeper = WorkerStatus(worker_to_source_map=cls.__workers_to_source_map, master=cls.__instance, freq=21)
+        cls._statusKeeper = WorkerStatus(worker_to_source_map=cls.__workers_to_source_map, master=cls.__instance, freq=7)
         _logger.info("Status keeper started ...")
-        cls._resolver = Resolver(sources=cls.__sources_to_workers_map["values"], worker_to_source_map=cls.__workers_to_source_map, master=cls.__instance)
+        cls._resolver = Resolver(sources=cls.__sources_to_workers_map["values"], worker_to_source_map=cls.__workers_to_source_map, master=cls.__instance, statuskeeper= cls._statusKeeper)
         _logger.info("Resolver started ...")
         
     @classmethod
     def workerFail(cls, worker: Worker, failure: Exception):
         cls._statusKeeper.update(worker, StateWorker.pending)
-        new_state = cls._resolver.resolve(worker, failure)
-        cls._statusKeeper.update(worker, new_state)
+        cls._resolver.resolve(worker, failure)

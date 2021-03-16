@@ -57,6 +57,7 @@ class Worker(Observer, threading.Thread):
     def kill(self):
         ProxyTor.detach(self)
         self.set_state(StateWorker.aborted)
+        _logger.warning("worker of trade {} to USD is killed ...".format(self.__from_curr))
     
     def send_value(self, val, now):
         _logger.info("value of trade of {0} to USD at {1} is {2}".format(self.__from_curr, now, val)) # temporarely until api setup
@@ -65,6 +66,7 @@ class Worker(Observer, threading.Thread):
         while self._status == StateWorker.pending:
             _logger.warning("worker of trade {} to USD is still pending resolution ...".format(self.__from_curr))
             time.sleep(5)
+        self.scrapp()
     
     def scrapp(self):
         try:

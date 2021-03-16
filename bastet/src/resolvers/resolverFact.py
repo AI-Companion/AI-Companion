@@ -5,17 +5,18 @@ import logging as lg
 _logger = lg.getLogger(__name__)
 
 class ResolverFact:
-    def __init__(self, resolver, master):
+    def __init__(self, resolver, master, statuskeeper):
         super().__init__()
         self._error_resolver_map = {}
         self._resolver = resolver
         self._master = master
+        self._statuskeeper = statuskeeper
         self.start()
         
     def start(self):
         self._error_resolver_map = {
-            AttributeError : AttributeErrResolver(resolver = self._resolver, master = self._master),
-            "default" : DefErrResolver(resolver = self._resolver, master = self._master)
+            AttributeError : AttributeErrResolver(resolver = self._resolver, master = self._master, statuskeeper= self._statuskeeper),
+            "default" : DefErrResolver(resolver = self._resolver, master = self._master, statuskeeper= self._statuskeeper)
             
         }
         
