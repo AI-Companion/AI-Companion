@@ -1,6 +1,6 @@
 {
   "simple": {
-    "tickers": [],
+    "tickers": [ ],
     "tickers_specs": {},
     "sources": {
       "yahoo": {
