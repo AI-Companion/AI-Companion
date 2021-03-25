@@ -49,59 +49,59 @@ def train_model(config: NERConfigReader) -> None:
         X, y_tagged = dataset.get_set()
     tags = [item for sublist in y_tagged for item in sublist]
     unique_labels = list(set(tags))
-    tags2index = {t:i for i,t in enumerate(unique_labels)}
-    y = [[tags2index[w[1]] for w in s] for s in y_tagged]
-    y = tf.keras.preprocessing.sequence.pad_sequences(maxlen=config.max_sequence_length, sequences=y, padding="post", value=tags2index["O"])
+    unique_labels.remove("O") # remove the generic tag
+    tags2index = {t:i + 1 for i,t in enumerate(unique_labels)}
+    tags2index["O"] = 0
+    n_tags = len(tags2index)
+    y = [[tags2index[w] for w in s] for s in y_tagged]
     if config.experimental_mode:
         ind = np.random.randint(0, len(X), 500)
         X = [X[i] for i in ind]
         y = [y[i] for i in ind]
-    inputs = tf.ragged.constant(X, dtype=tf.string)
-    labels = tf.ragged.constant(y, dtype=tf.string)
+    X = [" ".join(x) for x in X]
+    labels = tf.keras.preprocessing.sequence.pad_sequences(maxlen=config.max_sequence_length, sequences=y, padding="post", value=tags2index["O"])
     d_size = len(X)
     valid_size = (int) (d_size * config.validation_split)
-    dataset = tf.data.Dataset.from_tensor_slices((inputs, labels))
-    valid_ds = dataset.take(valid_size) 
-    train_ds = dataset.skip(valid_size)
+    dataset = tf.data.Dataset.from_tensor_slices((X, labels))
+    print("dataset spec {}".format(dataset.element_spec))
+    valid_ds = dataset.take(valid_size).shuffle(10000).batch(64).prefetch(tf.data.AUTOTUNE)
+    train_ds = dataset.skip(valid_size).shuffle(10000).batch(64).prefetch(tf.data.AUTOTUNE)
 
     # build and compile model
     tokenizer = tf.keras.layers.experimental.preprocessing.TextVectorization(
-                standardize=custom_standardization,
-                ngrams=3,
+                #ngrams=3,
                 max_tokens=config.vocab_size,
                 output_sequence_length=config.max_sequence_length,
                 output_mode='int')
-    tokenizer.adapt(train_ds.map(lambda text, label: text))
+    tokenizer.adapt(dataset.map(lambda text, label: text))
+    """
+    # visualize tokenizer transformation
+
+    vocab = np.array(tokenizer.get_vocabulary())
+    for example, label in dataset.take(1):
+        encoded_example = tokenizer(example)[:3].numpy()
+        for n in range(3):
+            print("Original: ", example[n].numpy())
+            print("Round-trip: ", " ".join(vocab[encoded_example[n]]))
+            print()
+    """
+
     input_layer = tf.keras.Input(shape=(1,), dtype=tf.string, name='input')
     x = tokenizer(input_layer)
-    x = tf.keras.layers.Embedding(input_dim=config.vocab_size, output_dim=50,
-                                    input_length=config.max_sequence_length, trainable=True)(x)
-    # # archi 3: crf layer
+    x = tf.keras.layers.Embedding(input_dim=len(tokenizer.get_vocabulary()),
+                                 output_dim=config.embedding_dimension,
+                                 input_length=config.max_sequence_length, trainable=True)(x)    
     x = tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(units=50, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
     x_rnn = tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(units=50, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
     x = tf.keras.layers.add([x, x_rnn])  # residual connection to the first biLSTM
-    x = tf.keras.layers.TimeDistributed(tf.keras.layers.Dense(len(unique_labels), activation='softmax'))(x)
-    #x = tfa.layers.CRF(len(unique_labels))(x)
+    x = tf.keras.layers.TimeDistributed(tf.keras.layers.Dense(n_tags, activation='softmax'))(x)
     model = tf.keras.Model(inputs=input_layer, outputs=x)
     print(model.summary())
-    model.compile(loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-                    optimizer='adam',
-                    metrics=["accuracy"])
-
+    model.compile(loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False),
+                    optimizer='adam', metrics=["accuracy"])
     history = model.fit(train_ds, validation_data=valid_ds, epochs=config.n_iter)
     save_perf(config.model_name, history.history)
-
-
-    export_model = tf.keras.Sequential([
-        model,
-        tf.keras.layers.Activation('sigmoid', name="probabilities")
-    ])
-    export_model.compile(
-        loss=tf.keras.losses.BinaryCrossentropy(from_logits=False), optimizer="adam", metrics=['accuracy']
-    )
-    # save
-    tf.keras.models.save_model(export_model, os.path.join(MODELS_DIR, config.model_name))
-
+    tf.keras.models.save_model(model, os.path.join(MODELS_DIR, config.model_name))
 
 def main():
     """main function"""
