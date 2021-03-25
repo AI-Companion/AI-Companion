@@ -11,8 +11,8 @@ from marabou.commons import custom_standardization
 def save_perf(model_name, history):
     fig, axs = plt.subplots(1,2)
     fig.tight_layout()
-    acc = history['binary_accuracy']
-    val_acc = history['val_binary_accuracy']
+    acc = history['accuracy']
+    val_acc = history['val_accuracy']
     loss = history['loss']
     val_loss = history['val_loss']
     epochs = range(1, len(acc) + 1)
