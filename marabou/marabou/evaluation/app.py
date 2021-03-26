@@ -1,15 +1,11 @@
 import os
 import sys
 import json
-from typing import List
 from flask import Flask, render_template, request
 from flask_restful import reqparse, Api, Resource
-from PIL import Image
 import tensorflow as tf
-from marabou.evaluation.utils import load_model
-from marabou.commons import SA_CONFIG_FILE, MODELS_DIR, NER_CONFIG_FILE, ROOT_DIR,\
-                            SAConfigReader, NERConfigReader, TD_CONFIG_FILE, TDConfigReader,\
-                            rnn_classification_visualize, custom_standardization
+from marabou.commons import SA_CONFIG_FILE, MODELS_DIR, NER_CONFIG_FILE,\
+    SAConfigReader, NERConfigReader, custom_standardization
 
 
 app = Flask(__name__)
@@ -29,13 +25,13 @@ class PredictSentiment(Resource):
     def __init__(self, model):
         self.model = model
 
+
 @app.route('/api/sentimentAnalysis', methods=['POST', 'GET'])
 def sentiment_analysis():
     """
-    sentiment analysis service function
+    # sentiment analysis service function
     """
     if request.method == 'POST':
-        #data = request.get_json(force=True)
         task_content = request.json['content']
         model_wrapper = PredictSentiment(global_model_config[0])
         output = model_wrapper.model.predict(task_content)
@@ -44,6 +40,7 @@ def sentiment_analysis():
     else:
         return None
 
+
 # Named entity recognition callers
 class PredictEntities(Resource):
     """
@@ -51,6 +48,7 @@ class PredictEntities(Resource):
     """
     def __init__(self, model):
         self.model = model
+
 
 @app.route('/api/namedEntityRecognition', methods=['POST', 'GET'])
 def named_entity_recognition():
@@ -65,6 +63,7 @@ def named_entity_recognition():
         return json.dumps(output)
     else:
         return None
+
 
 '''
 # topic detection callers
@@ -141,10 +140,11 @@ def clothing_classifier():
         return None
 '''
 
+
 @app.route('/', methods=['POST', 'GET'])
 def index():
     """
-    index function
+    # index function
     """
     return render_template('index.html')
 
@@ -155,7 +155,7 @@ def main():
     # load SA models
     valid_config = SAConfigReader(SA_CONFIG_FILE)
     sa_model = tf.keras.models.load_model(os.path.join(MODELS_DIR, valid_config.model_name),
-                                        custom_objects={'custom_standardization': custom_standardization})
+                                          custom_objects={'custom_standardization': custom_standardization})
 
     # load ner models
     valid_config = NERConfigReader(NER_CONFIG_FILE)
@@ -181,7 +181,7 @@ def main():
     else:
         print(PredictSentiment(sa_model))
         print(PredictEntities(ner_model))
-        #print(PredictTopic(td_model, td_preprocessor))
+        # print(PredictTopic(td_model, td_preprocessor))
 
 
 if __name__ == '__main__':

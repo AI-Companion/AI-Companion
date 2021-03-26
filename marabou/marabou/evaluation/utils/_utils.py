@@ -1,13 +1,14 @@
 import os
-import numpy as np
 from itertools import compress
 import re
-import subprocess
 import time
 import gdown
-from marabou.commons import ROOT_DIR, MODELS_DIR
+import numpy as np
+from marabou.commons import MODELS_DIR
 
-def load_model(h5_file_url=None, class_file_url=None, preprocessor_file_url=None, collect_from_gdrive=False, use_case="ner"):
+
+def load_model(h5_file_url=None, class_file_url=None, preprocessor_file_url=None,
+               collect_from_gdrive=False, use_case="ner"):
     """
     Extracts a model saved using the save_model function
     Args:
@@ -55,7 +56,7 @@ def load_model(h5_file_url=None, class_file_url=None, preprocessor_file_url=None
         h5_file_local_url = os.path.join(MODELS_DIR, h5_file_name)
         h5_file_url = 'https://drive.google.com/uc?id={}'.format(h5_file_url)
         gdown.download(h5_file_url, h5_file_local_url, quiet=True)
-        print("---> h5 model file download under %s" %h5_file_local_url)
+        print("---> h5 model file download under %s" % h5_file_local_url)
         # get class file
         class_file_local_url = None
         if use_case != "CNN":
@@ -63,14 +64,14 @@ def load_model(h5_file_url=None, class_file_url=None, preprocessor_file_url=None
             class_file_local_url = os.path.join(MODELS_DIR, class_file_name)
             class_file_url = 'https://drive.google.com/uc?id={}'.format(class_file_url)
             gdown.download(class_file_url, class_file_local_url, quiet=True)
-            print("---> class file downloaded under %s" %class_file_local_url)
-        
+            print("---> class file downloaded under %s" % class_file_local_url)
+
         # get preprocessor file
         preprocessor_file_name = h5_file_name.replace("rnn_model.h5", "preprocessor.pkl")
         preprocessor_file_local_url = os.path.join(MODELS_DIR, preprocessor_file_name)
         preprocessor_file_url = 'https://drive.google.com/uc?id={}'.format(preprocessor_file_url)
         gdown.download(preprocessor_file_url, preprocessor_file_local_url, quiet=True)
-        print("---> preprocessor file downloaded under %s" %preprocessor_file_local_url)
+        print("---> preprocessor file downloaded under %s" % preprocessor_file_local_url)
 
         if (os.path.isfile(h5_file_local_url) and os.path.isfile(preprocessor_file_local_url)):
             return h5_file_local_url, class_file_local_url, preprocessor_file_local_url

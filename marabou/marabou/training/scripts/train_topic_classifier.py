@@ -1,16 +1,8 @@
 import time
 from typing import List, Tuple
 import os
-import numpy as np
 from itertools import compress
-import nltk
-nltk.download('wordnet')
-from nltk.stem import WordNetLemmatizer
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-from keras.utils import to_categorical
-import string
-import matplotlib.pyplot as plt
+import numpy as np
 from sklearn.datasets import fetch_20newsgroups
 from dsg.RNN_MTO_classifier import RNNMTO, RNNMTOPreprocessor
 from marabou.commons import EMBEDDINGS_DIR, ROOT_DIR, PLOTS_DIR, MODELS_DIR, DATA_DIR, TDConfigReader, TD_CONFIG_FILE
@@ -49,28 +41,27 @@ def train_model(config: TDConfigReader) -> None:
         X = dataset.data
         y = dataset.target
     categories = {
-                  'rec.sport.baseball':'sport',
-                  'rec.sport.hockey':'sport',
-                  'rec.autos':'mechanical',
-                  'rec.motorcycles':'mechanical',
-                  'soc.religion.christian':'religion',
-                  'talk.religion.misc':'religion',
-                  'talk.politics.guns':'politics',
-                  'talk.politics.mideast':'politics',
-                  'talk.politics.misc':'politics',
-                  'sci.crypt':'science',
-                  'sci.electronics':'science',
-                  'sci.med':'science',
-                  'sci.space':'science',
-                  'comp.sys.mac.hardware':'computer',
-                  'comp.sys.ibm.pc.hardware':'computer',
-                  'comp.os.ms-windows.misc':'computer',
-                  'comp.graphics':'computer'
-                }
+        'rec.sport.baseball': 'sport',
+        'rec.sport.hockey': 'sport',
+        'rec.autos': 'mechanical',
+        'rec.motorcycles': 'mechanical',
+        'soc.religion.christian': 'religion',
+        'talk.religion.misc': 'religion',
+        'talk.politics.guns': 'politics',
+        'talk.politics.mideast': 'politics',
+        'talk.politics.misc': 'politics',
+        'sci.crypt': 'science',
+        'sci.electronics': 'science',
+        'sci.med': 'science',
+        'sci.space': 'science',
+        'comp.sys.mac.hardware': 'computer',
+        'comp.sys.ibm.pc.hardware': 'computer',
+        'comp.os.ms-windows.misc': 'computer',
+        'comp.graphics': 'computer'}
 
     print("===========> Slicing predefined classes from the data")
-    label_mapping = {dataset.target_names.index(cat):categories[cat] for cat in categories.keys()}
-    filter_classes = [cl in label_mapping.keys() for cl in y]
+    label_mapping = {dataset.target_names.index(cat): categories[cat] for cat in categories}
+    filter_classes = [cl in label_mapping for cl in y]
     y = list(compress(y, filter_classes))
     X = list(compress(X, filter_classes))
     y = [label_mapping[idx] for idx in y]
@@ -87,7 +78,7 @@ def train_model(config: TDConfigReader) -> None:
         os.mkdir(PLOTS_DIR)
 
     print("===========> Data preprocessing")
-    data_preprocessor = RNNMTOPreprocessor(max_sequence_length=config.max_sequence_length, \
+    data_preprocessor = RNNMTOPreprocessor(max_sequence_length=config.max_sequence_length,
                                            validation_split=config.validation_split, vocab_size=config.vocab_size)
     X_train, X_test, y_train, y_test = preprocess_data(X, y, data_preprocessor)
 
@@ -112,12 +103,13 @@ def train_model(config: TDConfigReader) -> None:
     print("===========> saving trained model and preprocessor under models/")
     trained_model.save(file_prefix, MODELS_DIR)
     data_preprocessor.save(file_prefix, MODELS_DIR)
-    
+
 
 def main():
     """main function"""
     if ROOT_DIR is None:
-        raise ValueError("please make sure to setup the environment variable MARABOU_HOME to point for the root of the project")
+        raise ValueError("please make sure to setup the environment variable MARABOU_HOME\
+                         to point for the root of the project")
     train_config = TDConfigReader(TD_CONFIG_FILE)
     train_model(train_config)
 

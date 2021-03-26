@@ -1,9 +1,9 @@
 import time
 import os
 import numpy as np
-from marabou.training.datasets import FashionImageNet
-from marabou.commons import CCConfigReader, MODELS_DIR, NETWORK_DIR, PLOTS_DIR, ROOT_DIR, CC_CONFIG_FILE
 from dsg.CNN_classifier import CNNClassifier, CNNClassifierPreprocessor
+from marabou.training.datasets import FashionImageNet
+from marabou.commons import CCConfigReader, MODELS_DIR, PLOTS_DIR, ROOT_DIR, CC_CONFIG_FILE
 
 
 def train_model(config: CCConfigReader) -> None:
@@ -25,18 +25,17 @@ def train_model(config: CCConfigReader) -> None:
     file_prefix = "clothing_classifier_%s" % time.strftime("%Y%m%d_%H%M%S")
     if not os.path.exists(MODELS_DIR):
         os.mkdir(MODELS_DIR)
-    if not os.path.exists(NETWORK_DIR):
-        os.mkdir(NETWORK_DIR)
     if not os.path.exists(PLOTS_DIR):
         os.mkdir(PLOTS_DIR)
 
-    preprocessor = CNNClassifierPreprocessor(image_height=config.image_height, image_width=config.image_width, validation_split=config.validation_split)
+    preprocessor = CNNClassifierPreprocessor(image_height=config.image_height,
+                                             image_width=config.image_width, validation_split=config.validation_split)
     X_train, X_test, y_train, y_test = preprocessor.split_train_test(X, y)
     preprocessor.fit(X_train, y_train)
     X_train, y_train = preprocessor.preprocess(X_train, y_train)
     X_test, y_test = preprocessor.preprocess(X_test, y_test)
     file_prefix = "fashion_classifier_%s" % time.strftime("%Y%m%d_%H%M%S")
-    idx_to_labels = {v:k for k,v in preprocessor.labels_to_idx.items()}
+    idx_to_labels = {v: k for k, v in preprocessor.labels_to_idx.items()}
     trained_model = CNNClassifier(idx_to_labels=idx_to_labels,
                                   pre_trained_cnn=config.use_pre_trained_cnn,
                                   pretrained_network_name=config.pretrained_network_name,
@@ -54,6 +53,7 @@ def train_model(config: CCConfigReader) -> None:
     trained_model.save(file_prefix, MODELS_DIR)
     preprocessor.save(file_prefix, MODELS_DIR)
 
+
 def main():
     """main function"""
     if ROOT_DIR is None:
@@ -61,6 +61,7 @@ def main():
                          for the root of the project")
     train_config = CCConfigReader(CC_CONFIG_FILE)
     train_model(train_config)
+
 
 if __name__ == '__main__':
     main()

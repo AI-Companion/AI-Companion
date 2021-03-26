@@ -1,12 +1,11 @@
 import os
-import subprocess
-from cv2 import cv2
-import pandas as pd
-import wget
 import tarfile
+from zipfile import ZipFile
+import wget
 import gdown
-from zipfile import ZipFile, BadZipfile
-from marabou.commons import SCRIPTS_DIR, DATA_DIR
+import pandas as pd
+from cv2 import cv2
+from marabou.commons import DATA_DIR
 
 
 class ImdbDataset:
@@ -162,8 +161,8 @@ class KaggleDataset:
             gdown.download(url, output_file_name, quiet=True)
         else:
             print("---> Dataset already downloaded")
-        with ZipFile(output_file_name, 'r') as zipObj:
-            zipObj.extractall(DATA_DIR)
+        with ZipFile(output_file_name, 'r') as zip_obj:
+            zip_obj.extractall(DATA_DIR)
 
     def get_set(self):
         """

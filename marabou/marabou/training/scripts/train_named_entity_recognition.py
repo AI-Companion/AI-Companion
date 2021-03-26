@@ -1,16 +1,22 @@
-from typing import List, Tuple
-import time, os
+import os
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
-import tensorflow_addons as tfa
 from marabou.training.datasets import KaggleDataset
-from marabou.commons import EMBEDDINGS_DIR, NER_CONFIG_FILE, MODELS_DIR, NERConfigReader
-from marabou.commons import custom_standardization
+from marabou.commons import NER_CONFIG_FILE, MODELS_DIR, NERConfigReader
 
 
 def save_perf(model_name, history):
-    fig, axs = plt.subplots(1,2)
+    """
+    plots learning curve and saved under model directory with the given model name
+    Args:
+        model_name: model configuration name as indicated in the json config file
+        history: dictionary containing model performance for each iteration
+    Return:
+        None
+
+    """
+    fig, axs = plt.subplots(1, 2)
     fig.tight_layout()
     acc = history['accuracy']
     val_acc = history['val_accuracy']
@@ -35,35 +41,53 @@ def save_perf(model_name, history):
     output_file_name = os.path.join(MODELS_DIR, model_name)
     plt.savefig(output_file_name)
 
-class PostProcessor(tf.keras.layers.Layer):
 
+class PostProcessor(tf.keras.layers.Layer):
+    """
+    The postprocessing layer is used after model training finish
+    Instead of returning class probabilities for each text token in each
+    input text, the class will return asssigned class label for each token
+    in each text input.
+    The layer combines input from the input layer and the probilities from the last layer
+    """
     def __init__(self, labels, **kwargs):
         self.labels = labels
-        super(PostProcessor, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     @tf.function
-    def call(self, input_list):
+    def call(self, input_list, **kwargs):
+        """
+        implements the mapping from probabilities to class labels
+        Args:
+            input_list: a list of the input layer and output probabilities
+        Return:
+            mapped class labels for each input
+        """
         preds = input_list[0]
         inputs = input_list[1]
-        #classes = np.argmax(preds, axis=2)
         classes = tf.math.argmax(preds, axis=2)
         classes = tf.cast(classes, tf.int32)
         n_cols = preds.shape[1]
 
-        #n_tokens = [len(x.split()) for x in inputs]
         splitted = tf.strings.split(inputs, sep=" ")
         n_tokens = tf.map_fn(fn=lambda t: tf.repeat(tf.size(t), n_cols), elems=splitted, fn_output_signature=tf.int32)
         stacked = tf.stack([classes, n_tokens], axis=1)
 
-        def get_classes(t):
-            n_tokens = t[1,0]
-            cl_int = tf.slice(t[0], [0], [n_tokens])
-            res = tf.map_fn(fn=lambda t: tf.convert_to_tensor(self.labels)[t], elems=cl_int, fn_output_signature=tf.string)
+        def get_classes(tensor):
+            """
+            returns class labels
+            """
+            n_tokens = tensor[1, 0]
+            cl_int = tf.slice(tensor[0], [0], [n_tokens])
+            res = tf.map_fn(fn=lambda t: tf.convert_to_tensor(
+                self.labels)[tensor],
+                elems=cl_int, fn_output_signature=tf.string)
             return tf.strings.reduce_join(res, separator=" ")
-        return tf.map_fn(fn=get_classes, elems=stacked, fn_output_signature=tf.string)
+        return tf.map_fn(fn=get_classes, elems=stacked,
+                         fn_output_signature=tf.string)
 
     def get_config(self):
-        config = super(PostProcessor, self).get_config()
+        config = super().get_config()
         config.update({"labels": self.labels})
         return config
 
@@ -86,7 +110,7 @@ def train_model(config: NERConfigReader) -> None:
         X, y_tagged = dataset.get_set()
     tags = [item for sublist in y_tagged for item in sublist]
     unique_labels = list(set(tags))
-    tags2index = {t:i + 1 for i,t in enumerate(unique_labels)}
+    tags2index = {t: i + 1 for i, t in enumerate(unique_labels)}
     tags2index["pad"] = 0
     n_tags = len(tags2index)
     y = [[tags2index[w] for w in s] for s in y_tagged]
@@ -95,9 +119,11 @@ def train_model(config: NERConfigReader) -> None:
         X = [X[i] for i in ind]
         y = [y[i] for i in ind]
     X = [" ".join(x) for x in X]
-    labels = tf.keras.preprocessing.sequence.pad_sequences(maxlen=config.max_sequence_length, sequences=y, padding="post", value=tags2index["pad"])
+    labels = tf.keras.preprocessing.sequence.pad_sequences(
+        maxlen=config.max_sequence_length, sequences=y,
+        padding="post", value=tags2index["pad"])
     d_size = len(X)
-    valid_size = (int) (d_size * config.validation_split)
+    valid_size = (int)(d_size * config.validation_split)
     dataset = tf.data.Dataset.from_tensor_slices((X, labels))
     # check dataset specifications
     # print("dataset spec {}".format(dataset.element_spec))
@@ -106,10 +132,10 @@ def train_model(config: NERConfigReader) -> None:
 
     # build and compile model
     tokenizer = tf.keras.layers.experimental.preprocessing.TextVectorization(
-                #ngrams=3,
-                max_tokens=config.vocab_size,
-                output_sequence_length=config.max_sequence_length,
-                output_mode='int')
+        # ngrams=3,
+        max_tokens=config.vocab_size,
+        output_sequence_length=config.max_sequence_length,
+        output_mode='int')
     tokenizer.adapt(dataset.map(lambda text, label: text))
     """
     # visualize tokenizer transformation
@@ -126,36 +152,36 @@ def train_model(config: NERConfigReader) -> None:
     input_layer = tf.keras.Input(shape=(1,), dtype=tf.string, name='input')
     x = tokenizer(input_layer)
     x = tf.keras.layers.Embedding(input_dim=len(tokenizer.get_vocabulary()),
-                                 output_dim=config.embedding_dimension,
-                                 input_length=config.max_sequence_length, trainable=True)(x)    
-    x = tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(units=50, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
-    x_rnn = tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(units=50, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
+                                  output_dim=config.embedding_dimension,
+                                  input_length=config.max_sequence_length, trainable=True)(x)
+    x = tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(
+        units=50, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
+    x_rnn = tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(
+        units=50, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
     x = tf.keras.layers.add([x, x_rnn])  # residual connection to the first biLSTM
     x = tf.keras.layers.TimeDistributed(tf.keras.layers.Dense(n_tags, activation='softmax'))(x)
 
     model = tf.keras.Model(inputs=input_layer, outputs=x)
     print(model.summary())
     model.compile(loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False),
-                    optimizer='adam', metrics=["accuracy"])
+                  optimizer='adam', metrics=["accuracy"])
     history = model.fit(train_ds, validation_data=valid_ds, epochs=config.n_iter)
     save_perf(config.model_name, history.history)
 
     # export model
-    reverted = {v:k for k,v in tags2index.items()}
+    reverted = {v: k for k, v in tags2index.items()}
     reverted = dict(sorted(reverted.items()))
     labels = tf.convert_to_tensor(list(reverted.values()))
     preds = model.get_layer("time_distributed").output
     x = PostProcessor(list(reverted.values()))([preds, input_layer])
     export_model = tf.keras.Model(inputs=input_layer, outputs=x)
     export_model.compile(loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False),
-                    optimizer='adam', metrics=["accuracy"])
+                         optimizer='adam', metrics=["accuracy"])
     # test the model
-    #x = tf.convert_to_tensor(["we are outside", "i go to paris"])
-    #print(export_model(x))
-    #export_model.save(os.path.join(MODELS_DIR, "rnn2"))
-    #tf.saved_model.save(export_model, os.path.join(MODELS_DIR, "rnn2"))
+    # x = tf.convert_to_tensor(["we are outside", "i go to paris"])
+    # print(export_model(x))
+    tf.keras.models.save_model(export_model, os.path.join(MODELS_DIR, config.model_name))
 
-    tf.keras.models.save_model(export_model, os.path.join(MODELS_DIR, "rnn2"))
 
 def main():
     """main function"""

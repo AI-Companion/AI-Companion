@@ -1,6 +1,4 @@
-import time, os, re, string
-from typing import List, Tuple, Dict
-import numpy as np
+import os
 import tensorflow as tf
 import tensorflow_datasets as tfds
 import matplotlib.pyplot as plt
@@ -8,7 +6,13 @@ from marabou.commons import MODELS_DIR, SA_CONFIG_FILE, SAConfigReader, custom_s
 
 
 def save_perf(model_name, history):
-    fig, axs = plt.subplots(1,2)
+    """
+    stores the learning curve of the algorithm
+    Args:
+        model_name: name of the algorithm as configured in the json file
+        history: dictionary containing model results for each epoch
+    """
+    fig, axs = plt.subplots(1, 2)
     fig.tight_layout()
     acc = history['binary_accuracy']
     val_acc = history['val_binary_accuracy']
@@ -33,6 +37,7 @@ def save_perf(model_name, history):
     output_file_name = os.path.join(MODELS_DIR, model_name)
     plt.savefig(output_file_name)
 
+
 '''
 @tf.keras.utils.register_keras_serializable(package='Custom', name='custom_standardization')
 def custom_standardization(input_data):
@@ -43,9 +48,10 @@ def custom_standardization(input_data):
                                     '')
 '''
 
+
 def train_model(config: SAConfigReader) -> None:
     """
-    Training pipeline, input dataset is the sentiment analysis dataset hosted under 
+    Training pipeline, input dataset is the sentiment analysis dataset hosted under
     https://ai.stanford.edu/~amaas/data/sentiment/
     The pipeline will save a model object will be saved under saved_models along with model performances
     Args:
@@ -62,9 +68,11 @@ def train_model(config: SAConfigReader) -> None:
     train_size = config.train_size
     batch_size = config.batch_size
     # load dataset
-    train_ds, valid_ds, test_ds = tfds.load(name="imdb_reviews",
-                                            split=('train[:{}%]'.format(validation_split), 'train[{}%:]'.format(validation_split), 'test'),
-                                            as_supervised=True)
+    train_ds, valid_ds, test_ds = tfds.load(
+        name="imdb_reviews", split=(
+            'train[:{}%]'.format(validation_split),
+            'train[{}%:]'.format(validation_split), 'test'),
+        as_supervised=True)
     if train_size < 1:
         n_train_total = train_ds.cardinality().numpy()
         n_train = (int)(train_size * n_train_total)
@@ -76,10 +84,10 @@ def train_model(config: SAConfigReader) -> None:
     # build and compile model
 
     tokenizer_bow = tf.keras.layers.experimental.preprocessing.TextVectorization(
-                        standardize=custom_standardization,
-                        ngrams=3,
-                        max_tokens=vocab_size,
-                        output_mode='count')
+        standardize=custom_standardization,
+        ngrams=3,
+        max_tokens=vocab_size,
+        output_mode='count')
     tokenizer_bow.adapt(train_ds.map(lambda text, label: text))
     inputs = tf.keras.Input(shape=(1,), dtype=tf.string, name="textual_input")
     x = tokenizer_bow(inputs)
@@ -87,9 +95,9 @@ def train_model(config: SAConfigReader) -> None:
     model = tf.keras.Model(inputs, x)
     print(model.summary())
     model.compile(loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
-                optimizer='adam',
-                metrics=tf.metrics.BinaryAccuracy(threshold=0.0))
-    
+                  optimizer='adam',
+                  metrics=tf.metrics.BinaryAccuracy(threshold=0.0))
+
     # fit model
     history = model.fit(train_ds, validation_data=valid_ds, epochs=n_iter)
     save_perf(config.model_name, history.history)
@@ -99,10 +107,12 @@ def train_model(config: SAConfigReader) -> None:
         tf.keras.layers.Activation('sigmoid', name="probabilities")
     ])
     export_model.compile(
-        loss=tf.keras.losses.BinaryCrossentropy(from_logits=False), optimizer="adam", metrics=['accuracy']
+        loss=tf.keras.losses.BinaryCrossentropy(from_logits=False),
+        optimizer="adam", metrics=['accuracy']
     )
     # save
     tf.keras.models.save_model(export_model, os.path.join(MODELS_DIR, config.model_name))
+
 
 def main():
     """main function"""
