@@ -1,6 +1,6 @@
 {
     "dataset_name":"imdb",
-    "model_name":"tfidf",
+    "model_name":"sa_tfidf",
     "__help_model_name":"can be either 'rnn' or 'tfidf'",
     "dataset_url":"1zJpirZ39NMrBz2GxXaPxUD-ibXevzlRw",
     "__help_dataset_url":"url for the specified dataset",

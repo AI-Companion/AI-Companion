@@ -8,6 +8,7 @@ from marabou.training.datasets import KaggleDataset
 from marabou.commons import EMBEDDINGS_DIR, NER_CONFIG_FILE, MODELS_DIR, NERConfigReader
 from marabou.commons import custom_standardization
 
+
 def save_perf(model_name, history):
     fig, axs = plt.subplots(1,2)
     fig.tight_layout()
@@ -34,6 +35,42 @@ def save_perf(model_name, history):
     output_file_name = os.path.join(MODELS_DIR, model_name)
     plt.savefig(output_file_name)
 
+class PostProcessor(tf.keras.layers.Layer):
+
+    def __init__(self, labels, **kwargs):
+        self.labels = labels
+        super(PostProcessor, self).__init__(**kwargs)
+
+    @tf.function
+    def call(self, input_list):
+        preds = input_list[0]
+        inputs = input_list[1]
+        #classes = np.argmax(preds, axis=2)
+        classes = tf.math.argmax(preds, axis=2)
+        classes = tf.cast(classes, tf.int32)
+        n_cols = preds.shape[1]
+
+        #n_tokens = [len(x.split()) for x in inputs]
+        splitted = tf.strings.split(inputs, sep=" ")
+        n_tokens = tf.map_fn(fn=lambda t: tf.repeat(tf.size(t), n_cols), elems=splitted, fn_output_signature=tf.int32)
+        stacked = tf.stack([classes, n_tokens], axis=1)
+
+        def get_classes(t):
+            n_tokens = t[1,0]
+            cl_int = tf.slice(t[0], [0], [n_tokens])
+            res = tf.map_fn(fn=lambda t: tf.convert_to_tensor(self.labels)[t], elems=cl_int, fn_output_signature=tf.string)
+            return tf.strings.reduce_join(res, separator=" ")
+        return tf.map_fn(fn=get_classes, elems=stacked, fn_output_signature=tf.string)
+
+    def get_config(self):
+        config = super(PostProcessor, self).get_config()
+        config.update({"labels": self.labels})
+        return config
+
+    @classmethod
+    def from_config(cls, config):
+        return cls(**config)
+
 
 def train_model(config: NERConfigReader) -> None:
     """
@@ -49,9 +86,8 @@ def train_model(config: NERConfigReader) -> None:
         X, y_tagged = dataset.get_set()
     tags = [item for sublist in y_tagged for item in sublist]
     unique_labels = list(set(tags))
-    unique_labels.remove("O") # remove the generic tag
     tags2index = {t:i + 1 for i,t in enumerate(unique_labels)}
-    tags2index["O"] = 0
+    tags2index["pad"] = 0
     n_tags = len(tags2index)
     y = [[tags2index[w] for w in s] for s in y_tagged]
     if config.experimental_mode:
@@ -59,11 +95,12 @@ def train_model(config: NERConfigReader) -> None:
         X = [X[i] for i in ind]
         y = [y[i] for i in ind]
     X = [" ".join(x) for x in X]
-    labels = tf.keras.preprocessing.sequence.pad_sequences(maxlen=config.max_sequence_length, sequences=y, padding="post", value=tags2index["O"])
+    labels = tf.keras.preprocessing.sequence.pad_sequences(maxlen=config.max_sequence_length, sequences=y, padding="post", value=tags2index["pad"])
     d_size = len(X)
     valid_size = (int) (d_size * config.validation_split)
     dataset = tf.data.Dataset.from_tensor_slices((X, labels))
-    print("dataset spec {}".format(dataset.element_spec))
+    # check dataset specifications
+    # print("dataset spec {}".format(dataset.element_spec))
     valid_ds = dataset.take(valid_size).shuffle(10000).batch(64).prefetch(tf.data.AUTOTUNE)
     train_ds = dataset.skip(valid_size).shuffle(10000).batch(64).prefetch(tf.data.AUTOTUNE)
 
@@ -95,13 +132,30 @@ def train_model(config: NERConfigReader) -> None:
     x_rnn = tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(units=50, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
     x = tf.keras.layers.add([x, x_rnn])  # residual connection to the first biLSTM
     x = tf.keras.layers.TimeDistributed(tf.keras.layers.Dense(n_tags, activation='softmax'))(x)
+
     model = tf.keras.Model(inputs=input_layer, outputs=x)
     print(model.summary())
     model.compile(loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False),
                     optimizer='adam', metrics=["accuracy"])
     history = model.fit(train_ds, validation_data=valid_ds, epochs=config.n_iter)
     save_perf(config.model_name, history.history)
-    tf.keras.models.save_model(model, os.path.join(MODELS_DIR, config.model_name))
+
+    # export model
+    reverted = {v:k for k,v in tags2index.items()}
+    reverted = dict(sorted(reverted.items()))
+    labels = tf.convert_to_tensor(list(reverted.values()))
+    preds = model.get_layer("time_distributed").output
+    x = PostProcessor(list(reverted.values()))([preds, input_layer])
+    export_model = tf.keras.Model(inputs=input_layer, outputs=x)
+    export_model.compile(loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False),
+                    optimizer='adam', metrics=["accuracy"])
+    # test the model
+    #x = tf.convert_to_tensor(["we are outside", "i go to paris"])
+    #print(export_model(x))
+    #export_model.save(os.path.join(MODELS_DIR, "rnn2"))
+    #tf.saved_model.save(export_model, os.path.join(MODELS_DIR, "rnn2"))
+
+    tf.keras.models.save_model(export_model, os.path.join(MODELS_DIR, "rnn2"))
 
 def main():
     """main function"""
