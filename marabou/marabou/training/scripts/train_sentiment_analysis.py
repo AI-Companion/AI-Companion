@@ -1,86 +1,121 @@
-import time
-from typing import List, Tuple, Dict
 import os
-import numpy as np
-from marabou.training.datasets import ImdbDataset
-from dsg.RNN_MTO_classifier import RNNMTO, RNNMTOPreprocessor
-from marabou.commons import ROOT_DIR, PLOTS_DIR, MODELS_DIR, SA_CONFIG_FILE, SAConfigReader, EMBEDDINGS_DIR
+import tensorflow as tf
+import tensorflow_datasets as tfds
+import matplotlib.pyplot as plt
+from marabou.commons import MODELS_DIR, SA_CONFIG_FILE, SAConfigReader, custom_standardization
 
 
-def preprocess_data(X: List, y: List, data_preprocessor: RNNMTOPreprocessor, labels_to_idx:Dict=None) \
-        -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+def save_perf(model_name, history):
     """
-    Wrapper method which yields the training and validation datasets
+    stores the learning curve of the algorithm
     Args:
-        X: list of unprocessed features
-        y: list of ratings
-        data_processor: a data handler object
-    Return:
-        tuple containing the training data, validation data
+        model_name: name of the algorithm as configured in the json file
+        history: dictionary containing model results for each epoch
     """
-    X = data_preprocessor.clean(X)
-    X_train, X_test, y_train, y_test = data_preprocessor.split_train_test(X, y)
-    data_preprocessor.fit(X_train, y, labels_to_idx=labels_to_idx)
-    X_train = data_preprocessor.preprocess(X_train)
-    X_test = data_preprocessor.preprocess(X_test)
-    return X_train, X_test, y_train, y_test
+    fig, axs = plt.subplots(1, 2)
+    fig.tight_layout()
+    acc = history['binary_accuracy']
+    val_acc = history['val_binary_accuracy']
+    loss = history['loss']
+    val_loss = history['val_loss']
+    epochs = range(1, len(acc) + 1)
+
+    axs[0].plot(epochs, loss, 'bo', label='Training loss')
+    axs[0].plot(epochs, val_loss, 'b', label='Validation loss')
+    axs[0].set_title('Training and validation loss')
+    axs[0].set_xlabel('Epochs')
+    axs[0].set_ylabel('Loss')
+    axs[0].legend()
+
+    axs[1].plot(epochs, acc, 'bo', label='Training accuracy')
+    axs[1].plot(epochs, val_acc, 'b', label='Validation accuracy')
+    axs[1].set_title('Training and validation accuracy')
+    axs[1].set_xlabel('Epochs')
+    axs[1].set_ylabel('Accuracy')
+    axs[1].legend(loc='lower right')
+
+    output_file_name = os.path.join(MODELS_DIR, model_name)
+    plt.savefig(output_file_name)
+
+
+'''
+@tf.keras.utils.register_keras_serializable(package='Custom', name='custom_standardization')
+def custom_standardization(input_data):
+    lowercase = tf.strings.lower(input_data)
+    stripped_html = tf.strings.regex_replace(lowercase, '<br />', ' ')
+    return tf.strings.regex_replace(stripped_html,
+                                    '[%s]' % re.escape(string.punctuation),
+                                    '')
+'''
 
 
 def train_model(config: SAConfigReader) -> None:
     """
-    Training function which prints classification summary as as result
+    Training pipeline, input dataset is the sentiment analysis dataset hosted under
+    https://ai.stanford.edu/~amaas/data/sentiment/
+    The pipeline will save a model object will be saved under saved_models along with model performances
     Args:
         config: Configuration object containing parsed .json file parameters
     Return:
         None
     """
-    X, y = [], []
-    if config.dataset_name == "imdb":
-        dataset = ImdbDataset(config.dataset_url)
-        X, y = dataset.get_set("train")
-        X_test, y_test = dataset.get_set("test")
-        X = X + X_test
-        y = y + y_test
-    if config.experimental_mode:
-        ind = np.random.randint(0, len(X), 1000)
-        X = [X[i] for i in ind]
-        y = [y[i] for i in ind]
-    
-    labels_to_idx = {"pos":1, "neg":0} # mapping the labels to corresponding indices
-    file_prefix = "sentiment_analysis_%s" % time.strftime("%Y%m%d_%H%M%S")
-    if not os.path.exists(MODELS_DIR):
-        os.mkdir(EMBEDDINGS_DIR)
-    if not os.path.exists(MODELS_DIR):
-        os.mkdir(MODELS_DIR)
-    if not os.path.exists(PLOTS_DIR):
-        os.mkdir(PLOTS_DIR)
-    print("===========> Data preprocessing")
-    data_preprocessor = RNNMTOPreprocessor(max_sequence_length=config.max_sequence_length, \
-                                           validation_split=config.validation_split, vocab_size=config.vocab_size)
-    X_train, X_test, y_train, y_test = preprocess_data(X, y, data_preprocessor, labels_to_idx)
-    print("===========> Model building")
-    trained_model = RNNMTO(pre_trained_embedding=config.pre_trained_embedding,
-                           vocab_size=config.vocab_size,
-                           embedding_dimension=config.embedding_dimension,
-                           embedding_algorithm=config.embedding_algorithm,
-                           n_iter=config.n_iter,
-                           embeddings_path=config.embeddings_path,
-                           max_sequence_length=config.max_sequence_length,
-                           data_preprocessor=data_preprocessor, save_folder=EMBEDDINGS_DIR)
-    history = trained_model.fit(X_train, y_train, X_test, y_test)
-    print("===========> saving")
-    print("===========> saving learning curve under plots/")
-    trained_model.save_learning_curve(history, file_prefix, PLOTS_DIR)
-    print("===========> saving trained model and preprocessor under models/")
-    trained_model.save(file_prefix, MODELS_DIR)
-    data_preprocessor.save(file_prefix, MODELS_DIR)
+    # load variables
+    validation_split = (int)(100 - 100 * config.validation_split)
+    vocab_size = config.vocab_size
+    # max_sequence_length = config.max_sequence_length
+    n_iter = config.n_iter
+    buffer_size = 3000
+    train_size = config.train_size
+    batch_size = config.batch_size
+    # load dataset
+    train_ds, valid_ds, test_ds = tfds.load(
+        name="imdb_reviews", split=(
+            'train[:{}%]'.format(validation_split),
+            'train[{}%:]'.format(validation_split), 'test'),
+        as_supervised=True)
+    if train_size < 1:
+        n_train_total = train_ds.cardinality().numpy()
+        n_train = (int)(train_size * n_train_total)
+        train_ds = train_ds.take(n_train)
+    train_ds = train_ds.cache().shuffle(buffer_size).batch(batch_size).prefetch(tf.data.AUTOTUNE)
+    valid_ds = valid_ds.cache().shuffle(buffer_size).batch(batch_size).prefetch(tf.data.AUTOTUNE)
+    test_ds = test_ds.cache().shuffle(buffer_size).batch(batch_size).prefetch(tf.data.AUTOTUNE)
+
+    # build and compile model
+
+    tokenizer_bow = tf.keras.layers.experimental.preprocessing.TextVectorization(
+        standardize=custom_standardization,
+        ngrams=3,
+        max_tokens=vocab_size,
+        output_mode='count')
+    tokenizer_bow.adapt(train_ds.map(lambda text, label: text))
+    inputs = tf.keras.Input(shape=(1,), dtype=tf.string, name="textual_input")
+    x = tokenizer_bow(inputs)
+    x = tf.keras.layers.Dense(1, kernel_regularizer=tf.keras.regularizers.L1L2(l1=0.0005, l2=0.0))(x)
+    model = tf.keras.Model(inputs, x)
+    print(model.summary())
+    model.compile(loss=tf.keras.losses.BinaryCrossentropy(from_logits=True),
+                  optimizer='adam',
+                  metrics=tf.metrics.BinaryAccuracy(threshold=0.0))
+
+    # fit model
+    history = model.fit(train_ds, validation_data=valid_ds, epochs=n_iter)
+    save_perf(config.model_name, history.history)
+
+    export_model = tf.keras.Sequential([
+        model,
+        tf.keras.layers.Activation('sigmoid', name="probabilities")
+    ])
+    export_model.compile(
+        loss=tf.keras.losses.BinaryCrossentropy(from_logits=False),
+        optimizer="adam", metrics=['accuracy']
+    )
+    # save
+    tf.keras.models.save_model(export_model, os.path.join(MODELS_DIR, config.model_name))
 
 
 def main():
     """main function"""
-    if ROOT_DIR is None:
-        raise ValueError(
-            "please make sure to setup the environment variable MARABOU_ROOT to point for the root of the project")
     train_config = SAConfigReader(SA_CONFIG_FILE)
     train_model(train_config)
 

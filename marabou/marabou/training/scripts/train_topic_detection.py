@@ -2,8 +2,8 @@ import time
 from typing import List, Tuple
 import os
 import numpy as np
-from marabou.training.datasets import News20Dataset
 from dsg.RNN_MTO_classifier import RNNMTO, RNNMTOPreprocessor
+from marabou.training.datasets import News20Dataset
 from marabou.commons import ROOT_DIR, PLOTS_DIR, MODELS_DIR, TD_CONFIG_FILE, TDConfigReader, EMBEDDINGS_DIR
 
 
@@ -53,7 +53,7 @@ def train_model(config: TDConfigReader) -> None:
     if not os.path.exists(PLOTS_DIR):
         os.mkdir(PLOTS_DIR)
     print("===========> Data preprocessing")
-    data_preprocessor = RNNMTOPreprocessor(max_sequence_length=config.max_sequence_length, \
+    data_preprocessor = RNNMTOPreprocessor(max_sequence_length=config.max_sequence_length,
                                            validation_split=config.validation_split, vocab_size=config.vocab_size)
     X_train, X_test, y_train, y_test = preprocess_data(X, y, data_preprocessor)
     print("===========> Model building")

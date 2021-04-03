@@ -1,22 +1,27 @@
-import requests
-from cv2 import cv2
 import os
 import glob
+import requests
+from cv2 import cv2
 from marabou.commons import DATA_DIR
 
+
 def main():
+    """
+    the script collects first the dataset then builds the classifier
+    based on CGG16
+    """
     classes = ["sunglasses", "jeans", "dress"]
     dataset_dir = os.path.join(DATA_DIR, "clothing_classifier")
     if not os.path.exists(dataset_dir):
         raise ValueError("please create dataset folder and place download scripts inside it")
 
-    for cl in classes:
-        class_dir = os.path.join(dataset_dir, cl)
+    for class_ in classes:
+        class_dir = os.path.join(dataset_dir, class_)
         status_file = os.path.join(class_dir, 'status.txt')
         total = 0
         collect_images = False
-        if not os.path.isfile(os.path.join(dataset_dir, cl + ".txt")):
-            raise ValueError("no %s file" % cl)
+        if not os.path.isfile(os.path.join(dataset_dir, class_ + ".txt")):
+            raise ValueError("no %s file" % class_)
         if not os.path.exists(class_dir):
             os.mkdir(class_dir)
             with open(status_file, 'w') as f:
@@ -28,30 +33,30 @@ def main():
         class_status = open(status_file).read().strip()
         if class_status != "OK":
             collect_images = True
-        download_file = os.path.join(dataset_dir, cl + ".txt")
+        download_file = os.path.join(dataset_dir, class_ + ".txt")
         if not collect_images:
-            print("[INFO] {} images already collected".format(cl))
+            print("[INFO] {} images already collected".format(class_))
         else:
-            print("[INFO] collecting {} images...".format(cl))
-            files = glob.glob(os.path.join(class_dir,"*"))
+            print("[INFO] collecting {} images...".format(class_))
+            files = glob.glob(os.path.join(class_dir, "*"))
             for f in files:
                 os.remove(f)
             rows = open(download_file).read().strip().split("\n")
             for url in rows:
                 try:
                     # try to download the image
-                    r = requests.get(url, timeout=60)
+                    req = requests.get(url, timeout=60)
                     # save the image to disk
-                    p = os.path.sep.join([class_dir, "{}.jpg".format(
+                    p_1 = os.path.sep.join([class_dir, "{}.jpg".format(
                         str(total).zfill(8))])
-                    f = open(p, "wb")
-                    f.write(r.content)
+                    f = open(p_1, "wb")
+                    f.write(req.content)
                     f.close()
                     # update the counter
                     total += 1
                 # handle if any exceptions are thrown during the download process
-                except:
-                    print("[INFO] error downloading {}...skipping".format(p))
+                except requests.ConnectionError:
+                    print("[INFO] error downloading {}...skipping".format(p_1))
             print("[INFO] collected {} images".format(total))
             with open(status_file, 'w') as f:
                 f.write('OK')
@@ -74,14 +79,14 @@ def main():
                     total += 1
             # if OpenCV cannot load the image then the image is likely
             # corrupt so we should delete it
-            except:
-                print("Except")
+            except cv2.error:
                 delete = True
             # check to see if the image should be deleted
             if delete:
                 print("[INFO] deleting {}".format(image_path))
                 os.remove(image_path)
         print("[INFO] deleted {} images".format(total))
+
 
 if __name__ == '__main__':
     main()

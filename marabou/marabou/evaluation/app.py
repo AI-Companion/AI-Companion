@@ -1,15 +1,11 @@
 import os
 import sys
 import json
-from typing import List
 from flask import Flask, render_template, request
 from flask_restful import reqparse, Api, Resource
-from PIL import Image
-from dsg.RNN_MTM_classifier import RNNMTMPreprocessor, RNNMTM
-from dsg.RNN_MTO_classifier import RNNMTO, RNNMTOPreprocessor
-from dsg.CNN_classifier import CNNClassifierPreprocessor, CNNClassifier
-from marabou.evaluation.utils import load_model
-from marabou.commons import SA_CONFIG_FILE, NER_CONFIG_FILE, ROOT_DIR, SAConfigReader, NERConfigReader, TD_CONFIG_FILE, TDConfigReader, rnn_classification_visualize
+import tensorflow as tf
+from marabou.commons import SA_CONFIG_FILE, MODELS_DIR, NER_CONFIG_FILE,\
+    SAConfigReader, NERConfigReader, custom_standardization
 
 
 app = Flask(__name__)
@@ -26,38 +22,50 @@ class PredictSentiment(Resource):
     """
     utility class for the api_resource method
     """
-    def __init__(self, model: RNNMTO, pre_processor: RNNMTOPreprocessor):
+    def __init__(self, model):
         self.model = model
-        self.pre_processor = pre_processor
-
-    def get_from_service(self, input_list: List[str]):
-        """
-        gets the user's query strings.
-        The query could either be a single string or a list of multiple strings
-        Args:
-            input_list: textual input
-        Return:
-            dictionary containing probilities prediction as value sorted by each string as key
-        """
-        query = self.pre_processor.clean(input_list)
-        query = self.pre_processor.preprocess(query)
-        probs = self.model.predict_proba(query)
-        return probs
 
 
 @app.route('/api/sentimentAnalysis', methods=['POST', 'GET'])
 def sentiment_analysis():
     """
-    sentiment analysis service function
+    # sentiment analysis service function
     """
     if request.method == 'POST':
         task_content = request.json['content']
-        new_prediction = PredictSentiment(model=global_model_config[0], pre_processor=global_model_config[1])
-        output = new_prediction.get_from_service(task_content)
+        model_wrapper = PredictSentiment(global_model_config[0])
+        output = model_wrapper.model.predict(task_content)
+        output = [o[0] for o in output]
         return json.dumps([round(o * 100, 2) for o in output])
     else:
         return None
 
+
+# Named entity recognition callers
+class PredictEntities(Resource):
+    """
+    utility class for the api_resource method
+    """
+    def __init__(self, model):
+        self.model = model
+
+
+@app.route('/api/namedEntityRecognition', methods=['POST', 'GET'])
+def named_entity_recognition():
+    """
+    named entity recognition service function
+    """
+    if request.method == 'POST':
+        task_content = request.json['content']
+        model_wrapper = PredictEntities(global_model_config[1])
+        res = model_wrapper.model.predict(task_content)
+        output = [r.decode("utf-8").split(" ") for r in list(res)]
+        return json.dumps(output)
+    else:
+        return None
+
+
+'''
 # topic detection callers
 class PredictTopic(Resource):
     """
@@ -95,46 +103,6 @@ def topic_detection():
     else:
         return None
 
-
-# Named entity recognition callers
-class PredictEntities(Resource):
-    """
-    utility class for the api_resource method
-    """
-    def __init__(self, model:RNNMTM, pre_processor:RNNMTMPreprocessor):
-        self.model = model
-        self.pre_processor = pre_processor
-
-    def get_from_service(self, input_list: List[str]):
-        """
-        gets the user's query strings.
-        The query could either be a single string or a list of multiple strings
-        Args:
-            input_list: textual input
-        Return:
-            dictionary containing probilities prediction as value sorted by each string as key
-        """
-        questions_list_encoded, questions_list_tokenized, n_tokens, _ = self.pre_processor.preprocess(input_list)
-        preds = self.model.predict(questions_list_encoded, self.pre_processor.labels_to_idx, n_tokens)
-        display_result = rnn_classification_visualize(questions_list_tokenized, preds)
-        return display_result
-
-
-@app.route('/api/namedEntityRecognition', methods=['POST', 'GET'])
-def named_entity_recognition():
-    """
-    named entity recognition service function
-    """
-    if request.method == 'POST':
-        data = request.get_json()
-        task_content = data['content']
-        new_prediction = PredictEntities(model=global_model_config[2], pre_processor=global_model_config[3])
-        output = new_prediction.get_from_service([task_content])
-        return json.dumps(output)
-    else:
-        return None
-
-
 # clothing classifier callers
 
 class PredictClothing(Resource):
@@ -170,12 +138,13 @@ def clothing_classifier():
         return json.dumps(img_class)
     else:
         return None
+'''
 
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
     """
-    index function
+    # index function
     """
     return render_template('index.html')
 
@@ -183,32 +152,15 @@ def index():
 def main():
     """ if boolean is true bring the application up"""
     app_up = len(sys.argv) < 2
-    if ROOT_DIR is None:
-        raise ValueError("Please make sure to set the environment variable MARABOU_HOME to the root of the directory")
     # load SA models
     valid_config = SAConfigReader(SA_CONFIG_FILE)
-    h5_model_file, class_file, preprocessor_file = load_model(h5_file_url=valid_config.h5_model_url,
-                                                              class_file_url=valid_config.class_file_url,
-                                                              preprocessor_file_url=valid_config.preprocessor_file_url,
-                                                              collect_from_gdrive=False,
-                                                              use_case="sa")
-    if h5_model_file is None or preprocessor_file is None:
-        raise ValueError("there is no corresponding SA model file")
-    sa_model = RNNMTO(h5_file=h5_model_file, class_file=class_file)
-    sa_preprocessor = RNNMTOPreprocessor(preprocessor_file=preprocessor_file)
+    sa_model = tf.keras.models.load_model(os.path.join(MODELS_DIR, valid_config.model_name),
+                                          custom_objects={'custom_standardization': custom_standardization})
 
     # load ner models
     valid_config = NERConfigReader(NER_CONFIG_FILE)
-    h5_model_file, class_file, preprocessor_file = load_model(h5_file_url=valid_config.h5_model_url,
-                                                              class_file_url=valid_config.class_file_url,
-                                                              preprocessor_file_url=valid_config.preprocessor_file_url,
-                                                              collect_from_gdrive=False,
-                                                              use_case="ner")
-    if h5_model_file is None or preprocessor_file is None:
-        raise ValueError("there is no corresponding NER model file")
-    ner_model = RNNMTM(h5_file=h5_model_file, class_file=class_file)
-    ner_preprocessor = RNNMTMPreprocessor(preprocessor_file=preprocessor_file)
-
+    ner_model = tf.keras.models.load_model(os.path.join(MODELS_DIR, valid_config.model_name))
+    """
     # load topic detection models
     valid_config = TDConfigReader(TD_CONFIG_FILE)
     h5_model_file, class_file, preprocessor_file = load_model(h5_file_url=valid_config.h5_model_url,
@@ -220,16 +172,16 @@ def main():
         raise ValueError("there is no corresponding TD model file")
     td_model = RNNMTO(h5_file=h5_model_file, class_file=class_file)
     td_preprocessor = RNNMTOPreprocessor(preprocessor_file=preprocessor_file)
-
-    global_model_config.extend([sa_model, sa_preprocessor, ner_model, ner_preprocessor, td_model, td_preprocessor])
+    """
+    global_model_config.extend([sa_model, ner_model])
     if app_up:
         # the PredictSentiment methode will be executed in the sentimentAnalysis() method
         port = int(os.environ.get('PORT', 5000))
         app.run(host='0.0.0.0', port=port, threaded=False)
     else:
-        print(PredictSentiment(sa_model, sa_preprocessor))
-        print(PredictEntities(ner_model, ner_preprocessor))
-        print(PredictTopic(td_model, td_preprocessor))
+        print(PredictSentiment(sa_model))
+        print(PredictEntities(ner_model))
+        # print(PredictTopic(td_model, td_preprocessor))
 
 
 if __name__ == '__main__':

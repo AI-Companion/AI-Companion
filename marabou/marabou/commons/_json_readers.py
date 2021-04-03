@@ -1,10 +1,6 @@
 """
 Contains abstract dataset class and abstract json configuration
 """
-from abc import ABC, abstractmethod
-import os
-import subprocess
-import pandas as pd
 import json
 
 
@@ -109,6 +105,13 @@ class BaseConfigReader():
         """
         return self.config["batch_size"]
 
+    @property
+    def train_size(self):
+        """
+        fraction of the dataset to use for training
+        """
+        return self.config["train_size"]
+
 
 class RNNConfigReader(BaseConfigReader):
     """
@@ -181,23 +184,24 @@ class NERConfigReader(RNNConfigReader):
     """
     Named Entity Recognition analysis json configuration file reader
     """
-    pass
 
 
 class SAConfigReader(RNNConfigReader):
     """
     Sentiment analysis json configuration file reader
     """
-    pass
 
 
 class TDConfigReader(RNNConfigReader):
     """
     Sentiment analysis json configuration file reader
     """
-    pass
+
 
 class CCConfigReader(BaseConfigReader):
+    """
+    Clothing classifier configuration class
+    """
     @property
     def pretrained_network_name(self):
         """
@@ -243,7 +247,7 @@ class CCConfigReader(BaseConfigReader):
     @property
     def use_pre_trained_cnn(self):
         """
-        whether to use a pretrained cnn 
+        whether to use a pretrained cnn
         """
         return self.config["use_pre_trained_cnn"]
 

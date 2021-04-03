@@ -1,1 +1,0 @@
-this folder contains the saved models after training

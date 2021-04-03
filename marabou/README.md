@@ -3,29 +3,26 @@ Marabou is a python pipeline to perform training and evaluation for different de
 ### Depenencies
 #### Evaluation mode (default)
 - Python (> 3.6)
-- ds-gear
 - flask
 - flask_restful
 - pillow
-- keras-contrib: Need to be installed separately first (refer to https://github.com/keras-team/keras-contrib)
+- tensorflow
 #### Training mode
 - numpy
 - pandas
 - scikit-lear
 - matplotlib
 - jupyter
-- nltk (>=3.5)
-- keras
 - tensorflow
 - opencv-python
 
 ### User installation
 #### Pre-requisites
 1. Update pip `pip install --upgrade pip`
-2. Setup the environment variable `MARABOU_HOME` to point to the root of this repo `export MARABOU_HOME=/path/to/root`
-3. Create a python3 venv and source it (better than mixing with your existing packages):
+2. Create a python3 venv and source it (better than mixing with your existing packages):
 `python3 -m venv /path/to/your/venv`
 `source /path/to/your/venv/bin/activate`
+3. configure githooks path: go to the root of the repository and run `git config core.hooksPath .githooks`
 #### Evaluation
 Move to the root of the repository (containing `setup.py`)  
 `pip install .`

@@ -1,28 +1,99 @@
-from typing import List, Tuple
-import time
 import os
+import matplotlib.pyplot as plt
 import numpy as np
-from dsg.RNN_MTM_classifier import RNNMTMPreprocessor, RNNMTM 
+import tensorflow as tf
 from marabou.training.datasets import KaggleDataset
-from marabou.commons import EMBEDDINGS_DIR, NER_CONFIG_FILE, ROOT_DIR, PLOTS_DIR, MODELS_DIR, NERConfigReader
+from marabou.commons import NER_CONFIG_FILE, MODELS_DIR, NERConfigReader
 
-def preprocess_data(X: List, y: List, data_processor: RNNMTMPreprocessor)\
-    -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+
+def save_perf(model_name, history):
     """
-    wrapper method which yields the training and validation datasets
+    plots learning curve and saved under model directory with the given model name
     Args:
-        X: list of texts (features)
-        y: list of ratings
-        data_processor: a data handler object
+        model_name: model configuration name as indicated in the json config file
+        history: dictionary containing model performance for each iteration
     Return:
-        tuple containing the training data, validation data
+        None
+
     """
-    X = data_processor.clean(X)
-    X_train, X_test, y_train, y_test = data_processor.split_train_test(X, y)
-    data_processor.fit(X_train, y_train)
-    X_train, _, _, y_train = data_processor.preprocess(X_train, y_train)
-    X_test, _, _, y_test = data_processor.preprocess(X_test, y_test)
-    return X_train, X_test, y_train, y_test
+    fig, axs = plt.subplots(1, 2)
+    fig.tight_layout()
+    acc = history['accuracy']
+    val_acc = history['val_accuracy']
+    loss = history['loss']
+    val_loss = history['val_loss']
+    epochs = range(1, len(acc) + 1)
+
+    axs[0].plot(epochs, loss, 'bo', label='Training loss')
+    axs[0].plot(epochs, val_loss, 'b', label='Validation loss')
+    axs[0].set_title('Training and validation loss')
+    axs[0].set_xlabel('Epochs')
+    axs[0].set_ylabel('Loss')
+    axs[0].legend()
+
+    axs[1].plot(epochs, acc, 'bo', label='Training accuracy')
+    axs[1].plot(epochs, val_acc, 'b', label='Validation accuracy')
+    axs[1].set_title('Training and validation accuracy')
+    axs[1].set_xlabel('Epochs')
+    axs[1].set_ylabel('Accuracy')
+    axs[1].legend(loc='lower right')
+
+    output_file_name = os.path.join(MODELS_DIR, model_name)
+    plt.savefig(output_file_name)
+
+
+class PostProcessor(tf.keras.layers.Layer):
+    """
+    The postprocessing layer is used after model training finish
+    Instead of returning class probabilities for each text token in each
+    input text, the class will return asssigned class label for each token
+    in each text input.
+    The layer combines input from the input layer and the probilities from the last layer
+    """
+    def __init__(self, labels, **kwargs):
+        self.labels = labels
+        super().__init__(**kwargs)
+
+    @tf.function
+    def call(self, input_list, **kwargs):
+        """
+        implements the mapping from probabilities to class labels
+        Args:
+            input_list: a list of the input layer and output probabilities
+        Return:
+            mapped class labels for each input
+        """
+        preds = input_list[0]
+        inputs = input_list[1]
+        classes = tf.math.argmax(preds, axis=2)
+        classes = tf.cast(classes, tf.int32)
+        n_cols = preds.shape[1]
+
+        splitted = tf.strings.split(inputs, sep=" ")
+        n_tokens = tf.map_fn(fn=lambda t: tf.repeat(tf.size(t), n_cols), elems=splitted, fn_output_signature=tf.int32)
+        stacked = tf.stack([classes, n_tokens], axis=1)
+
+        def get_classes(tensor):
+            """
+            returns class labels
+            """
+            n_tokens = tensor[1, 0]
+            cl_int = tf.slice(tensor[0], [0], [n_tokens])
+            res = tf.map_fn(fn=lambda t: tf.convert_to_tensor(
+                self.labels)[tensor],
+                elems=cl_int, fn_output_signature=tf.string)
+            return tf.strings.reduce_join(res, separator=" ")
+        return tf.map_fn(fn=get_classes, elems=stacked,
+                         fn_output_signature=tf.string)
+
+    def get_config(self):
+        config = super().get_config()
+        config.update({"labels": self.labels})
+        return config
+
+    @classmethod
+    def from_config(cls, config):
+        return cls(**config)
 
 
 def train_model(config: NERConfigReader) -> None:
@@ -36,47 +107,84 @@ def train_model(config: NERConfigReader) -> None:
     X, y = [], []
     if config.dataset_name == "kaggle_ner":
         dataset = KaggleDataset(config.dataset_url)
-        X, y = dataset.get_set()
+        X, y_tagged = dataset.get_set()
+    tags = [item for sublist in y_tagged for item in sublist]
+    unique_labels = list(set(tags))
+    tags2index = {t: i + 1 for i, t in enumerate(unique_labels)}
+    tags2index["pad"] = 0
+    n_tags = len(tags2index)
+    y = [[tags2index[w] for w in s] for s in y_tagged]
     if config.experimental_mode:
         ind = np.random.randint(0, len(X), 500)
         X = [X[i] for i in ind]
         y = [y[i] for i in ind]
-    file_prefix = "named_entity_recognition_%s" % time.strftime("%Y%m%d_%H%M%S")
-    if not os.path.exists(MODELS_DIR):
-        os.mkdir(EMBEDDINGS_DIR)
-    if not os.path.exists(MODELS_DIR):
-        os.mkdir(MODELS_DIR)
-    if not os.path.exists(PLOTS_DIR):
-        os.mkdir(PLOTS_DIR)
-    print("===========> Data preprocessing")
-    data_preprocessor = RNNMTMPreprocessor(max_sequence_length=config.max_sequence_length,
-                                        validation_split=config.validation_split, vocab_size=config.vocab_size)
-    X_train, X_test, y_train, y_test = preprocess_data(X, y, data_preprocessor)
-    print("===========> Model building")
-    trained_model = RNNMTM(pre_trained_embedding=config.pre_trained_embedding,
-                           vocab_size=config.vocab_size,
-                           embedding_dimension=config.embedding_dimension,
-                           embedding_algorithm=config.embedding_algorithm,
-                           n_iter=config.n_iter,
-                           embeddings_path=config.embeddings_path,
-                           max_sequence_length=config.max_sequence_length,
-                           data_preprocessor=data_preprocessor, save_folder=EMBEDDINGS_DIR)
-    history, report = trained_model.fit(X_train, y_train, X_test, y_test, data_preprocessor.labels_to_idx)
-    print("===========> Saving")
-    print("===========> saving learning curve and classification report under perf/")
-    print(history)
-    trained_model.save_learning_curve(history, file_prefix, PLOTS_DIR, metric="crf_viterbi_accuracy")
-    trained_model.save_classification_report(report, file_prefix, PLOTS_DIR)
-    print("===========> saving trained model and preprocessor under models/")
-    trained_model.save(file_prefix, MODELS_DIR)
-    data_preprocessor.save(file_prefix, MODELS_DIR)
+    X = [" ".join(x) for x in X]
+    labels = tf.keras.preprocessing.sequence.pad_sequences(
+        maxlen=config.max_sequence_length, sequences=y,
+        padding="post", value=tags2index["pad"])
+    d_size = len(X)
+    valid_size = (int)(d_size * config.validation_split)
+    dataset = tf.data.Dataset.from_tensor_slices((X, labels))
+    # check dataset specifications
+    # print("dataset spec {}".format(dataset.element_spec))
+    valid_ds = dataset.take(valid_size).shuffle(10000).batch(64).prefetch(tf.data.AUTOTUNE)
+    train_ds = dataset.skip(valid_size).shuffle(10000).batch(64).prefetch(tf.data.AUTOTUNE)
+
+    # build and compile model
+    tokenizer = tf.keras.layers.experimental.preprocessing.TextVectorization(
+        # ngrams=3,
+        max_tokens=config.vocab_size,
+        output_sequence_length=config.max_sequence_length,
+        output_mode='int')
+    tokenizer.adapt(dataset.map(lambda text, label: text))
+    """
+    # visualize tokenizer transformation
+
+    vocab = np.array(tokenizer.get_vocabulary())
+    for example, label in dataset.take(1):
+        encoded_example = tokenizer(example)[:3].numpy()
+        for n in range(3):
+            print("Original: ", example[n].numpy())
+            print("Round-trip: ", " ".join(vocab[encoded_example[n]]))
+            print()
+    """
+
+    input_layer = tf.keras.Input(shape=(1,), dtype=tf.string, name='input')
+    x = tokenizer(input_layer)
+    x = tf.keras.layers.Embedding(input_dim=len(tokenizer.get_vocabulary()),
+                                  output_dim=config.embedding_dimension,
+                                  input_length=config.max_sequence_length, trainable=True)(x)
+    x = tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(
+        units=50, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
+    x_rnn = tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(
+        units=50, return_sequences=True, recurrent_dropout=0.2, dropout=0.2))(x)
+    x = tf.keras.layers.add([x, x_rnn])  # residual connection to the first biLSTM
+    x = tf.keras.layers.TimeDistributed(tf.keras.layers.Dense(n_tags, activation='softmax'))(x)
+
+    model = tf.keras.Model(inputs=input_layer, outputs=x)
+    print(model.summary())
+    model.compile(loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False),
+                  optimizer='adam', metrics=["accuracy"])
+    history = model.fit(train_ds, validation_data=valid_ds, epochs=config.n_iter)
+    save_perf(config.model_name, history.history)
+
+    # export model
+    reverted = {v: k for k, v in tags2index.items()}
+    reverted = dict(sorted(reverted.items()))
+    labels = tf.convert_to_tensor(list(reverted.values()))
+    preds = model.get_layer("time_distributed").output
+    x = PostProcessor(list(reverted.values()))([preds, input_layer])
+    export_model = tf.keras.Model(inputs=input_layer, outputs=x)
+    export_model.compile(loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False),
+                         optimizer='adam', metrics=["accuracy"])
+    # test the model
+    # x = tf.convert_to_tensor(["we are outside", "i go to paris"])
+    # print(export_model(x))
+    tf.keras.models.save_model(export_model, os.path.join(MODELS_DIR, config.model_name))
 
 
 def main():
     """main function"""
-    if ROOT_DIR is None:
-        raise ValueError("please make sure to setup the environment variable MARABOU_ROOT to point\
-                         for the root of the project")
     train_config = NERConfigReader(NER_CONFIG_FILE)
     train_model(train_config)
 
